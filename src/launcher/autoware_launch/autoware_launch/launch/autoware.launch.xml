@@ -108,4 +108,9 @@
   <group>
     <node pkg="rviz2" exec="rviz2" name="rviz2" output="screen" args="-d $(var rviz_config) -s $(find-pkg-share autoware_launch)/rviz/image/autoware.png" if="$(var rviz)"/>
   </group>
+
+  <!-- AI Challenge Scoring Node (Do not modify) -->
+  <group>
+    <include file="$(find-pkg-share aichallenge_scoring)/launch/aichallenge_scoring.launch.xml"/>
+  </group>
 </launch>
