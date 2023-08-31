@@ -112,5 +112,6 @@
   <!-- AI Challenge Scoring Node (Do not modify) -->
   <group>
     <include file="$(find-pkg-share aichallenge_scoring)/launch/aichallenge_scoring.launch.xml"/>
+    <node pkg="aichallenge_scoring_result" exec="scoring_result" name="scoring_result" output="screen" />
   </group>
 </launch>
