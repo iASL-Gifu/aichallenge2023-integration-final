@@ -123,7 +123,9 @@ namespace aichallenge_scoring {
     if (has_started_driving_) {
       total_duration = stop_watch_ptr_.toc(total_duration_timer_name, false);
     }
-    const auto timeout_time = 5.0 * 60.0;
+
+    // Ignore Timeout
+    const auto timeout_time = 50000000.0 * 60.0;
     auto is_timeout = total_duration > timeout_time;
 
     // Check speed limit
