@@ -38,8 +38,9 @@ fi
 
 # CAN data reception check
 echo "Check candump..."
-if [ -z "`candump can0 -T 200`" ]; then
-  echo "Error: Please check vehicle power is ON."
+if [ -z "`candump can0 -n 200`" ]; then
+  echo "Error: Please check the CAN cable connection."
   exit 1
+else
+  echo "CAN Interface configuration done."
 fi
-echo "CAN Interface configuration done."
