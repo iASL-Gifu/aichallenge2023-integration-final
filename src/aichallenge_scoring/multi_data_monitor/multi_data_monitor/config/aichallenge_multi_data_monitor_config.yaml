@@ -30,6 +30,6 @@ widgets:
         rows: 1
         items:
           - class: Simple
-            value: "TASK 3 DURATION"
+            value: "RESULT SCORE"
           - class: Simple
-            input: { class: subscription, topic: /aichallenge_scoring/score, field: task3_duration }
+            input: { class: subscription, topic: /aichallenge_scoring/result, field: distance_score_when_overridden }

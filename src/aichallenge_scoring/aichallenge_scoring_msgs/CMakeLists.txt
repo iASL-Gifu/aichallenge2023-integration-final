@@ -6,6 +6,7 @@ ament_auto_find_build_dependencies()
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Score.msg"
+  "msg/Result.msg"
 )
 
 ament_auto_package()

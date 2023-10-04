@@ -49,6 +49,8 @@ namespace aichallenge_scoring {
     has_finished_task2_ = false;
     has_finished_task3_ = false;
     is_doing_task3_ = false;
+    has_started_driving_ = false;
+    has_exceeded_speed_limit_ = false;
     odometry_ = nullptr;
     stop_watch_ptr_.tic("task3_duration");
   }

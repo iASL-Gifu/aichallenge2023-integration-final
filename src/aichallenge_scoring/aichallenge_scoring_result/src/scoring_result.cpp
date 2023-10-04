@@ -1,4 +1,5 @@
 #include "aichallenge_scoring_msgs/msg/score.hpp"
+#include "aichallenge_scoring_msgs/msg/result.hpp"
 
 #include "rclcpp/rclcpp.hpp"
 
@@ -23,6 +24,7 @@ public:
     
     // Publishers
     engage_pub_ = this->create_publisher<autoware_auto_vehicle_msgs::msg::Engage>("/autoware/engage", 1);
+    result_pub_ = this->create_publisher<aichallenge_scoring_msgs::msg::Result>("/aichallenge_scoring/result", 1);
 
     // Service Clients
     control_mode_client_ = this->create_client<autoware_auto_vehicle_msgs::srv::ControlModeCommand>("/control/control_mode_request");
@@ -30,6 +32,13 @@ public:
 
 private:
 
+  /**
+   * Callback function for vehicle_control_mode_sub_ ROS2 subscription 
+   * of /vehicle/status/control_mode topic
+   * 
+   * @param msg autoware_auto_vehicle_msgs/ControlModeReport ROS2 message
+   * @return void
+  */
   void vehicleControlModeCallback(const autoware_auto_vehicle_msgs::msg::ControlModeReport& msg) {
 
     // If mode is AUTONOMOUS=1
@@ -40,20 +49,29 @@ private:
     }
 
     // If already been in AUTONOMOUS mode and mode changed to MANUAL=4
+    // Basically means if the vehicle has been overriden
     if (is_autonomous_mode_ && msg.mode == 4) {
       std::cout << "Overriden by Driver." << std::endl;
       is_overridden_ = true;
     }
   }
 
+  /**
+   * Callback function for score_subscriber ROS2 subscription
+   * @param msg aichallenge_scoring_msgs/Score ROS2 message
+   * @return void
+  */
   void scoreCallback(const aichallenge_scoring_msgs::msg::Score& msg) {
     if (is_result_generated_)
       return;
     
+    // Calculate conditions for finishing the race
     const auto has_finished =
       msg.is_outside_lane || msg.is_timeout ||
       msg.has_exceeded_speed_limit || msg.has_finished_task3 ||
       is_overridden_;
+    
+    // Return if conditions for finishing is not met
     if (!has_finished)
       return;
 
@@ -74,6 +92,11 @@ private:
     control_mode_client_->async_send_request(request);
 
     is_autonomous_mode_ = false;
+
+    // Publish to aichallenge_scoring/result topic
+    auto aichallenge_scoring_result_msg = aichallenge_scoring_msgs::msg::Result();
+    aichallenge_scoring_result_msg.distance_score_when_overridden = msg.distance_score;
+    result_pub_->publish(aichallenge_scoring_result_msg);
   }
 
   float calculateDistanceScore(const aichallenge_scoring_msgs::msg::Score& score_msg) {
@@ -97,8 +120,8 @@ private:
     // Get time and use it to name the result.json filename
     time_t t = time(0);
     struct tm * now = localtime(&t);
-    char filename[50];
-    strftime(filename, 50, "results/%Y-%m-%d_%H-%M-%S_result.json", now);
+    char filename[100];
+    strftime(filename, 100, "/home/autoware/autoware/results/%Y-%m-%d_%H-%M-%S_result.json", now);
 
     std::ofstream ofs(filename);
     ofs << "{" << std::endl;
@@ -122,6 +145,7 @@ private:
 
   // Publishers
   rclcpp::Publisher<autoware_auto_vehicle_msgs::msg::Engage>::SharedPtr engage_pub_;
+  rclcpp::Publisher<aichallenge_scoring_msgs::msg::Result>::SharedPtr result_pub_;
 
   // Service Clients
   rclcpp::Client<autoware_auto_vehicle_msgs::srv::ControlModeCommand>::SharedPtr control_mode_client_;
