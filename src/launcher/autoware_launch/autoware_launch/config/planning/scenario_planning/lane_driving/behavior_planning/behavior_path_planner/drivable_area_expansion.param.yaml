@@ -46,7 +46,7 @@
         method: polygon # method used to expand the drivable area. Either 'lanelet' or 'polygon'.
                          # 'lanelet': add lanelets overlapped by the ego footprints
                          # 'polygon': add polygons built around sections of the ego footprint that go out of the drivable area
-        max_distance: 0.0 # [m] maximum distance by which the drivable area can be expended (0.0 means no limit)
+        max_distance: 1.0 # [m] maximum distance by which the drivable area can be expended (0.0 means no limit)
         max_path_arc_length: 50.0 # [m] maximum arc length along the path where the ego footprint is projected (0.0 means no limit)
         extra_arc_length: 0.5 # [m] extra expansion arc length around an ego footprint
       avoid_linestring:

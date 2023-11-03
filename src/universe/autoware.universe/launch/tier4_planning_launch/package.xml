@@ -57,6 +57,7 @@
 
   <exec_depend>behavior_path_planner</exec_depend>
   <exec_depend>behavior_velocity_planner</exec_depend>
+  <exec_depend>self_costmap_generator</exec_depend>
   <exec_depend>costmap_generator</exec_depend>
   <exec_depend>external_cmd_selector</exec_depend>
   <exec_depend>external_velocity_limit_selector</exec_depend>
@@ -69,6 +70,7 @@
   <exec_depend>planning_validator</exec_depend>
   <exec_depend>rtc_auto_mode_manager</exec_depend>
   <exec_depend>scenario_selector</exec_depend>
+  <exec_depend>self_scenario_selector</exec_depend>
   <exec_depend>surround_obstacle_checker</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>

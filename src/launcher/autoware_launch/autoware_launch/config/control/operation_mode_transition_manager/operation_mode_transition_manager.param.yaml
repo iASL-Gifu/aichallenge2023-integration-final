@@ -7,7 +7,7 @@
     nearest_yaw_deviation_threshold: 1.57 # [rad] for finding nearest index
     engage_acceptable_limits:
       allow_autonomous_in_stopped: true  # no check if the velocity is zero, always allowed.
-      dist_threshold: 1.5
+      dist_threshold: 5.0
       yaw_threshold: 0.524
       speed_upper_threshold: 10.0
       speed_lower_threshold: -10.0

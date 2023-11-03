@@ -5,7 +5,7 @@
   <group>
     <push-ros-namespace namespace="parking"/>
     <group>
-      <include file="$(find-pkg-share costmap_generator)/launch/costmap_generator.launch.xml">
+      <include file="$(find-pkg-share self_costmap_generator)/launch/costmap_generator.launch.xml">
         <arg name="input_objects" value="/perception/object_recognition/objects"/>
         <arg name="input_points_no_ground" value="/perception/obstacle_segmentation/pointcloud"/>
         <arg name="input_lanelet_map" value="/map/vector_map"/>
