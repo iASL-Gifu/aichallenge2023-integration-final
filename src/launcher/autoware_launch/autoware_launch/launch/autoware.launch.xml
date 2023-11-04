@@ -109,8 +109,13 @@
     <node pkg="rviz2" exec="rviz2" name="rviz2" output="screen" args="-d $(var rviz_config) -s $(find-pkg-share autoware_launch)/rviz/image/autoware.png" if="$(var rviz)"/>
   </group>
 
+  <!-- AI Challenge Scoring Node (Do not modify) -->
+  <group>
+    <include file="$(find-pkg-share aichallenge_scoring)/launch/aichallenge_scoring.launch.xml"/>
+    <node pkg="aichallenge_scoring_result" exec="scoring_result" name="scoring_result" output="screen" />
   <!-- add self -->
   <group>
+  
     <include file="$(find-pkg-share static_centerline_optimizer)/launch/static_centerline_optimizer.launch.xml">
       <arg name="run_backgrond" value="false"/>
       <arg name="lanelet2_input_file_path" value="/aichallenge/aichallenge_ws/src/aichallenge_submit/map/lanelet2_map.osm"/>

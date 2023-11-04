@@ -13,8 +13,9 @@
 
   <!-- pose_initializer -->
   <group>
-    <include file="$(find-pkg-share pose_initializer_custom)/launch/pose_initializer.launch.xml">
-      <arg name="gnss_enabled" value="false"/>
+    <!--本番削除--><include file="$(find-pkg-share pose_initializer_custom)/launch/pose_initializer.launch.xml">
+    <!--本番追加<include file="$(find-pkg-share pose_initializer)/launch/pose_initializer.launch.xml">-->
+      <arg name="gnss_enabled" value="false"/><!--本番 false→trueへ-->>
       <arg name="ndt_enabled" value="true"/>
       <arg name="ekf_enabled" value="true"/>
       <arg name="stop_check_enabled" value="true"/>
