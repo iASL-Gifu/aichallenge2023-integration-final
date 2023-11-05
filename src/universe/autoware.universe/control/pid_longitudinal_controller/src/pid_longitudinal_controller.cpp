@@ -470,9 +470,8 @@ PidLongitudinalController::Motion PidLongitudinalController::calcEmergencyCtrlCm
     longitudinal_utils::applyDiffLimitFilter(p.acc, m_prev_raw_ctrl_cmd.acc, dt, p.jerk);
 
   RCLCPP_ERROR_THROTTLE(
-    node_->get_logger(), *node_->get_clock(), 3000, "[Emergency stop] vel: %3.3f, acc: %3.3f", vel,
+    node_->get_logger(), *node_->get_clock(), 3000, "<PID>[Emergency stop] vel: %3.3f, acc: %3.3f", vel,
     acc);
-
   return Motion{vel, acc};
 }
 
@@ -576,10 +575,10 @@ void PidLongitudinalController::updateControlState(const ControlData & control_d
   if (m_control_state == ControlState::STOPPED) {
     // -- debug print --
     if (has_nonzero_target_vel && !departure_condition_from_stopped) {
-      info_throttle("target speed > 0, but departure condition is not met. Keep STOPPED.");
+      info_throttle("<PID>target speed > 0, but departure condition is not met. Keep STOPPED.(Param;Stopdist)");
     }
     if (has_nonzero_target_vel && keep_stopped_condition) {
-      info_throttle("target speed > 0, but keep stop condition is met. Keep STOPPED.");
+      info_throttle("<PID>target speed > 0, but keep stop condition is met. Keep STOPPED.");
     }
     // ---------------
 

@@ -2,15 +2,15 @@
   ros__parameters:
     delay_compensation_time: 0.1
 
-    enable_smooth_stop: false
-    enable_overshoot_emergency: true
+    enable_smooth_stop: true
+    enable_overshoot_emergency: false
     enable_large_tracking_error_emergency: true
-    enable_slope_compensation: true
+    enable_slope_compensation: false
     enable_keep_stopped_until_steer_convergence: true
 
     # state transition
-    drive_state_stop_dist: 0.5
-    drive_state_offset_stop_dist: 1.0
+    drive_state_stop_dist: 0.0
+    drive_state_offset_stop_dist: 0.0
     stopping_state_stop_dist: 0.5
     stopped_state_entry_duration_time: 0.1
     stopped_state_entry_vel: 0.5
@@ -56,7 +56,7 @@
 
     # emergency state
     emergency_vel: 0.0
-    emergency_acc: -50.0
+    emergency_acc: -55.5
     emergency_jerk: -30.0
 
     # acceleration limit

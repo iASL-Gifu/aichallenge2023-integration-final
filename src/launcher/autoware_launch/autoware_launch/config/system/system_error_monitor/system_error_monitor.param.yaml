@@ -29,7 +29,7 @@
 
         /autoware/perception/node_alive_monitoring: default
 
-        /autoware/planning/node_alive_monitoring: default
+        #/autoware/planning/node_alive_monitoring: default
         /autoware/planning/performance_monitoring/trajectory_validation: default
 
         # /autoware/sensing/node_alive_monitoring: default

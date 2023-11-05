@@ -53,7 +53,7 @@ bool MPC::calculateMPC(
 
   if (!updateStateForDelayCompensation(reference_trajectory, mpc_data.nearest_time, &x0)) {
     RCLCPP_WARN_SKIPFIRST_THROTTLE(
-      m_logger, *m_clock, 1000 /*ms*/, "updateStateForDelayCompensation failed. stop computation.");
+      m_logger, *m_clock, 1000 /*ms*/, "<mpc>updateStateForDelayCompensation failed. stop computation.");
     return false;
   }
 
@@ -64,7 +64,7 @@ bool MPC::calculateMPC(
     getPredictionDeltaTime(mpc_start_time, reference_trajectory, current_pose);
   if (!resampleMPCTrajectoryByTime(
         mpc_start_time, prediction_dt, reference_trajectory, &mpc_resampled_ref_traj)) {
-    RCLCPP_WARN_THROTTLE(m_logger, *m_clock, 1000 /*ms*/, "trajectory resampling failed.");
+    RCLCPP_WARN_THROTTLE(m_logger, *m_clock, 1000 /*ms*/, "<mpc>trajectory resampling failed.");
     return false;
   }
 
@@ -74,7 +74,7 @@ bool MPC::calculateMPC(
   /* solve quadratic optimization */
   Eigen::VectorXd Uex;
   if (!executeOptimization(mpc_matrix, x0, prediction_dt, &Uex)) {
-    RCLCPP_WARN_THROTTLE(m_logger, *m_clock, 1000 /*ms*/, "optimization failed.");
+    RCLCPP_WARN_THROTTLE(m_logger, *m_clock, 1000 /*ms*/, "<mpc>optimization failed.");
     return false;
   }
 
@@ -685,7 +685,7 @@ bool MPC::executeOptimization(
   bool solve_result = m_qpsolver_ptr->solve(H, f.transpose(), A, lb, ub, lbA, ubA, *Uex);
   auto t_end = std::chrono::system_clock::now();
   if (!solve_result) {
-    RCLCPP_WARN_SKIPFIRST_THROTTLE(m_logger, *m_clock, 1000 /*ms*/, "qp solver error");
+    RCLCPP_WARN_SKIPFIRST_THROTTLE(m_logger, *m_clock, 1000 /*ms*/, "<mpc>qp solver error");
     return false;
   }
 

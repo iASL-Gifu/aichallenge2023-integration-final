@@ -8,8 +8,8 @@
   <arg name="output_trajectory" default="/planning/scenario_planning/trajectory"/>
 
   <!-- debug flags -->
-  <arg name="publish_debug_trajs" default="false"/>
-  <arg name="smoother_type" default="JerkFiltered"/>
+  <arg name="publish_debug_trajs" default="true"/>
+  <arg name="smoother_type" default="L2"/>
   <!-- Analytical, JerkFiltered, L2, or Linf -->
 
   <arg name="param_path" default="$(find-pkg-share motion_velocity_smoother)/config/default_motion_velocity_smoother.param.yaml"/>
