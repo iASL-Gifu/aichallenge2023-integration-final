@@ -13,8 +13,9 @@
     drive_state_offset_stop_dist: 0.0
     stopping_state_stop_dist: 0.5 #Stoppingへの移行基準。停止線とegoの距離
     stopped_state_entry_duration_time: 0.1
-    stopped_state_entry_vel: 0.5 #Stop状態へ移行する際のVelocity閾値
-    stopped_state_entry_acc: 0.5 #Stop状態へ移行する際のACC閾値
+    stopped_state_entry_vel: 0.01 #Stop状態へ移行する際のVelocity閾値
+    stopped_state_entry_acc: 0.01 #Stop状態へ移行する際のACC閾値
+    #基本関係ない。
     emergency_state_overshoot_stop_dist: 1.5 #enable_overshootがTrueの場合作動。作動する閾値(m)
     emergency_state_traj_trans_dev: 3.0 #enable_overshootがTrueの場合作動。
     emergency_state_traj_rot_dev: 0.7854 #enable_overshootがTrueの場合作動。
