@@ -2,14 +2,14 @@
   ros__parameters:
     # constraints param for normal driving
     normal:
-      min_acc: -1.0         # min deceleration [m/ss]
-      max_acc: 1.0          # max acceleration [m/ss]
-      min_jerk: -1.0        # min jerk [m/sss]
-      max_jerk: 1.0         # max jerk [m/sss]
+      min_acc: -10.0         # min deceleration [m/ss]
+      max_acc: 4.0          # max acceleration [m/ss]
+      min_jerk: -4.0        # min jerk [m/sss]
+      max_jerk: 4.0         # max jerk [m/sss]
 
-    # constraints to be observed
+    # constraints to be observedこっちは使っていない？
     limit:
-      min_acc: -2.5         # min deceleration limit [m/ss]
-      max_acc: 1.0          # max acceleration limit [m/ss]
-      min_jerk: -1.5        # min jerk limit [m/sss]
-      max_jerk: 1.5         # max jerk limit [m/sss]
+      min_acc: -4.0         # min deceleration limit [m/ss]
+      max_acc: 4.0          # max acceleration limit [m/ss]
+      min_jerk: -4.0        # min jerk limit [m/sss]
+      max_jerk: 4.0         # max jerk limit [m/sss]
