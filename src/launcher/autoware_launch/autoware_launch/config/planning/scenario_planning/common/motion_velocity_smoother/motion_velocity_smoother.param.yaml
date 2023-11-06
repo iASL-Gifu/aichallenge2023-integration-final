@@ -1,7 +1,7 @@
 /**:
   ros__parameters:
     # motion state constraints
-    max_velocity: 5.1      # max velocity limit [m/s]
+    max_velocity: 1.39      # 変更の必要なし。5.004km/h max velocity limit [m/s]
     stop_decel: 0.0         # deceleration at a stop point[m/ss]
 
     # external velocity limit parameter
@@ -16,8 +16,8 @@
 
     # engage & replan parameters
     replan_vel_deviation: 5.53         # velocity deviation to replan initial velocity [m/s]
-    engage_velocity: 0.25              # engage velocity threshold [m/s] (if the trajectory velocity is higher than this value, use this velocity for engage vehicle speed)
-    engage_acceleration: 0.1           # engage acceleration [m/ss] (use this acceleration when engagement)
+    engage_velocity: 1.25              # ここも速度制限。engage velocity threshold [m/s] (if the trajectory velocity is higher than this value, use this velocity for engage vehicle speed)
+    engage_acceleration: 0.1           # ここは加速度制限　engage acceleration [m/ss] (use this acceleration when engagement)
     engage_exit_ratio: 0.5             # exit engage sequence to normal velocity planning when the velocity exceeds engage_exit_ratio x engage_velocity.
     stop_dist_to_prohibit_engage: 0.5  # if the stop point is in this distance, the speed is set to 0 not to move the vehicle [m]
 
@@ -25,8 +25,8 @@
     stopping_velocity: 2.778  # change target velocity to this value before v=0 point [m/s]
     stopping_distance: 0.0    # distance for the stopping_velocity [m]. 0 means the stopping velocity is not applied.
 
-    # path extraction parameters
-    extract_ahead_dist: 200.0         # forward trajectory distance used for planning [m]
+    # path extraction parameters 
+    extract_ahead_dist: 15.0         # forward trajectory distance used for planning [m]
     extract_behind_dist: 5.0          # backward trajectory distance used for planning [m]
     delta_yaw_threshold: 1.0472       # Allowed delta yaw between ego pose and trajectory pose [radian]
 
