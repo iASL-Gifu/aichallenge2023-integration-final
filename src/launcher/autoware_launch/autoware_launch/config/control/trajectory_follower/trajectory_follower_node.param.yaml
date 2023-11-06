@@ -1,4 +1,4 @@
 /**:
   ros__parameters:
-    ctrl_period: 0.03
-    timeout_thr_sec: 0.5
+    ctrl_period: 0.03 #Control Period 縦は不使用。コントロールの時間？
+    timeout_thr_sec: 0.5 #Controlのタイムアウト。超えると制御コマンドが出力されない。

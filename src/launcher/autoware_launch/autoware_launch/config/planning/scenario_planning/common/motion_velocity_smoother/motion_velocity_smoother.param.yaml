@@ -16,7 +16,7 @@
     margin_to_insert_external_velocity_limit: 0.3   #  恐らく使っていない？margin distance to insert external velocity limit [m]
   
     # stop velocity
-    stopping_velocity: 0.1    # 1km/hchange target velocity to this value before v=0 point [m/s]
+    stopping_velocity: 0.1    # 1km/h change target velocity to this value before v=0 point [m/s]
     stopping_distance: 1.0    # この距離の手前になったら上の速度が適用される。現在無効化。distance for the stopping_velocity [m]. 0 means the stopping velocity is not applied.
 
     # curve parameters(Apply lateral limit)曲がるときに適用される。上2つが曲がる時のスピードに影響。
@@ -41,7 +41,7 @@
     sparse_resample_dt: 0.5             # resample time interval for sparse sampling [s]
     sparse_min_interval_distance: 4.0   # minimum points-interval length for sparse sampling [m]
 
-    # engage & replan parameters
+    # engage & replan parameters 発進時(engage)
     replan_vel_deviation: 5.53         # velocity deviation to replan initial velocity [m/s]
     engage_velocity: 0.1              # 発進時の速度制限。1.38より大きいとエラーーengage velocity threshold [m/s] (if the trajectory velocity is higher than this value, use this velocity for engage vehicle speed)
     engage_acceleration: 0.05           # 発進時の加速度制限　engage acceleration [m/ss] (use this acceleration when engagement)
