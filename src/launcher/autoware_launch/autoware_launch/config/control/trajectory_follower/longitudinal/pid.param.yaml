@@ -1,53 +1,53 @@
 /**:
   ros__parameters:
-    delay_compensation_time: 0.1
+    delay_compensation_time: 0.1 #アクセル・ブレーキの作動の遅れ。
 
-    enable_smooth_stop: true
-    enable_overshoot_emergency: false
-    enable_large_tracking_error_emergency: true
-    enable_slope_compensation: false
-    enable_keep_stopped_until_steer_convergence: true
+    enable_smooth_stop: true #Mode:Stoppingに突入するかいなか。スムーズに止まるため。
+    enable_overshoot_emergency: false #停止線を超えそうになるとEmergencyに入る。　emergency_state_overshoot_stop_distが閾値
+    enable_large_tracking_error_emergency: false #入れるとDiagAggriで引っかかる。
+    enable_slope_compensation: false #土地が傾斜している場合はON
+    enable_keep_stopped_until_steer_convergence: false #入れるとDiagAggriで引っかかる。ステアリングが収束するまで止まっているか。
 
     # state transition
-    drive_state_stop_dist: 0.0
+    drive_state_stop_dist: 0.0 #停止線までの距離。Drive移行を決定する。
     drive_state_offset_stop_dist: 0.0
-    stopping_state_stop_dist: 0.5
+    stopping_state_stop_dist: 0.5 #Stoppingへの移行基準。停止線とegoの距離
     stopped_state_entry_duration_time: 0.1
-    stopped_state_entry_vel: 0.5
-    stopped_state_entry_acc: 0.5
-    emergency_state_overshoot_stop_dist: 1.5
-    emergency_state_traj_trans_dev: 3.0
-    emergency_state_traj_rot_dev: 0.7854
+    stopped_state_entry_vel: 0.5 #Stop状態へ移行する際のVelocity閾値
+    stopped_state_entry_acc: 0.5 #Stop状態へ移行する際のACC閾値
+    emergency_state_overshoot_stop_dist: 1.5 #enable_overshootがTrueの場合作動。作動する閾値(m)
+    emergency_state_traj_trans_dev: 3.0 #enable_overshootがTrueの場合作動。
+    emergency_state_traj_rot_dev: 0.7854 #enable_overshootがTrueの場合作動。
 
     # drive state
     kp: 1.0
     ki: 0.1
     kd: 0.0
-    max_out: 1.0
-    min_out: -1.0
-    max_p_effort: 1.0
-    min_p_effort: -1.0
-    max_i_effort: 0.3
+    max_out: 1.0 #Driveの際のMax_Acc(m/s^2)
+    min_out: -1.0 #Driveの際のMin_Acc(m/s^2)
+    max_p_effort: 1.0 #PゲインのMax_Acc
+    min_p_effort: -1.0 #PゲインのMin_Acc
+    max_i_effort: 0.3 #以下同様
     min_i_effort: -0.3
     max_d_effort: 0.0
     min_d_effort: 0.0
-    lpf_vel_error_gain: 0.9
-    current_vel_threshold_pid_integration: 0.5
-    enable_brake_keeping_before_stop: false
-    brake_keeping_acc: -0.2
+    lpf_vel_error_gain: 0.9 #速度誤差用のローパスフィルターゲイン
+    current_vel_threshold_pid_integration: 0.5 #?
+    enable_brake_keeping_before_stop: false #止まる直前に、目標線を超えないかつ乗り心地。ONだと下が基準に。
+    brake_keeping_acc: -0.2 #最後停止するときのACC。目標線を超えないように、かつ乗り心地の実現
 
-    # smooth stop state
+    # smooth stop state(Stopping)
     smooth_stop_max_strong_acc: -0.5
     smooth_stop_min_strong_acc: -0.8
     smooth_stop_weak_acc: -0.3
-    smooth_stop_weak_stop_acc: -0.8
-    smooth_stop_strong_stop_acc: -3.4
-    smooth_stop_max_fast_vel: 0.5
-    smooth_stop_min_running_vel: 0.01
-    smooth_stop_min_running_acc: 0.01
-    smooth_stop_weak_stop_time: 0.8
-    smooth_stop_weak_stop_dist: -0.3
-    smooth_stop_strong_stop_dist: -0.5
+    smooth_stop_weak_stop_acc: -0.8 #今すぐ止める弱いAcc
+    smooth_stop_strong_stop_acc: -3.4 #smooth_stop_strong_stop_dist-meterで停止点を超えたときの強い加速度。
+    smooth_stop_max_fast_vel: 0.5 #egoが速く走っているという閾値。超えるとStrong-accが出る。
+    smooth_stop_min_running_vel: 0.01 #egoが走っているかどうかを判断するMin-Vel
+    smooth_stop_min_running_acc: 0.01 #egoが走っているか判断するMin-acc
+    smooth_stop_weak_stop_time: 0.8 #weak-accを出す最大時間。この後strong_accが出力される。
+    smooth_stop_weak_stop_dist: -0.3 #これより手前にあるときにweak-accが出力される。
+    smooth_stop_strong_stop_dist: -0.5 #これよりオーバーするときString-ACCが出る。
 
     # stopped state
     stopped_vel: 0.0
@@ -67,7 +67,7 @@
     max_jerk: 50.0
     min_jerk: -50.0
 
-    # pitch
+    # pitch 土地が傾いていた場合。今回は関係ない。
     use_trajectory_for_pitch_calculation: false
     lpf_pitch_gain: 0.95
     max_pitch_rad: 0.1
