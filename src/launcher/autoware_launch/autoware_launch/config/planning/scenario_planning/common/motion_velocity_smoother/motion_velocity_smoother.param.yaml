@@ -5,21 +5,23 @@
 
     # motion state constraints
     max_velocity: 1.389      # 変更の必要なし。5.004km/h max velocity limit [m/s]
-    stop_decel: 0.0         # deceleration at a stop point[m/ss]
+    stop_decel: 0.0         # 停止位置での加速度.deceleration at a stop point[m/ss]
 
-    # path extraction parameters 
+    # path extraction parameters 最初にどこまで先、後ろの経路を見るのか。
     extract_ahead_dist: 50.0         # forward trajectory distance used for planning [m]
-    extract_behind_dist: 5.0          # backward trajectory distance used for planning [m]
+    extract_behind_dist: 3.0          # backward trajectory distance used for planning [m]
     delta_yaw_threshold: 1.0472       # 恐らく使っていない。Allowed delta yaw between ego pose and trajectory pose [radian]
 
-    # external velocity limit parameter
+    # 今回は関係ない。外部からの速度制限を適用する。(external_velocity_limit_selector)external velocity limit parameterexternal velocity limit parameter
     margin_to_insert_external_velocity_limit: 0.3   #  恐らく使っていない？margin distance to insert external velocity limit [m]
   
-    # stop velocity
-    stopping_velocity: 0.1    # 1km/h change target velocity to this value before v=0 point [m/s]
-    stopping_distance: 1.0    # この距離の手前になったら上の速度が適用される。現在無効化。distance for the stopping_velocity [m]. 0 means the stopping velocity is not applied.
+    # stop velocity 止まる前のStoppingしているよ。 停止位置の1.5m前に速度を2km/hに変更する。
+    stopping_velocity: 0.555    # 目標速度を0m/sになる前にこの速度に変更する。1km/h change target velocity to this value before v=0 point [m/s]
+    stopping_distance: 2.0    # STOPPINGに入る距離。0は無効化される。この距離の手前になったら上の速度が適用される。現在無効化。distance for the stopping_velocity [m]. 0 means the stopping velocity is not applied.
 
     # curve parameters(Apply lateral limit)曲がるときに適用される。上2つが曲がる時のスピードに影響。
+    #経路の曲率に応じて、指定された最大横加速度max_lateral_accelを超えない速度を制限速度として設定する。
+    #ただし、制限速度はmin_curve_velocityを下回らないように設定する。
     max_lateral_accel: 0.07             # max lateral acceleration limit [m/ss]
     min_curve_velocity: 0.0            # 曲がるときの最低速度。min velocity at lateral acceleration limit and steering angle rate limit [m/s]
     decel_distance_before_curve: 4.0   # slow speed distance before a curve for lateral acceleration limit
@@ -33,31 +35,41 @@
     curvature_calculation_distance: 0.1      # distance of points while curvature is calculating [m]
 
     # resampling parameters for optimization　ここはあまりいじる必要はない？
-    max_trajectory_length: 200.0        # max trajectory length for resampling [m]
-    min_trajectory_length: 50.0        # min trajectory length for resampling [m]
-    resample_time: 2.0                  # resample total time for dense sampling [s]
-    dense_resample_dt: 0.2              # resample time interval for dense sampling [s]
-    dense_min_interval_distance: 0.1    # minimum points-interval length for dense sampling [m]
-    sparse_resample_dt: 0.5             # resample time interval for sparse sampling [s]
-    sparse_min_interval_distance: 4.0   # minimum points-interval length for sparse sampling [m]
+    # resampling parameters for optimization. 指定された時間間隔で経路の点を再サンプルする。ただし、経路全体の長さはmin_trajectory_lengthからmax_trajectory_lengthの間となるように再サンプルを行い、
+    # 点の間隔はmin_trajectory_interval_distanceより小さくならないようにする。 現在車速でresample_timeの間進む距離までは密にサンプリングし、それ以降は疎にサンプリングする。 
+    # この方法でサンプリングすることで、低速時は密に、高速時は疎にサンプルされるため、停止精度と計算負荷軽減の両立を図っている
+    max_trajectory_length: 50.0        # 経路全体のMax長さ。max trajectory length for resampling [m]
+    min_trajectory_length: 10.0        # 経路全体のMin長さ。min trajectory length for resampling [m]
+    resample_time: 0.5                  # 密にサンプリングする距離時間。それ以降は疎。resample total time for dense sampling [s]
+    dense_resample_dt: 0.2              # 密サンプル。1つ1つの。resample time interval for dense sampling [s]
+    dense_min_interval_distance: 0.01    # 密サンプルの最小サンプル間隔[m]minimum points-interval length for dense sampling [m]
+    sparse_resample_dt: 0.5             #疎にサンプルする際の時間インターバル。 resample time interval for sparse sampling [s]
+    sparse_min_interval_distance: 1.0   # 疎にサンプルする際の最小サンプル距離間隔minimum points-interval length for sparse sampling [m]
 
-    # engage & replan parameters 発進時(engage)
+   # engage(発進時) & replan parameters
+    #engage::自車両のvelが低い＆ベースの望むVelが高いときに、engageを使う
     replan_vel_deviation: 5.53         # velocity deviation to replan initial velocity [m/s]
-    engage_velocity: 0.1              # 発進時の速度制限。1.38より大きいとエラーーengage velocity threshold [m/s] (if the trajectory velocity is higher than this value, use this velocity for engage vehicle speed)
+    engage_velocity: 0.1              # # 発進時の速度。(IF 軌跡速度 >engage_vel, THEN　この速度を使う).発進時の速度制限。1.38より大きいとエラーーengage velocity threshold [m/s] (if the trajectory velocity is higher than this value, use this velocity for engage vehicle speed)
     engage_acceleration: 0.05           # 発進時の加速度制限　engage acceleration [m/ss] (use this acceleration when engagement)
-    engage_exit_ratio: 0.5             # exit engage sequence to normal velocity planning when the velocity exceeds engage_exit_ratio x engage_velocity.
+    engage_exit_ratio: 0.5             # 発進時から通常ドライブへの遷移条件。exit engage sequence to normal velocity planning when the velocity exceeds engage_exit_ratio x engage_velocity.
     stop_dist_to_prohibit_engage: 0.6   # if the stop point is in this distance, the speed is set to 0 not to move the vehicle [m]
 
     #Apply JerkFilter, L2, Linf, orAnalytical 
 
     # resampling parameters for post process
-    post_max_trajectory_length: 300.0        # max trajectory length for resampling [m]
-    post_min_trajectory_length: 30.0         # min trajectory length for resampling [m]
-    post_resample_time: 10.0                 # resample total time for dense sampling [s]
-    post_dense_resample_dt: 0.1              # resample time interval for dense sampling [s]
-    post_dense_min_interval_distance: 0.1    # minimum points-interval length for dense sampling [m]
+    # resampling parameters for post process。2回目のResampling。
+    #最適化前で必要な経路間隔と後段のモジュールに渡す経路間隔が必ずしも一致していないからであり、その差を埋めるために再度サンプリングを行っている。
+    #そのため、post resamplingでは後段モジュールの経路仕様を確認してパラメータを決める必要がある。
+    #なお、最適化アルゴリズムの計算負荷が高く、最初のリサンプリングで経路間隔が後段モジュールの経路仕様より疎になっている場合、post resamplingで経路を蜜にリサンプリングする。
+    #逆に最適化アルゴリズムの計算負荷が小さく、最初のリサンプリングで経路間隔が後段の経路仕様より蜜になっている場合は、post resamplingで経路をその仕様に合わせて疎にリサンプリングする。
+
+    post_max_trajectory_length: 50.0        # max trajectory length for resampling [m]
+    post_min_trajectory_length: 10.0         # min trajectory length for resampling [m]
+    post_resample_time: 0.5                 # resample total time for dense sampling [s]
+    post_dense_resample_dt: 0.2              # resample time interval for dense sampling [s]
+    post_dense_min_interval_distance: 0.01    # FreeSpaceでの精密制御のため。minimum points-interval length for dense sampling [m]
     post_sparse_resample_dt: 0.1             # resample time interval for sparse sampling [s]
-    post_sparse_min_interval_distance: 1.0   # minimum points-interval length for sparse sampling [m]
+    post_sparse_min_interval_distance: 0.5   # minimum points-interval length for sparse sampling [m]
 
 
 
