@@ -39,16 +39,16 @@
 
     # smooth stop state(Stopping)
     smooth_stop_max_strong_acc: -0.5
-    smooth_stop_min_strong_acc: -0.8
-    smooth_stop_weak_acc: -0.3
+    smooth_stop_min_strong_acc: -1.8
+    smooth_stop_weak_acc: -0.7
     smooth_stop_weak_stop_acc: -0.8 #今すぐ止める弱いAcc
     smooth_stop_strong_stop_acc: -3.4 #smooth_stop_strong_stop_dist-meterで停止点を超えたときの強い加速度。
     smooth_stop_max_fast_vel: 0.5 #egoが速く走っているという閾値。超えるとStrong-accが出る。
     smooth_stop_min_running_vel: 0.01 #egoが走っているかどうかを判断するMin-Vel
     smooth_stop_min_running_acc: 0.01 #egoが走っているか判断するMin-acc
-    smooth_stop_weak_stop_time: 0.8 #weak-accを出す最大時間。この後strong_accが出力される。
+    smooth_stop_weak_stop_time: 0.3 #weak-accを出す最大時間。この後strong_accが出力される。
     smooth_stop_weak_stop_dist: -0.3 #これより手前にあるときにweak-accが出力される。
-    smooth_stop_strong_stop_dist: -0.5 #これよりオーバーするときString-ACCが出る。
+    smooth_stop_strong_stop_dist: -0.1 #これよりオーバーするときString-ACCが出る。
 
     # stopped state
     stopped_vel: 0.0
