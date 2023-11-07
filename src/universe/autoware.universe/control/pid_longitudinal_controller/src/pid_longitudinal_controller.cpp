@@ -576,9 +576,11 @@ void PidLongitudinalController::updateControlState(const ControlData & control_d
     // -- debug print --
     if (has_nonzero_target_vel && !departure_condition_from_stopped) {
       info_throttle("<PID>target speed > 0, but departure condition is not met. Keep STOPPED.(Param;Stopdist)");
+      return changeState(ControlState::DRIVE);
     }
     if (has_nonzero_target_vel && keep_stopped_condition) {
       info_throttle("<PID>target speed > 0, but keep stop condition is met. Keep STOPPED.");
+      return changeState(ControlState::DRIVE);
     }
     // ---------------
 
