@@ -19,8 +19,7 @@ Panels:
         - /Planning1/Diagnostic1/PlanningErrorMarker1
         - /Stop_Reason1/Topic1
         - /(2) Motion Traj1/View Path1
-        - /PID_rViZ1
-        - /PID_rViZ1/PID_State1
+        - /MPC_rViZ1
       Splitter Ratio: 0.35922330617904663
     Tree Height: 352
   - Class: rviz_common/Selection
@@ -2466,6 +2465,82 @@ Visualization Manager:
           top: 170
       Enabled: true
       Name: PID_rViZ
+    - Class: rviz_common/Group
+      Displays:
+        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+          Enabled: true
+          Name: MPC_FinalSteer
+          Topic: /control/trajectory_follower/lateral/diagnostic
+          Value: true
+          auto color change: true
+          background alpha: 0
+          background color: 0; 0; 0
+          clockwise rotate direction: false
+          data index: 0
+          foreground alpha: 0.699999988079071
+          foreground alpha 2: 0.4000000059604645
+          foreground color: 170; 255; 127
+          left: 0
+          max color: 255; 0; 0
+          max color change threshold: 0
+          max value: 1
+          med color: 255; 0; 0
+          med color change threshold: 0
+          min value: 0
+          show caption: true
+          size: 100
+          text size: 10
+          top: 300
+        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+          Enabled: true
+          Name: LatError
+          Topic: /control/trajectory_follower/lateral/diagnostic
+          Value: true
+          auto color change: true
+          background alpha: 0
+          background color: 0; 0; 0
+          clockwise rotate direction: false
+          data index: 5
+          foreground alpha: 0.699999988079071
+          foreground alpha 2: 0.4000000059604645
+          foreground color: 170; 255; 127
+          left: 110
+          max color: 255; 0; 0
+          max color change threshold: 0
+          max value: 1
+          med color: 255; 0; 0
+          med color change threshold: 0
+          min value: 0
+          show caption: true
+          size: 100
+          text size: 11
+          top: 300
+        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+          Enabled: true
+          Name: YawError
+          Topic: /control/trajectory_follower/lateral/diagnostic
+          Value: true
+          auto color change: true
+          background alpha: 0
+          background color: 0; 0; 0
+          clockwise rotate direction: false
+          data index: 8
+          foreground alpha: 0.699999988079071
+          foreground alpha 2: 0.4000000059604645
+          foreground color: 170; 255; 127
+          left: 210
+          max color: 255; 255; 255
+          max color change threshold: 0
+          max value: 1
+          med color: 255; 255; 0
+          med color change threshold: 0
+          min value: 0
+          show caption: true
+          size: 100
+          text size: 10
+          top: 300
+      Enabled: true
+      Name: MPC_rViZ
   Enabled: true
   Global Options:
     Background Color: 10; 10; 10
@@ -2556,7 +2631,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 0.5699996948242188
+      Angle: 0.464999794960022
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -2566,11 +2641,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 98.09637451171875
+      Scale: 36.218997955322266
       Target Frame: viewer
       Value: TopDownOrtho (rviz_default_plugins)
-      X: -28.626358032226562
-      Y: -7.243669509887695
+      X: -25.616073608398438
+      Y: -1.2200709581375122
     Saved:
       - Class: rviz_default_plugins/ThirdPersonFollower
         Distance: 18
