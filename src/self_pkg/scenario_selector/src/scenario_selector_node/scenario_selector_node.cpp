@@ -173,16 +173,15 @@ void ScenarioSelectorNode::updateCurrentScenario()
   const auto is_near_trajectory_end =
     isNearTrajectoryEnd(scenario_trajectory, current_pose_->pose.pose, th_arrived_distance_m_);
 
-  // const auto is_stopped = 
-  isStopped(twist_buffer_, th_stopped_velocity_mps_);
+  const auto is_stopped = isStopped(twist_buffer_, th_stopped_velocity_mps_);
 
-  if (is_near_trajectory_end) {
+  if (is_near_trajectory_end && is_stopped) {
+    RCLCPP_INFO_STREAM(this->get_logger(), "In parking and stopped: " );
     current_scenario_ = selectScenarioByPosition();
   }
 
   if (current_scenario_ != prev_scenario) {
-    RCLCPP_INFO_STREAM(
-      this->get_logger(), "scenario changed: " << prev_scenario << " -> " << current_scenario_);
+    RCLCPP_INFO_STREAM(this->get_logger(), "scenario changed: " << prev_scenario << " -> " << current_scenario_);
   }
 }
 

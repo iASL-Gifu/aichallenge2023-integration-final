@@ -24,6 +24,6 @@
     <param name="th_max_message_delay_sec" value="0.5"/>
     <param name="th_arrived_distance_m" value="100.0"/>
     <param name="th_stopped_time_sec" value="0.05"/>
-    <param name="th_stopped_velocity_mps" value="5.01"/>
+    <param name="th_stopped_velocity_mps" value="0.01"/>
   </node>
 </launch>
