@@ -528,6 +528,7 @@ void PidLongitudinalController::updateControlState(const ControlData & control_d
   // transit state
   // in DRIVE state
   if (m_control_state == ControlState::DRIVE) {
+    info_throttle("<PID>DRIVING");
     if (emergency_condition) {
       return changeState(ControlState::EMERGENCY);
     }
@@ -553,6 +554,7 @@ void PidLongitudinalController::updateControlState(const ControlData & control_d
 
   // in STOPPING state
   if (m_control_state == ControlState::STOPPING) {
+    info_throttle("<PID>STOPPING");
     if (emergency_condition) {
       return changeState(ControlState::EMERGENCY);
     }
@@ -573,6 +575,7 @@ void PidLongitudinalController::updateControlState(const ControlData & control_d
 
   // in STOPPED state
   if (m_control_state == ControlState::STOPPED) {
+    info_throttle("<PID>STOPPED");
     // -- debug print --
     if (has_nonzero_target_vel && !departure_condition_from_stopped) {
       info_throttle("<PID>target speed > 0, but departure condition is not met. Keep STOPPED.(Param;Stopdist)");
