@@ -13,8 +13,8 @@
     drive_state_offset_stop_dist: 0.0
     stopping_state_stop_dist: 0.5 #Stoppingへの移行基準。停止線とegoの距離
     stopped_state_entry_duration_time: 0.1
-    stopped_state_entry_vel: 0.05 #Stop状態へ移行する際のVelocity閾値
-    stopped_state_entry_acc: 0.05 #Stop状態へ移行する際のACC閾値
+    stopped_state_entry_vel: 0.005 #Stop状態へ移行する際のVelocity閾値
+    stopped_state_entry_acc: 0.01 #Stop状態へ移行する際のACC閾値
     #基本関係ない。
     emergency_state_overshoot_stop_dist: 1.5 #enable_overshootがTrueの場合作動。作動する閾値(m)
     emergency_state_traj_trans_dev: 3.0 #enable_overshootがTrueの場合作動。
@@ -37,10 +37,12 @@
     enable_brake_keeping_before_stop: false #止まる直前に、目標線を超えないかつ乗り心地。ONだと下が基準に。
     brake_keeping_acc: -0.2 #最後停止するときのACC。目標線を超えないように、かつ乗り心地の実現
 
-    # smooth stop state(Stopping)
+    # smooth stop state(Stopping) まずstrong_accでego速度を下げる。次にweak-accでego-jerkを減少させスムーズに停止する。
+    # 仮に、egoが一定時間内に止まらないor停止線を何mかオーバーした際には、すぐに止まるため、weak-stop-accが出力される。
+    # もしそれでもegoが動いているなら、今すぐ止まるためのstrong_stop_accを出力する。
     smooth_stop_max_strong_acc: -0.5
     smooth_stop_min_strong_acc: -1.8
-    smooth_stop_weak_acc: -0.7
+    smooth_stop_weak_acc: -1.1 #弱いACC。StopからEngageへ移行する際のinit-acc
     smooth_stop_weak_stop_acc: -0.8 #今すぐ止める弱いAcc
     smooth_stop_strong_stop_acc: -3.4 #smooth_stop_strong_stop_dist-meterで停止点を超えたときの強い加速度。
     smooth_stop_max_fast_vel: 0.5 #egoが速く走っているという閾値。超えるとStrong-accが出る。
