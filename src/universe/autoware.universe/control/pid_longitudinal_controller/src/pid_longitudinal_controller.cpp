@@ -191,23 +191,23 @@ PidLongitudinalController::PidLongitudinalController(rclcpp::Node & node)
   // diagnostic
   setupDiagnosticUpdater();
 }
-
+// 受信したメッセージで現在速度と前回速度を設定
 void PidLongitudinalController::setKinematicState(const nav_msgs::msg::Odometry & msg)
 {
   m_current_kinematic_state = msg;
 }
-
+// 受信したメッセージで現在の加速度を設定
 void PidLongitudinalController::setCurrentAcceleration(
   const geometry_msgs::msg::AccelWithCovarianceStamped & msg)
 {
   m_current_accel = msg;
 }
-
+// 受信したメッセージで現在の動作モードを設定
 void PidLongitudinalController::setCurrentOperationMode(const OperationModeState & msg)
 {
   m_current_operation_mode = msg;
 }
-
+// 受信したメッセージで基準軌道を設定
 void PidLongitudinalController::setTrajectory(
   const autoware_auto_planning_msgs::msg::Trajectory & msg)
 {
@@ -328,7 +328,7 @@ rcl_interfaces::msg::SetParametersResult PidLongitudinalController::paramCallbac
   {
     auto & p = m_emergency_state_params;
     update_param("emergency_vel", p.vel);
-    update_param("emergency_acc", p.acc);
+    update_param("stop_distemergency_acc", p.acc);
     update_param("emergency_jerk", p.jerk);
   }
 
@@ -354,7 +354,7 @@ bool PidLongitudinalController::isReady(
 {
   return true;
 }
-
+// 制御コマンドを計算し、定期的に公表する
 trajectory_follower::LongitudinalOutput PidLongitudinalController::run(
   trajectory_follower::InputData const & input_data)
 {
@@ -458,7 +458,7 @@ PidLongitudinalController::ControlData PidLongitudinalController::getControlData
 
   return control_data;
 }
-
+// 緊急時の制御コマンドを計算する
 PidLongitudinalController::Motion PidLongitudinalController::calcEmergencyCtrlCmd(
   const double dt) const
 {
@@ -474,7 +474,7 @@ PidLongitudinalController::Motion PidLongitudinalController::calcEmergencyCtrlCm
     acc);
   return Motion{vel, acc};
 }
-
+// 現在の状況に応じて制御状態を更新
 void PidLongitudinalController::updateControlState(const ControlData & control_data)
 {
   const double current_vel = control_data.current_motion.vel;
@@ -485,13 +485,13 @@ void PidLongitudinalController::updateControlState(const ControlData & control_d
   const auto & p = m_state_transition_params;
 
   const bool departure_condition_from_stopping =
-    stop_dist > p.drive_state_stop_dist + p.drive_state_offset_stop_dist;
-  const bool departure_condition_from_stopped = stop_dist > p.drive_state_stop_dist;
+    std::abs(stop_dist) > p.drive_state_stop_dist + p.drive_state_offset_stop_dist;
+  const bool departure_condition_from_stopped = std::abs(stop_dist) > p.drive_state_stop_dist;
 
   const bool keep_stopped_condition =
     m_enable_keep_stopped_until_steer_convergence && !lateral_sync_data_.is_steer_converged;
 
-  const bool stopping_condition = stop_dist < p.stopping_state_stop_dist;
+  const bool stopping_condition = std::abs(stop_dist) < p.stopping_state_stop_dist;
   if (
     std::fabs(current_vel) > p.stopped_state_entry_vel ||
     std::fabs(current_acc) > p.stopped_state_entry_acc) {
@@ -507,7 +507,7 @@ void PidLongitudinalController::updateControlState(const ControlData & control_d
   const double current_vel_cmd =
     std::fabs(m_trajectory.points.at(control_data.nearest_idx).longitudinal_velocity_mps);
   const bool emergency_condition = m_enable_overshoot_emergency &&
-                                   stop_dist < -p.emergency_state_overshoot_stop_dist &&
+                                   std::abs(stop_dist) < -p.emergency_state_overshoot_stop_dist &&
                                    current_vel_cmd < vel_epsilon;
   const bool has_nonzero_target_vel = std::abs(current_vel_cmd) > 1.0e-5;
 
@@ -535,6 +535,7 @@ void PidLongitudinalController::updateControlState(const ControlData & control_d
 
     if (m_enable_smooth_stop) {
       if (stopping_condition) {
+        info_throttle("is stopping condition");
         // predictions after input time delay
         const double pred_vel_in_target =
           predictedVelocityInTargetPoint(control_data.current_motion, m_delay_compensation_time);
@@ -579,11 +580,9 @@ void PidLongitudinalController::updateControlState(const ControlData & control_d
     // -- debug print --
     if (has_nonzero_target_vel && !departure_condition_from_stopped) {
       info_throttle("<PID>target speed > 0, but departure condition is not met. Keep STOPPED.(Param;Stopdist)");
-      return changeState(ControlState::DRIVE);
     }
     if (has_nonzero_target_vel && keep_stopped_condition) {
       info_throttle("<PID>target speed > 0, but keep stop condition is met. Keep STOPPED.");
-      return changeState(ControlState::DRIVE);
     }
     // ---------------
 
@@ -612,7 +611,7 @@ void PidLongitudinalController::updateControlState(const ControlData & control_d
   RCLCPP_FATAL(node_->get_logger(), "invalid state found.");
   return;
 }
-
+// 現在の制御状態に基づいて制御コマンドを計算する
 PidLongitudinalController::Motion PidLongitudinalController::calcCtrlCmd(
   const geometry_msgs::msg::Pose & current_pose, const ControlData & control_data)
 {
@@ -620,10 +619,11 @@ PidLongitudinalController::Motion PidLongitudinalController::calcCtrlCmd(
   const double current_vel = control_data.current_motion.vel;
   const double current_acc = control_data.current_motion.acc;
 
-  // velocity and acceleration command
+  // 速さと加速度コマンドの定義
   Motion raw_ctrl_cmd{};
   Motion target_motion{};
   if (m_control_state == ControlState::DRIVE) {
+    // 車両を現在の速度で遅延時間移動させ、時間遅延後の車両姿勢を計算
     const auto target_pose = longitudinal_utils::calcPoseAfterTimeDelay(
       current_pose, m_delay_compensation_time, current_vel);
     const auto target_interpolated_point = calcInterpolatedTargetValue(m_trajectory, target_pose);
@@ -757,7 +757,7 @@ enum PidLongitudinalController::Shift PidLongitudinalController::getCurrentShift
 
   return m_prev_shift;
 }
-
+// 加速度とジャークを制限し、傾きを補償するフィルタ加速度コマンド
 double PidLongitudinalController::calcFilteredAcc(
   const double raw_acc, const ControlData & control_data)
 {
@@ -778,7 +778,7 @@ double PidLongitudinalController::calcFilteredAcc(
 
   return acc_jerk_filtered;
 }
-
+// 勾配補正前の加速度指令を記憶
 void PidLongitudinalController::storeAccelCmd(const double accel)
 {
   if (m_control_state == ControlState::DRIVE) {
@@ -802,7 +802,7 @@ void PidLongitudinalController::storeAccelCmd(const double accel)
     m_ctrl_cmd_vec.erase(m_ctrl_cmd_vec.begin());
   }
 }
-
+// 加速度を加えて勾配を補正する
 double PidLongitudinalController::applySlopeCompensation(
   const double input_acc, const double pitch, const Shift shift) const
 {
@@ -816,7 +816,7 @@ double PidLongitudinalController::applySlopeCompensation(
   double compensated_acc = input_acc + sign * 9.81 * std::sin(pitch_limited);
   return compensated_acc;
 }
-
+// 停止前の目標運動加速度を負に維持する
 PidLongitudinalController::Motion PidLongitudinalController::keepBrakeBeforeStop(
   const autoware_auto_planning_msgs::msg::Trajectory & traj, const Motion & target_motion,
   const size_t nearest_idx) const
@@ -850,7 +850,7 @@ PidLongitudinalController::Motion PidLongitudinalController::keepBrakeBeforeStop
 
   return output_motion;
 }
-
+// 車両に最も近い軌跡点を補間する
 autoware_auto_planning_msgs::msg::TrajectoryPoint
 PidLongitudinalController::calcInterpolatedTargetValue(
   const autoware_auto_planning_msgs::msg::Trajectory & traj,
@@ -864,7 +864,7 @@ PidLongitudinalController::calcInterpolatedTargetValue(
   return longitudinal_utils::lerpTrajectoryPoint(
     traj.points, pose, m_ego_nearest_dist_threshold, m_ego_nearest_yaw_threshold);
 }
-
+// 過去の制御コマンドに基づいて、時間遅延後の予測速度を計算する
 double PidLongitudinalController::predictedVelocityInTargetPoint(
   const Motion current_motion, const double delay_compensation_time) const
 {
@@ -912,7 +912,7 @@ double PidLongitudinalController::predictedVelocityInTargetPoint(
   // avoid to change sign of current_vel and pred_vel
   return pred_vel > 0 ? std::copysign(pred_vel, current_vel) : 0.0;
 }
-
+// フィードフォワード制御とPID制御で速度フィードバックを計算
 double PidLongitudinalController::applyVelocityFeedback(
   const Motion target_motion, const double dt, const double current_vel)
 {
