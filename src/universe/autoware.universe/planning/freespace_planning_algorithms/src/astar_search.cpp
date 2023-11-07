@@ -177,6 +177,7 @@ bool AstarSearch::setStartNode()
   start_node->gc = 0;
   start_node->hc = estimateCost(start_pose_);
   start_node->is_back = false;
+  start_node->back_count = 10;
   start_node->status = NodeStatus::Open;
   start_node->parent = nullptr;
 
@@ -254,6 +255,10 @@ bool AstarSearch::search()
       setYaw(&next_pose.orientation, current_node->theta + transition.shift_theta);
       const auto next_index = pose2index(costmap_, next_pose, planner_common_param_.theta_size);
 
+      if (is_turning_point && current_node->back_count < 5) {
+        continue;
+      } 
+
       if (detectCollision(next_index)) {
         continue;
       }
@@ -268,6 +273,11 @@ bool AstarSearch::search()
         next_node->gc = current_node->gc + move_cost;
         next_node->hc = estimateCost(next_pose);
         next_node->is_back = transition.is_back;
+        if (!is_turning_point) {
+          next_node->back_count = current_node->back_count + 1;
+        } else {
+          next_node->back_count = 0;
+        }
         next_node->parent = current_node;
         openlist_.push(next_node);
         continue;

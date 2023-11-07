@@ -55,6 +55,7 @@ struct AstarNode
   double gc = 0;                         // actual cost
   double hc = 0;                         // heuristic cost
   bool is_back;                          // true if the current direction of the vehicle is back
+  int back_count;                        // recently count
   AstarNode * parent = nullptr;          // parent node
 
   double cost() const { return gc + hc; }
