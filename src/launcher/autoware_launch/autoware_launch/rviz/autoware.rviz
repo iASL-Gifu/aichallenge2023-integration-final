@@ -5,7 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /System1/Vehicle1/PolarGridDisplay1
+        - /System1/Vehicle1
         - /Map1/Lanelet2VectorMap1/Namespaces1
         - /Sensing1/LiDAR1/ConcatenatePointCloud1/Autocompute Value Bounds1
         - /Perception1/Segmentation1
@@ -18,6 +18,7 @@ Panels:
         - /Planning1/Diagnostic1/PlanningErrorMarker1
         - /Stop_Reason1/Topic1
         - /(2) Motion Traj1/View Path1
+        - /PID_rViZ1
       Splitter Ratio: 0.35922330617904663
     Tree Height: 352
   - Class: rviz_common/Selection
@@ -98,7 +99,7 @@ Visualization Manager:
               Name: SteeringAngle
               Scale: 10
               Text Color: 25; 255; 240
-              Top: 71
+              Top: 0
               Topic:
                 Depth: 5
                 Durability Policy: Volatile
@@ -114,7 +115,7 @@ Visualization Manager:
               Length: 100
               Name: ConsoleMeter
               Text Color: 25; 255; 240
-              Top: 70
+              Top: 0
               Topic:
                 Depth: 5
                 Durability Policy: Volatile
@@ -206,14 +207,14 @@ Visualization Manager:
               Length: 53
               Name: MaxVelocity
               Text Color: 255; 255; 255
-              Top: 130
+              Top: 0
               Topic: /planning/scenario_planning/current_max_velocity
               Value: true
               Value Scale: 0.20000000298023224
             - Class: rviz_plugins/TurnSignal
               Enabled: true
               Height: 71
-              Left: 11
+              Left: 1100
               Name: TurnSignal
               Top: 1
               Topic:
@@ -276,6 +277,7 @@ Visualization Manager:
             parking_lots: true
             right_lane_bound: true
             road_lanelets: false
+            stop_lines: true
           Topic:
             Depth: 5
             Durability Policy: Transient Local
@@ -2130,6 +2132,47 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/marker
       Value: false
+    - Class: rviz_plugins/Trajectory
+      Color Border Vel Max: 3
+      Enabled: false
+      Name: VelSmooth_Consi_Stopline
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /planning/scenario_planning/motion_velocity_smoother/debug/trajectory_external_velocity_limited
+      Value: false
+      View Footprint:
+        Alpha: 1
+        Color: 230; 230; 50
+        Offset from BaseLink: 0
+        Rear Overhang: 1.0299999713897705
+        Value: false
+        Vehicle Length: 4.769999980926514
+        Vehicle Width: 1.8300000429153442
+      View Path:
+        Alpha: 0.4000000059604645
+        Color: 0; 0; 0
+        Constant Color: false
+        Value: true
+        Width: 1.2649999856948853
+      View Point:
+        Alpha: 1
+        Color: 0; 60; 255
+        Offset: 0
+        Radius: 0.05000000074505806
+        Value: true
+      View Text Velocity:
+        Scale: 0.05000000074505806
+        Value: true
+      View Velocity:
+        Alpha: 1
+        Color: 0; 0; 0
+        Constant Color: false
+        Scale: 0.30000001192092896
+        Value: true
     - Class: rviz_default_plugins/Marker
       Enabled: true
       Name: Vehicle_foot
@@ -2412,7 +2455,7 @@ Visualization Manager:
           show caption: true
           size: 100
           text size: 10
-          top: 170
+          top: 100
         - Class: rviz_plugins/Float32MultiArrayStampedPieChart
           Enabled: true
           Name: State
@@ -2436,7 +2479,7 @@ Visualization Manager:
           show caption: true
           size: 100
           text size: 11
-          top: 170
+          top: 100
         - Class: rviz_plugins/Float32MultiArrayStampedPieChart
           Enabled: true
           Name: Pub_ACC
@@ -2460,7 +2503,7 @@ Visualization Manager:
           show caption: true
           size: 100
           text size: 10
-          top: 170
+          top: 100
         - Class: rviz_plugins/Float32MultiArrayStampedPieChart
           Enabled: true
           Name: Target_ACC
@@ -2484,7 +2527,7 @@ Visualization Manager:
           show caption: true
           size: 100
           text size: 10
-          top: 170
+          top: 100
         - Class: rviz_plugins/Float32MultiArrayStampedPieChart
           Enabled: true
           Name: Target_Vel
@@ -2508,7 +2551,31 @@ Visualization Manager:
           show caption: true
           size: 100
           text size: 10
-          top: 170
+          top: 100
+        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+          Enabled: true
+          Name: Nearest_Vel
+          Topic: /control/trajectory_follower/longitudinal/diagnostic
+          Value: true
+          auto color change: true
+          background alpha: 0
+          background color: 0; 0; 0
+          clockwise rotate direction: false
+          data index: 4
+          foreground alpha: 0.699999988079071
+          foreground alpha 2: 0.4000000059604645
+          foreground color: 255; 255; 255
+          left: 510
+          max color: 255; 255; 255
+          max color change threshold: 0
+          max value: 1
+          med color: 255; 255; 0
+          med color change threshold: 0
+          min value: 0
+          show caption: true
+          size: 100
+          text size: 10
+          top: 100
       Enabled: true
       Name: PID_rViZ
     - Class: rviz_common/Group
@@ -2536,7 +2603,7 @@ Visualization Manager:
           show caption: true
           size: 100
           text size: 10
-          top: 300
+          top: 220
         - Class: rviz_plugins/Float32MultiArrayStampedPieChart
           Enabled: true
           Name: LatError
@@ -2560,7 +2627,7 @@ Visualization Manager:
           show caption: true
           size: 100
           text size: 11
-          top: 300
+          top: 220
         - Class: rviz_plugins/Float32MultiArrayStampedPieChart
           Enabled: true
           Name: YawError
@@ -2584,7 +2651,7 @@ Visualization Manager:
           show caption: true
           size: 100
           text size: 10
-          top: 300
+          top: 220
       Enabled: true
       Name: MPC_rViZ
   Enabled: true
@@ -2677,7 +2744,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 0.464999794960022
+      Angle: 0.45999985933303833
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -2687,11 +2754,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 38.893001556396484
+      Scale: 440.8428649902344
       Target Frame: viewer
       Value: TopDownOrtho (rviz_default_plugins)
-      X: -36.149658203125
-      Y: -3.121551752090454
+      X: -31.270238876342773
+      Y: -6.1672139167785645
     Saved:
       - Class: rviz_default_plugins/ThirdPersonFollower
         Distance: 18
