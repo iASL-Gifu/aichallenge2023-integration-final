@@ -7,9 +7,9 @@
   <!-- vehicle body -->
   <link name="base_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="${vehicle_info['/**']['ros__parameters']['wheel_base']} 0 0" rpy="0 0 ${pi}"/>
       <geometry>
-        <mesh filename="package://golfcart_description/mesh/golfcart.dae" scale="1.4325 1.2091 1.1978"/>
+        <mesh filename="package://golfcart_description/mesh/golfcart.dae" scale="1 1 1"/>
       </geometry>
     </visual>
   </link>
