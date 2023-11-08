@@ -1,6 +1,6 @@
 /**:
   ros__parameters:
-    delay_compensation_time: 0.1 #アクセル・ブレーキの作動の遅れ。
+    delay_compensation_time: 0.2 #アクセル・ブレーキの作動の遅れ。
 
     enable_smooth_stop: true #Mode:Stoppingに突入するかいなか。スムーズに止まるため。
     enable_overshoot_emergency: false #停止線を超えそうになるとEmergencyに入る。　emergency_state_overshoot_stop_distが閾値
@@ -9,9 +9,9 @@
     enable_keep_stopped_until_steer_convergence: false #入れるとDiagAggriで引っかかる。ステアリングが収束するまで止まっているか。
 
     # state transition
-    drive_state_stop_dist: 0.0 #停止線までの距離。Drive移行を決定する。
+    drive_state_stop_dist: 0.06 #停止線までの距離。Drive移行を決定する。
     drive_state_offset_stop_dist: 0.0
-    stopping_state_stop_dist: 1.0 #Stoppingへの移行基準。停止線とegoの距離
+    stopping_state_stop_dist: 1.2 #Stoppingへの移行基準。停止線とegoの距離
     stopped_state_entry_duration_time: 0.1
     stopped_state_entry_vel: 0.0 #Stop状態へ移行する際のVelocity閾値
     stopped_state_entry_acc: 0.0 #Stop状態へ移行する際のACC閾値
@@ -46,17 +46,17 @@
     smooth_stop_weak_stop_time: 0.1 #weak-accを出す最大時間。この後strong_accが出力される。Def:0.3
     smooth_stop_weak_stop_acc: -2.8 #今すぐ止める弱いAcc
     smooth_stop_weak_stop_dist: -0.21 #これより手前にあるときにweak-accが出力される。[m]
-    smooth_stop_max_fast_vel: 0.5 #egoが速く走っているという閾値。超えるとStrong-accが出る。
+    smooth_stop_max_fast_vel: 0.3 #egoが速く走っているという閾値。超えるとStrong-accが出る。
     smooth_stop_min_running_vel: 0.01 #egoが走っているかどうかを判断するMin-Vel
     smooth_stop_min_running_acc: 0.01 #egoが走っているか判断するMin-acc
 
     
     smooth_stop_strong_stop_dist: 0.0 #これよりオーバーするときStrong-ACCが出る。Def::-0.1
-    smooth_stop_strong_stop_acc: -3.4 #smooth_stop_strong_stop_dist-meterで停止点を超えたときの強い加速度。
+    smooth_stop_strong_stop_acc: -6.4 #smooth_stop_strong_stop_dist-meterで停止点を超えたときの強い加速度。
 
     # stopped state
     stopped_vel: 0.0
-    stopped_acc: -3.4
+    stopped_acc: -6.4
     stopped_jerk: -5.0
 
     # emergency state
@@ -66,7 +66,7 @@
 
     # acceleration limit
     max_acc: 50.0
-    min_acc: -50.0
+    min_acc: -100.0
 
     # jerk limit
     max_jerk: 50.0

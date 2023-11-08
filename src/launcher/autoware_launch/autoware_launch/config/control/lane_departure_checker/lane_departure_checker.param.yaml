@@ -9,10 +9,10 @@
     include_conflicting_lanes: false
 
     # Core
-    footprint_margin_scale: 0.8 #geometrymsg::PosewithCovari(自身の位置)とこのマージンスケールを用いて車体のフットプリントを作成 Default:1
+    footprint_margin_scale: 0.0 #geometrymsg::PosewithCovari(自身の位置)とこのマージンスケールを用いて車体のフットプリントを作成 Default:1
     resample_interval: 0.3
     max_deceleration: 2.8 #制動距離を計算する際のMax acc
-    delay_time: 0.1 #ブレーキを作動させてから実際に作動するまでのDelay。制動距離を計算するために使用。
+    delay_time: 0.02 #ブレーキを作動させてから実際に作動するまでのDelay。制動距離を計算するために使用。
     max_lateral_deviation: 1.0 #LaneDepartureではなく、Traj DeviationのためのParam
     max_longitudinal_deviation: 1.0
     max_yaw_deviation_deg: 60.0

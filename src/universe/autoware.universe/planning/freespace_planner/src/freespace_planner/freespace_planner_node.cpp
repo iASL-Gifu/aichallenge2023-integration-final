@@ -532,8 +532,8 @@ void FreespacePlannerNode::initializePlanningAlgorithm()
   // Extend robot shape
   freespace_planning_algorithms::VehicleShape extended_vehicle_shape = vehicle_shape_;
   const double margin = node_param_.vehicle_shape_margin_m;
-  extended_vehicle_shape.length += margin;
-  extended_vehicle_shape.width += margin;
+  extended_vehicle_shape.length += margin * 1.5;
+  extended_vehicle_shape.width += margin * 1.0;
   extended_vehicle_shape.base2back += margin / 2;
 
   const auto planner_common_param = getPlannerCommonParam();
