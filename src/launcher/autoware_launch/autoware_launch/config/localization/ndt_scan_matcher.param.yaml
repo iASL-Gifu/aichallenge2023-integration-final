@@ -48,7 +48,7 @@
     neighborhood_search_method: 0
 
     # Number of threads used for parallel computing
-    num_threads: 4
+    num_threads: 8
 
     # The covariance of output pose
     # Do note that this covariance matrix is empirically derived
