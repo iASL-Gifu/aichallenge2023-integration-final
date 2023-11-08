@@ -1,4 +1,4 @@
-# see AvoidanceParameters description in avoidance_module_data.hpp for description.
+# see AvoidanceParameters description in avoidance_module_data.hpp for description.　ros2 topic echo /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/avoidance_debug_message_array
 /**:
   ros__parameters:
     avoidance:
@@ -8,15 +8,15 @@
       detection_area_left_expand_dist: 0.3              # [m]
       drivable_area_right_bound_offset: 0.0             # [m]
       drivable_area_left_bound_offset: 0.0              # [m]
-      object_envelope_buffer: 0.2                       # [m]
+      object_envelope_buffer: 0.2                       # [m] オブジェクトを少し大きく取る。
 
       # avoidance module common setting
       enable_bound_clipping: false
-      enable_avoidance_over_same_direction: true
-      enable_avoidance_over_opposite_direction: true
+      enable_avoidance_over_same_direction: true #同じ方向の横車線に車線変更して回避するか。
+      enable_avoidance_over_opposite_direction: true #反対車線まで車線変更して回避するか。
       enable_update_path_when_object_is_gone: false
       enable_force_avoidance_for_stopped_vehicle: true
-      enable_safety_check: false
+      enable_safety_check: false #安全チェック
       enable_yield_maneuver: false
       disable_path_update: false
 
@@ -38,22 +38,23 @@
       # For target object filtering
       target_filtering:
         # filtering moving objects
-        threshold_speed_object_is_stopped: 1.0          # [m/s]
-        threshold_time_object_is_moving: 5.0            # [s]
+        threshold_speed_object_is_stopped: 1.0          # 回避するオブジェクト種類. これより大きい速度の物体は回避されない。[m/s]
+        threshold_time_object_is_moving: 5.0            # オブジェクトが動いているという判定時間[s]。チャタリングの防止。
         threshold_time_force_avoidance_for_stopped_vehicle: 10.0 # [s]
-        # detection range
+        # detection range, egoとObjectとの距離と、ObjectがGoalより後ろにない。
         object_check_force_avoidance_clearance: 2.0    # [m]
-        object_check_forward_distance: 15.0            # [m]
-        object_check_backward_distance: 0.0             # [m]
+        object_check_forward_distance: 15.0            # これより遠くのオブジェクトは回避しない。[m] Def::150
+        object_check_backward_distance: 0.0             # 自車両より後ろのチェック。これより近くのオブジェクトは回避しない。詳細はDocsで確認。このParamよりObjectが後ろにいない。このParamにマイナスが付く？[m]def:2m
         object_check_goal_distance: 20.0                # [m]
-        # filtering parking objects
-        threshold_distance_object_is_on_center: 0.0     # [m]
-        object_check_shiftable_ratio: 0.0               # [-]
+        # filtering parking objects　信号待ち車両の除外。センターライン付近で止まっている車両の除外
+        threshold_distance_object_is_on_center: 0.0     # センターラインに付近にいるオブジェクトを回避しないため。センターラインからx mのオブジェクトは回避しない。[m]
+        object_check_shiftable_ratio: 0.0               # [Max 1] Objが駐車しているかどうかの判定。これより高ければ回避を実行する。
         object_check_min_road_shoulder_width: 0.0       # [m]
         # lost object compensation
-        object_last_seen_threshold: 2.0
+        object_last_seen_threshold: 2.0 #[s] チャタリングの防止。障害物が消えてもしばらく保持する。大きいと過検出が増える
+      
 
-      # For safety check
+      # For safety check 今は無効化
       safety_check:
         safety_check_backward_distance: 0.5            # [m]
         safety_check_time_horizon: 10.0                  # [s]
@@ -63,8 +64,8 @@
 
       # For avoidance maneuver
       avoidance:
-        # avoidance lateral parameters
-        lateral:
+        # avoidance lateral parameters.横方向にどれだけ回避するのかを決定する。
+        lateral: 
           lateral_collision_margin: 0.23                 # [m]
           lateral_collision_safety_buffer: 0.51          # [m]
           lateral_passable_safety_buffer: 0.0           # [m]
