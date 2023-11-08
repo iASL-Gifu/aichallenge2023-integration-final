@@ -1,10 +1,10 @@
 /**:
   ros__parameters:
-    # Static expansion
+    # Static expansion. モジュールごとに定義
     avoidance:
-      drivable_area_right_bound_offset: 0.0
-      drivable_area_left_bound_offset: 0.0
-      drivable_area_types_to_skip: [road_border]
+      drivable_area_right_bound_offset: 0.0 #expansion distance of the right bound
+      drivable_area_left_bound_offset: 0.0 #expansion distance of the left bound
+      drivable_area_types_to_skip: [road_border] #types of linestrings that are not expanded
     lane_change:
       drivable_area_right_bound_offset: 0.0
       drivable_area_left_bound_offset: 0.0
