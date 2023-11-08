@@ -4,8 +4,8 @@
     avoidance:
       resample_interval_for_planning: 0.1               # [m]
       resample_interval_for_output: 0.3                 # [m]
-      detection_area_right_expand_dist: 0.3             # [m]
-      detection_area_left_expand_dist: 0.3              # [m]
+      detection_area_right_expand_dist: 0.3             # Lanelet expand length for right side to find avoidance target vehicles.[m]
+      detection_area_left_expand_dist: 0.3              # Lanelet expand length for left side to find avoidance target vehicles.  [m]
       drivable_area_right_bound_offset: 0.0             # [m]
       drivable_area_left_bound_offset: 0.0              # [m]
       object_envelope_buffer: 0.2                       # [m] オブジェクトを少し大きく取る。
@@ -21,8 +21,8 @@
       disable_path_update: false
 
       # for debug
-      publish_debug_marker: true
-      print_debug_info: true
+      publish_debug_marker: true #Flag to publish debug marker (set `false` as default since it takes considerable cost)
+      print_debug_info: true  #Flag to print debug info (set `false` as default since it takes considerable cost)
 
       # avoidance is performed for the object type with true
       target_object:
@@ -43,7 +43,7 @@
         threshold_time_force_avoidance_for_stopped_vehicle: 10.0 # [s]
         # detection range, egoとObjectとの距離と、ObjectがGoalより後ろにない。
         object_check_force_avoidance_clearance: 2.0    # [m]
-        object_check_forward_distance: 15.0            # これより遠くのオブジェクトは回避しない。[m] Def::150
+        object_check_forward_distance: 30.0            # これより遠くのオブジェクトは回避しない。[m] Def::150
         object_check_backward_distance: 0.0             # 自車両より後ろのチェック。これより近くのオブジェクトは回避しない。詳細はDocsで確認。このParamよりObjectが後ろにいない。このParamにマイナスが付く？[m]def:2m
         object_check_goal_distance: 20.0                # [m]
         # filtering parking objects　信号待ち車両の除外。センターライン付近で止まっている車両の除外
