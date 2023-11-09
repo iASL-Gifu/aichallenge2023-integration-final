@@ -9,6 +9,7 @@
     # Subscriber queue size
     input_sensor_points_queue_size: 1
 
+    # 収束を考慮するための2つの連続した変換の最大差
     # The maximum difference between two consecutive
     # transformations in order to consider convergence
     trans_epsilon: 0.01
@@ -19,27 +20,34 @@
     # The ND voxel grid resolution
     resolution: 2.0
 
+    # アライメント計算に必要な反復回数
     # The number of iterations required to calculate alignment
     max_iterations: 30
 
+    # スキャンマッチングスコアの指標の種類
     # Converged param type
     # 0=TRANSFORM_PROBABILITY, 1=NEAREST_VOXEL_TRANSFORMATION_LIKELIHOOD
     converged_param_type: 1
 
+    # 推定結果を信頼するかどうかを決定するためのTP閾値 (type::0)
     # If converged_param_type is 0
     # Threshold for deciding whether to trust the estimation result
     converged_param_transform_probability: 3.0
 
+    # 推定結果を信頼するかどうかを決定するためのNVTL閾値 (type::1)
     # If converged_param_type is 1
     # Threshold for deciding whether to trust the estimation result
     converged_param_nearest_voxel_transformation_likelihood: 2.3
 
+    # 初期姿勢を推定するパーティクル数
     # The number of particles to estimate initial pose
     initial_estimate_particles_num: 100
 
+    # initial_poseとセンサポイントクラウド間のタイムスタンプの差の許容範囲．
     # Tolerance of timestamp difference between initial_pose and sensor pointcloud. [sec]
     initial_pose_timeout_sec: 1.0
 
+    #線形補間に使用される2つの初期ポーズ間の距離差の許容誤差。[m]
     # Tolerance of distance difference between two initial poses used for linear interpolation. [m]
     initial_pose_distance_tolerance_m: 10.0
 
@@ -50,6 +58,7 @@
     # Number of threads used for parallel computing
     num_threads: 8
 
+    # 出力ポーズの共分散
     # The covariance of output pose
     # Do note that this covariance matrix is empirically derived
     output_pose_covariance:
@@ -77,8 +86,10 @@
     # Radius of input LiDAR range (used for diagnostics of dynamic map loading)
     lidar_radius: 100.0
 
+    # これは、スキャンマッチングスコアを推定するために、非接地LiDARスキャンを使用する機能です。このスコアは、現在のローカライズ性能をより正確に反映することができます。
     # A flag for using scan matching score based on de-grounded LiDAR scan
     estimate_scores_for_degrounded_scan: false
 
+    # 接地点除去のZ値マージン
     # If lidar_point.z - base_link.z <= this threshold , the point will be removed
     z_margin_for_ground_removal: 0.8

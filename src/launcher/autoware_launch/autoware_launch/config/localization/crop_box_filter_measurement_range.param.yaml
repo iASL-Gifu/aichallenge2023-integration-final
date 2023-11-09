@@ -1,4 +1,4 @@
-/**:
+/**: #Pointclout_preprocessor, remove points within a given box.
   ros__parameters:
     input_frame: "base_link"
     output_frame: "base_link"

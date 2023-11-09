@@ -1,7 +1,7 @@
 /**:
-  ros__parameters:
-    scale: 3.0
-    error_ellipse_size: 1.0
-    warn_ellipse_size: 0.8
-    error_ellipse_size_lateral_direction: 0.3
-    warn_ellipse_size_lateral_direction: 0.2
+  ros__parameters: #信頼楕円の長半径の大きさ, 横方向（ボディーフレーム）に沿った信頼楕円の大きさ wo monitor
+    scale: 3.0 #Scale factor for monitored values. def 3.0
+    error_ellipse_size: 1.0 #信頼楕円の長半径の誤差閾値 [m] (DEf: 1.0)
+    warn_ellipse_size: 0.8 #信頼楕円の長半径の警告しきい値 [m] (デフォルト: 0.8)
+    error_ellipse_size_lateral_direction: 0.3 #横方向に沿った信頼楕円の大きさの誤差閾値 [m] (デフォルト: 0.3)
+    warn_ellipse_size_lateral_direction: 0.2 #横方向に沿った信頼楕円の大きさの警告しきい値 [m] (デフォルト: 0.2)
