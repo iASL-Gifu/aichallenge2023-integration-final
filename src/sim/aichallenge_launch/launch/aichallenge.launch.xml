@@ -10,7 +10,7 @@
     <include file="$(find-pkg-share autoware_launch)/launch/e2e_simulator.launch.xml">
         <arg name="vehicle_model" value="golfcart"/>
         <arg name="sensor_model" value="awsim_sensor_kit"/>
-        <arg name="map_path" value="/home/hermes-22/aichallenge/aichallenge2023-integration-final/map/AWSIM"/>
+        <arg name="map_path" value="/home/autoware/aichallenge/aichallenge2023-integration-final/map/AWSIM"/>
         <arg name="rviz" value="false"/>
     </include>
 

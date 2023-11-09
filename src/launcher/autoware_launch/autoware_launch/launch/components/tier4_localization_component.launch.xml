@@ -2,9 +2,9 @@
 <launch>
   <include file="$(find-pkg-share tier4_localization_launch)/launch/localization.launch.xml">
     <arg name="use_pointcloud_container" value="$(var use_pointcloud_container)"/>
-    <!-- 本番削除--><arg name="pointcloud_container_name" value="$(var pointcloud_container_name)"/>
-    <!-- 本番追加　　<arg name="input/pointcloud" value="/sensing/lidar/top/outlier_filtered/pointcloud"/>　
-    　　本番追加　<arg name="pointcloud_container_name" value="/sensing/lidar/top/pointcloud_preprocessor/velodyne_node_container"/>　-->
+    <!-- 本番削除<arg name="pointcloud_container_name" value="$(var pointcloud_container_name)"/> -->
+    <arg name="input/pointcloud" value="/sensing/lidar/top/rectified/pointcloud"/>
+    <arg name="pointcloud_container_name" value="/sensing/lidar/top/pointcloud_preprocessor/velodyne_node_container"/>
     <arg name="crop_box_filter_measurement_range_param_path" value="$(find-pkg-share autoware_launch)/config/localization/crop_box_filter_measurement_range.param.yaml"/>
     <arg name="voxel_grid_downsample_filter_param_path" value="$(find-pkg-share autoware_launch)/config/localization/voxel_grid_filter.param.yaml"/>
     <arg name="random_downsample_filter_param_path" value="$(find-pkg-share autoware_launch)/config/localization/random_downsample_filter.param.yaml"/>
