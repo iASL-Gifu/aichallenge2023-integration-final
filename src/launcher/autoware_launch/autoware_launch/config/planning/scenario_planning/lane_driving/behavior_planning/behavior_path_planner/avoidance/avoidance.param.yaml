@@ -2,9 +2,9 @@
 /**:
   ros__parameters:
     avoidance:
-      resample_interval_for_planning: 0.1               # [m]
+      resample_interval_for_planning: 0.1               # [m]回避計画パスのパス再サンプル間隔。
       resample_interval_for_output: 0.3                 # [m]
-      detection_area_right_expand_dist: 0.3             # Lanelet expand length for right side to find avoidance target vehicles.[m]
+      detection_area_right_expand_dist: 0.3             # 回避のためにレーンを拡大する。Lanelet expand length for right side to find avoidance target vehicles.[m]
       detection_area_left_expand_dist: 0.3              # Lanelet expand length for left side to find avoidance target vehicles.  [m]
       drivable_area_right_bound_offset: 0.0             # [m]
       drivable_area_left_bound_offset: 0.0              # [m]
@@ -14,10 +14,11 @@
       enable_bound_clipping: false
       enable_avoidance_over_same_direction: true #同じ方向の横車線に車線変更して回避するか。
       enable_avoidance_over_opposite_direction: true #反対車線まで車線変更して回避するか。
-      enable_update_path_when_object_is_gone: false
-      enable_force_avoidance_for_stopped_vehicle: true
-      enable_safety_check: false #安全チェック
-      enable_yield_maneuver: false
+      enable_update_path_when_object_is_gone: false #1回生成した回避パスをObjectが検出されないようになっても使い続けるか。
+      enable_force_avoidance_for_stopped_vehicle: true #停車しているvehicleに対して強制的にavoidを行うか。
+      enable_safety_check: false #安全チェック, Jerkしか確認しない。
+      #回避経路が生成でき、周囲の交通状況により回避を実行するべきではないと判断した時にYieldManuvergで、回避を実行するかいなかを決定する。
+      enable_yield_maneuver: false #Flag to enable yield maneuver.
       disable_path_update: false
 
       # for debug
@@ -54,13 +55,15 @@
         object_last_seen_threshold: 2.0 #[s] チャタリングの防止。障害物が消えてもしばらく保持する。大きいと過検出が増える
       
 
-      # For safety check 今は無効化
+      # For safety check 今は無効化 Yield Manuverに使う。
+      #エゴの未来位置と物体の予測経路から衝突の危険性を判断します。時間地平(safety_check_time_horizon)におけるエゴの将来位置を計算し、
+      #物体の予測経路を物体の将来位置として使用します。
       safety_check:
-        safety_check_backward_distance: 0.5            # [m]
-        safety_check_time_horizon: 10.0                  # [s]
-        safety_check_idling_time: 1.5                    # [s]
-        safety_check_accel_for_rss: 2.5                  # [m/ss]
-        safety_check_hysteresis_factor: 2.0              # [-]
+        safety_check_backward_distance: 0.1            # [m] #後方チェックする距離 Def::0.5
+        safety_check_time_horizon: 5.0                  # [s] この時間で衝突する可能性を判断する。
+        safety_check_idling_time: 1.5                    # [s] 横マージン計算のため。Def 1.5
+        safety_check_accel_for_rss: 2.5                  # [m/ss]　RSSに基づく縦方向のマージン計算に使用されるアクセル定数。横マージン計算のため。　Def 2.5
+        safety_check_hysteresis_factor: 2.0              # [-]チャタリング防止に使用されるヒステリシス係数。
 
       # For avoidance maneuver
       avoidance:
@@ -82,14 +85,15 @@
           min_nominal_avoidance_speed: 1.0              # [m/s]
           min_sharp_avoidance_speed: 1.0                # [m/s]
 
-      # For yield maneuver
+      # For yield maneuver.回避操作を実行しないとき。
       yield:
-        yield_velocity: 2.78                            # [m/s]
+        yield_velocity: 2.78                            # まずはこの速度に減速する。その後Yieldが継続され車両が回避目標に接近した場合は停止する。[m/s]
 
-      # For stop maneuver
+      # For stop maneuver 回避操作が許可されていない状況、または降伏操作における最低停止距離。Yield Manuverがfalseでも出る。
+      #ダンボールおじさんの停止位置。
       stop:
         min_distance: 3.0                              # [m]
-        max_distance: 6.0                              # [m]
+        max_distance: 6.0                              # 回避操作が許可されない状況、または降伏操作における最大停止距離。[m]
 
       constraints:
         # vehicle slows down under longitudinal constraints
@@ -109,9 +113,24 @@
           # For prevention of large acceleration while avoidance
           min_avoidance_speed_for_acc_prevention: 3.0   # [m/s]
           max_avoidance_acceleration: 0.5               # [m/ss]
-
+      #SafetyChack横方向マージン計算
       target_velocity_matrix:
         col_size: 2
         matrix:
-          [2.78, 13.9,                                  # velocity [m/s]
-           0.50, 1.00]                                  # margin [m]
+          [1.38, 2.0,                                  # target velocity [m/s]
+           0.01, 0.03]                                  # margin [m]
+
+#//         D5
+#//      |<---->|                               D4
+#//      |<----------------------------------------------------------------------->|
+#// +-----------+            D1                 D2                      D3         +-----------+
+#// |           |        |<------->|<------------------------->|<----------------->|           |
+#// |    ego    |======= x ======= x ========================= x ==================|    obj    |
+#// |           |    stop_point  avoid                       avoid                 |           |
+#// +-----------+                start                        end                  +-----------+
+#//
+#// D1: p.min_prepare_distance
+#// D2: min_avoid_distance
+#// D3: longitudinal_avoid_margin_front (margin + D5)
+#// D4: o_front.longitudinal
+#// D5: base_link2front
