@@ -44,6 +44,7 @@ struct AstarParam
 
   // search configs
   double distance_heuristic_weight;  // obstacle threshold on grid [0,255]
+  long int back_operation_limit;
 };
 
 struct AstarNode
@@ -121,7 +122,8 @@ public:
       AstarParam{
         node.declare_parameter("astar.only_behind_solutions", false),
         node.declare_parameter("astar.use_back", true),
-        node.declare_parameter("astar.distance_heuristic_weight", 1.0)})
+        node.declare_parameter("astar.distance_heuristic_weight", 1.0),
+        node.declare_parameter("astar.back_operation_limit", 5)})
   {
   }
 

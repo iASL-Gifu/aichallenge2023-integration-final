@@ -236,6 +236,8 @@ FreespacePlannerNode::FreespacePlannerNode(const rclcpp::NodeOptions & node_opti
     p.vehicle_shape_margin_m = declare_parameter("vehicle_shape_margin_m", 1.0);
     p.replan_when_obstacle_found = declare_parameter("replan_when_obstacle_found", true);
     p.replan_when_course_out = declare_parameter("replan_when_course_out", true);
+    p.use_time_cnt = declare_parameter("use_time_count", false);
+    p.replan_cnt = declare_parameter("replan_time_count", 100000);
   }
 
   // set vehicle_info
@@ -391,9 +393,18 @@ void FreespacePlannerNode::updateTargetIndex()
 
   const auto is_stopped = isStopped(odom_buffer_, node_param_.th_stopped_velocity_mps);
 
-  if (is_near_target && is_stopped) {
+  const auto time_stopped = cnt_ > node_param_.replan_cnt;
+
+  const auto use_is_stopped = node_param_.use_time_cnt;
+
+  if (!is_near_target && is_stopped){
+    cnt_+=1;
+  }
+
+  if (is_near_target && is_stopped | time_stopped && use_is_stopped) {
     const auto new_target_index =
       getNextTargetIndex(trajectory_.points.size(), reversing_indices_, target_index_);
+    cnt_ = 0;
 
     if (new_target_index == target_index_) {
       // Finished publishing all partial trajectories
@@ -404,6 +415,7 @@ void FreespacePlannerNode::updateTargetIndex()
       parking_state_pub_->publish(is_completed_msg);
     } else {
       // Switch to next partial trajectory
+      RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000, "Freespace trajectory change");
       prev_target_index_ = target_index_;
       target_index_ =
         getNextTargetIndex(trajectory_.points.size(), reversing_indices_, target_index_);

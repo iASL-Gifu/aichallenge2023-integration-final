@@ -255,7 +255,7 @@ bool AstarSearch::search()
       setYaw(&next_pose.orientation, current_node->theta + transition.shift_theta);
       const auto next_index = pose2index(costmap_, next_pose, planner_common_param_.theta_size);
 
-      if (is_turning_point && current_node->back_count < 5) {
+      if (is_turning_point && current_node->back_count < astar_param_.back_operation_limit) {
         continue;
       } 
 

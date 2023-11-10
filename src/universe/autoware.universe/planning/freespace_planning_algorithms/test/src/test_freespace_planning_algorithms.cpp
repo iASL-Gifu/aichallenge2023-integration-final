@@ -211,8 +211,9 @@ std::unique_ptr<fpa::AbstractPlanningAlgorithm> configure_astar(bool use_multi)
   const bool only_behind_solutions = false;
   const bool use_back = true;
   const double distance_heuristic_weight = 1.0;
+  const long int back_operation_limit = 5;
   const auto astar_param =
-    fpa::AstarParam{only_behind_solutions, use_back, distance_heuristic_weight};
+    fpa::AstarParam{only_behind_solutions, use_back, distance_heuristic_weight, back_operation_limit};
 
   auto algo = std::make_unique<fpa::AstarSearch>(planner_common_param, vehicle_shape, astar_param);
   return algo;

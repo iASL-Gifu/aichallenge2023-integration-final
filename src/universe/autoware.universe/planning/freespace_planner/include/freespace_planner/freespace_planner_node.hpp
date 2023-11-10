@@ -92,6 +92,8 @@ struct NodeParam
   double vehicle_shape_margin_m;
   bool replan_when_obstacle_found;
   bool replan_when_course_out;
+  int replan_cnt;
+  bool use_time_cnt;
 };
 
 class FreespacePlannerNode : public rclcpp::Node
@@ -131,6 +133,9 @@ private:
   size_t prev_target_index_;
   size_t target_index_;
   bool is_completed_ = false;
+
+  // add self param
+  int cnt_ = 0;
 
   LaneletRoute::ConstSharedPtr route_;
   OccupancyGrid::ConstSharedPtr occupancy_grid_;
