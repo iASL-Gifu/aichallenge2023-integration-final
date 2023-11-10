@@ -94,6 +94,9 @@ struct NodeParam
   bool replan_when_course_out;
   int replan_cnt;
   bool use_time_cnt;
+  double l_margin;
+  double w_margin;
+  double b2b_margin;
 };
 
 class FreespacePlannerNode : public rclcpp::Node

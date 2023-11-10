@@ -238,6 +238,9 @@ FreespacePlannerNode::FreespacePlannerNode(const rclcpp::NodeOptions & node_opti
     p.replan_when_course_out = declare_parameter("replan_when_course_out", true);
     p.use_time_cnt = declare_parameter("use_time_count", false);
     p.replan_cnt = declare_parameter("replan_time_count", 100000);
+    p.l_margin = declare_parameter("l_margin", 1.0);
+    p.w_margin = declare_parameter("w_margin", 1.0);
+    p.b2b_margin = declare_parameter("b2b_margin", 1.0);
   }
 
   // set vehicle_info
@@ -547,10 +550,10 @@ void FreespacePlannerNode::initializePlanningAlgorithm()
 {
   // Extend robot shape
   freespace_planning_algorithms::VehicleShape extended_vehicle_shape = vehicle_shape_;
-  const double margin = node_param_.vehicle_shape_margin_m;
-  extended_vehicle_shape.length += margin * 1.5;
-  extended_vehicle_shape.width += margin * 1.0;
-  extended_vehicle_shape.base2back += margin / 2;
+  // const double margin = node_param_.vehicle_shape_margin_m;
+  extended_vehicle_shape.length += node_param_.l_margin;
+  extended_vehicle_shape.width += node_param_.w_margin;
+  extended_vehicle_shape.base2back += node_param_.b2b_margin;
 
   const auto planner_common_param = getPlannerCommonParam();
 
