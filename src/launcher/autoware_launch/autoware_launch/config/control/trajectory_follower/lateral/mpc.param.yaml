@@ -1,7 +1,7 @@
 /**:
   ros__parameters:
     # -- system --
-    traj_resample_dist: 0.2665      # サンプリングにおけるWayPointの距離。path resampling interval [m]リ Def::0.1
+    traj_resample_dist: 0.5      # サンプリングにおけるWayPointの距離。path resampling interval [m]リ Def::0.1
     use_steer_prediction: false     # 現在ステアリング情報を取得する際に予測値を用いるか。Falseで良いかと。flag for using steer prediction (do not use steer measurement) 
     admissible_position_error: 5.0  # この値より自己位置誤差が大きければ車両を停止させる。(m)stop mpc calculation when error is larger than the following value
     admissible_yaw_error_rad: 1.57  # 上記のヨーアングルVer(rad)。stop mpc calculation when error is larger than the following value
@@ -9,10 +9,10 @@
     # -- path smoothing --　基本的に無効でいい気がする。
     # ターゲット曲率がギザギザに見える場合は、curvature_smoothingを調整することが正確な曲率計算のために決定的に重要になります。
     # 値を大きくすると、スムーズな曲率計算が行われ、ノイズが減りますが、フィードフォワード計算に遅延が生じ、パフォーマンスが低下する可能性があります。
-    enable_path_smoothing: false   # flag for path smoothing
-    path_filter_moving_ave_num: 5 # param of moving average filter for path smoothing
-    curvature_smoothing_num_traj: 5        # point-to-point index distance used in curvature calculation (for trajectory): curvature is calculated from three points p(i-num), p(i), p(i+num)
-    curvature_smoothing_num_ref_steer: 5   # point-to-point index distance used in curvature calculation (for steer command reference): curvature is calculated from three points p(i-num), p(i), p(i+num)
+    enable_path_smoothing: true   # flag for path smoothing
+    path_filter_moving_ave_num: 3 # param of moving average filter for path smoothing
+    curvature_smoothing_num_traj: 3        # point-to-point index distance used in curvature calculation (for trajectory): curvature is calculated from three points p(i-num), p(i), p(i+num)
+    curvature_smoothing_num_ref_steer: 3   # point-to-point index distance used in curvature calculation (for steer command reference): curvature is calculated from three points p(i-num), p(i), p(i+num)
 
     # -- trajectory extending -- MPCはPathの終点における姿勢角を考慮していない。経路終点を姿勢方向に延長することで、姿勢角を考慮できるようになり制御性能が向上する。軌道が終点の姿勢角を考慮して適切に定義されているならfalse
     extend_trajectory_for_end_yaw_control: true # flag of trajectory extending for terminal yaw control.ヨーエンド制御のためにTrajを延長するかいなか。最後ぐにゃって曲がる。
