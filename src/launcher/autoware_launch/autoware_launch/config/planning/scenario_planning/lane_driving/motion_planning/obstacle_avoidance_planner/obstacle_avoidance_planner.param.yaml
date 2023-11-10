@@ -1,19 +1,25 @@
 /**:
   ros__parameters:
+   # 以下のいずれかの条件を満たす場合、軌道最適化が実行される。
+   # それ以外の場合は、最新の入力経路から速度を更新しながら、以前に最適化された軌道が使用される。
+   # (1)egoが1サイクルでreplan.max_ego_moving_distより長く移動する。(Def: 3.0 [m]). シミュレーションでエゴのポーズが再び設定されるときのためのものです。
+   # (2)ゴールポーズとみなされる軌道の終点が、1サイクルでreplan.max_goal_moving_distより長く移動する。(デフォルト: 15.0 [ms]).ゴールポーズが再び設定されたら、プランニングをリセットする。
+   # (3)時間の経過。(デフォルト: 1.0 [s]) 最適化が時々重くなるため、最適化をしばらくスキップする。
+   # (4)入力パスが1サイクルで replan.max_path_shape_around_ego_lat_dist より長く横方向に変化する。(デフォルト: 2.0)
     option:
       enable_smoothing: true                                       # enable path smoothing by elastic band
       enable_skip_optimization: false                              # skip elastic band and model predictive trajectory
       enable_reset_prev_optimization: false                        # If true, optimization has no fix constraint to the previous result.
       enable_outside_drivable_area_stop: false                      # stop if the ego's trajectory footprint is outside the drivable area
       use_footprint_polygon_for_outside_drivable_area_check: true # If false, only the footprint's corner points are considered.
-
+    
       debug:
         # flag to publish
         enable_pub_debug_marker: true           # publish debug marker
 
         # flag to show
-        enable_debug_info: false
-        enable_calculation_time_info: false
+        enable_debug_info: true
+        enable_calculation_time_info: true
 
     common:
       # output
@@ -28,6 +34,7 @@
       max_goal_moving_dist: 15.0               # threshold of goal's moving distance for replan [m]
       max_delta_time_sec: 1.0                  # threshold of delta time for replan [second]
 
+    ## ErasticBand 後者の最適化（モデル予測軌道,MPJ,ModelPredictiveTrajectory）は、参照軌道が十分に滑らかであることを前提とする。この関数は、入力経路を弾性バンドによって滑らかにします。
     # eb param
     eb:
       option:
@@ -56,6 +63,20 @@
 
       validation: # if enable_optimization_validation is true
         max_error: 3.0 # [m]
+
+    # Model Predictive Trajectory
+    # このモジュールは、運動学的に実行可能で衝突のない軌道を作成する。車両のポーズをフレネット座標で定義し、最適化によってトラッキングエラーを最小化します。
+    # この最適化は、車両の運動学と道路境界や障害物との衝突チェックを考慮する。
+    # 計算コストを削減するため、最適化は全軌跡よりも短い軌跡（デフォルト：50[m]）に適用され、最後に残った軌跡と最適化された軌跡を連結する。
+    # ステアリングホイールが安定するように、自我の直前の軌道を大きく変化させてはならない。そのため、エゴの手前では以前に生成した軌道を使用する。
+    # 車両上の最適化中心は、ちょうど軌道上に位置しようとするため、車両の垂直軸に沿って調整することができる。
+    # このパラメータmpt.kinematics.optimization center offsetは、後輪中心から最適化中心までの符号付き長さとして定義されます。
+    # 下図にいくつかの例を示しますが、基準軌道（緑色の軌道）が同じでも、最適化中心によって車両形状の軌道が異なることがわかります。
+
+    # InsertZeroVelocityOutSieDrivableArea
+    # 最適化された軌道は速度計画を行うには短すぎるため、最適化された軌道と走行可能性を考慮した行動経路を連結して軌道を延長する。
+    # 生成した軌道が走行可能領域内か否かをチェックし、走行可能領域外であれば、走行可能領域内の軌道を挙動経路または前回生成した軌道で出力する。  
+
 
     # mpt param
     mpt:
