@@ -15,11 +15,9 @@ Panels:
         - /Planning1/ScenarioPlanning1
         - /Planning1/Diagnostic1
         - /Planning1/Diagnostic1/PlanningErrorMarker1
-        - /FreeSpace_Pose1/Topic1
         - /Stop_Reason1/Topic1
-        - /(2) Motion Traj1/View Path1
-      Splitter Ratio: 0.5509259104728699
-    Tree Height: 327
+      Splitter Ratio: 0.4221748411655426
+    Tree Height: 325
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -170,10 +168,122 @@ Visualization Manager:
                   Show Axes: false
                   Show Trail: false
                   Value: true
+                camera0/camera_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                camera0/camera_optical_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                camera1/camera_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                camera1/camera_optical_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                camera2/camera_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                camera2/camera_optical_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                camera3/camera_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                camera3/camera_optical_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                camera4/camera_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                camera4/camera_optical_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                camera5/camera_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                camera5/camera_optical_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                gnss_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
                 sensor_kit_base_link:
                   Alpha: 1
                   Show Axes: false
                   Show Trail: false
+                tamagawa/imu_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                traffic_light_left_camera/camera_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                traffic_light_left_camera/camera_optical_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                traffic_light_right_camera/camera_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                traffic_light_right_camera/camera_optical_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                velodyne_left:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                velodyne_left_base_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                velodyne_rear:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                velodyne_rear_base_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                velodyne_right:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                velodyne_right_base_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
                 velodyne_top:
                   Alpha: 1
                   Show Axes: false
@@ -548,7 +658,12 @@ Visualization Manager:
               Enabled: true
               Name: MonteCarloInitialPose
               Namespaces:
-                {}
+                initial_pose_index_color_marker: true
+                initial_pose_iteration_color_marker: true
+                initial_pose_transform_probability_color_marker: true
+                result_pose_index_color_marker: true
+                result_pose_iteration_color_marker: true
+                result_pose_transform_probability_color_marker: true
               Topic:
                 Depth: 5
                 Durability Policy: Volatile
@@ -2018,6 +2133,19 @@ Visualization Manager:
           Value: true
       Enabled: true
       Name: Control
+    - Class: rviz_default_plugins/Marker
+      Enabled: true
+      Name: Vehicle_foot
+      Namespaces:
+        aichallenge_scoring: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /aichallenge_scoring/vehicle_footprint
+      Value: true
     - BUS:
         Alpha: 0.9990000128746033
         Color: 30; 144; 255
@@ -2112,18 +2240,6 @@ Visualization Manager:
         Color: 255; 255; 255
       Value: false
       Visualization Type: Normal
-    - Class: rviz_default_plugins/MarkerArray
-      Enabled: false
-      Name: Motion_Avoid_debug
-      Namespaces:
-        {}
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/marker
-      Value: false
     - Class: rviz_plugins/Trajectory
       Color Border Vel Max: 3
       Enabled: false
@@ -2186,19 +2302,6 @@ Visualization Manager:
         Value: /planning/scenario_planning/parking/costmap_generator/occupancy_grid_updates
       Use Timestamp: false
       Value: false
-    - Class: rviz_default_plugins/Marker
-      Enabled: true
-      Name: Vehicle_foot
-      Namespaces:
-        aichallenge_scoring: true
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /aichallenge_scoring/vehicle_footprint
-      Value: true
     - Alpha: 1
       Arrow Length: 0.05000000074505806
       Axes Length: 0.30000001192092896
@@ -2220,27 +2323,72 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /planning/scenario_planning/parking/freespace_planner/debug/pose_array
       Value: false
-    - Alpha: 1
-      Arrow Length: 0.05000000074505806
-      Axes Length: 0.30000001192092896
-      Axes Radius: 0.009999999776482582
-      Class: rviz_default_plugins/PoseArray
-      Color: 0; 255; 0
+    - Class: rviz_common/Group
+      Displays:
+        - Alpha: 1
+          Arrow Length: 0.05000000074505806
+          Axes Length: 0.30000001192092896
+          Axes Radius: 0.009999999776482582
+          Class: rviz_default_plugins/PoseArray
+          Color: 0; 255; 0
+          Enabled: true
+          Head Length: 0.07000000029802322
+          Head Radius: 0.029999999329447746
+          Name: FreeSpace_Partial
+          Shaft Length: 0.23000000417232513
+          Shaft Radius: 0.009999999776482582
+          Shape: Arrow (Flat)
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /planning/scenario_planning/parking/freespace_planner/debug/partial_pose_array
+          Value: true
+        - Class: rviz_plugins/Trajectory
+          Color Border Vel Max: 3
+          Enabled: false
+          Name: Park_Traj
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /planning/scenario_planning/parking/trajectory
+          Value: false
+          View Footprint:
+            Alpha: 1
+            Color: 230; 230; 50
+            Offset from BaseLink: 0
+            Rear Overhang: 1.0299999713897705
+            Value: false
+            Vehicle Length: 4.769999980926514
+            Vehicle Width: 1.8300000429153442
+          View Path:
+            Alpha: 0.4000000059604645
+            Color: 0; 0; 0
+            Constant Color: false
+            Value: true
+            Width: 1.2649999856948853
+          View Point:
+            Alpha: 1
+            Color: 0; 60; 255
+            Offset: 0
+            Radius: 0.05000000074505806
+            Value: true
+          View Text Velocity:
+            Scale: 0.30000001192092896
+            Value: false
+          View Velocity:
+            Alpha: 1
+            Color: 0; 0; 0
+            Constant Color: false
+            Scale: 0.10000000149011612
+            Value: true
       Enabled: true
-      Head Length: 0.07000000029802322
-      Head Radius: 0.029999999329447746
-      Name: FreeSpace_Partial
-      Shaft Length: 0.23000000417232513
-      Shaft Radius: 0.009999999776482582
-      Shape: Arrow (Flat)
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /planning/scenario_planning/parking/freespace_planner/debug/partial_pose_array
-      Value: true
+      Name: FreeSpace
     - Class: rviz_default_plugins/MarkerArray
       Enabled: false
       Name: Stop_Reason
@@ -2256,88 +2404,6 @@ Visualization Manager:
     - Class: rviz_plugins/Trajectory
       Color Border Vel Max: 3
       Enabled: false
-      Name: (2) Motion Traj
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/trajectory
-      Value: false
-      View Footprint:
-        Alpha: 1
-        Color: 230; 230; 50
-        Offset from BaseLink: 0
-        Rear Overhang: 1.0299999713897705
-        Value: false
-        Vehicle Length: 4.769999980926514
-        Vehicle Width: 1.8300000429153442
-      View Path:
-        Alpha: 0.4000000059604645
-        Color: 233; 180; 255
-        Constant Color: false
-        Value: true
-        Width: 1.2649999856948853
-      View Point:
-        Alpha: 1
-        Color: 0; 60; 255
-        Offset: 0
-        Radius: 0.05000000074505806
-        Value: true
-      View Text Velocity:
-        Scale: 0.10000000149011612
-        Value: true
-      View Velocity:
-        Alpha: 1
-        Color: 0; 0; 0
-        Constant Color: false
-        Scale: 0.30000001192092896
-        Value: true
-    - Class: rviz_plugins/Trajectory
-      Color Border Vel Max: 3
-      Enabled: false
-      Name: Park_Traj
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /planning/scenario_planning/parking/trajectory
-      Value: false
-      View Footprint:
-        Alpha: 1
-        Color: 230; 230; 50
-        Offset from BaseLink: 0
-        Rear Overhang: 1.0299999713897705
-        Value: false
-        Vehicle Length: 4.769999980926514
-        Vehicle Width: 1.8300000429153442
-      View Path:
-        Alpha: 0.4000000059604645
-        Color: 0; 0; 0
-        Constant Color: false
-        Value: true
-        Width: 1.2649999856948853
-      View Point:
-        Alpha: 1
-        Color: 0; 60; 255
-        Offset: 0
-        Radius: 0.05000000074505806
-        Value: true
-      View Text Velocity:
-        Scale: 0.30000001192092896
-        Value: false
-      View Velocity:
-        Alpha: 1
-        Color: 0; 0; 0
-        Constant Color: false
-        Scale: 0.10000000149011612
-        Value: true
-    - Class: rviz_plugins/Trajectory
-      Color Border Vel Max: 3
-      Enabled: true
       Name: Motion_Velo_Smoother_Traj
       Topic:
         Depth: 5
@@ -2346,7 +2412,7 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /planning/scenario_planning/motion_velocity_smoother/trajectory
-      Value: true
+      Value: false
       View Footprint:
         Alpha: 1
         Color: 230; 230; 50
@@ -2797,42 +2863,240 @@ Visualization Manager:
             Scale: 0.30000001192092896
             Value: true
         - Class: rviz_default_plugins/MarkerArray
-          Enabled: true
+          Enabled: false
           Name: Behavior_Avoid_debug
           Namespaces:
-            c_0_merged: true
-            c_1_trim_similar_grad_shift: true
-            c_2_quantized: true
-            c_3_trim_small_shift: true
-            c_4_trim_similar_grad_shift: true
-            c_5_trim_momentary_return: true
-            c_6_trim_too_sharp_shift: true
-            centerline: true
-            centerline_resampled: true
-            current_lanelet: true
-            ego_status: true
-            expanded_lanelet: true
-            m_neg_shift_line: true
-            m_output_linear_line: true
-            m_output_shift_line: true
-            m_pos_shift_line: true
-            m_total_shift_line: true
-            p_current_raw_shift: true
-            p_extra_return_shift: true
-            p_registered_shift: true
-            path_shifter_proposed_points: true
-            path_shifter_registered_points: true
-            prev_linear_shift: true
-            reference_pose: true
+            {}
           Topic:
             Depth: 5
             Durability Policy: Volatile
             History Policy: Keep Last
             Reliability Policy: Reliable
             Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/avoidance
-          Value: true
+          Value: false
       Enabled: true
       Name: Behavior_Path
+    - Class: rviz_common/Group
+      Displays:
+        - Class: rviz_plugins/Trajectory
+          Color Border Vel Max: 3
+          Enabled: false
+          Name: Obstacle_Avoidance_Planner
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/trajectory
+          Value: false
+          View Footprint:
+            Alpha: 1
+            Color: 230; 230; 50
+            Offset from BaseLink: 0
+            Rear Overhang: 1.0299999713897705
+            Value: false
+            Vehicle Length: 4.769999980926514
+            Vehicle Width: 1.8300000429153442
+          View Path:
+            Alpha: 0.4000000059604645
+            Color: 233; 180; 255
+            Constant Color: false
+            Value: true
+            Width: 1.2649999856948853
+          View Point:
+            Alpha: 1
+            Color: 0; 60; 255
+            Offset: 0
+            Radius: 0.05000000074505806
+            Value: true
+          View Text Velocity:
+            Scale: 0.10000000149011612
+            Value: true
+          View Velocity:
+            Alpha: 1
+            Color: 0; 0; 0
+            Constant Color: false
+            Scale: 0.30000001192092896
+            Value: true
+        - Class: rviz_plugins/Trajectory
+          Color Border Vel Max: 3
+          Enabled: false
+          Name: Eb_Traj
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/eb_traj
+          Value: false
+          View Footprint:
+            Alpha: 1
+            Color: 230; 230; 50
+            Offset from BaseLink: 0
+            Rear Overhang: 1.0299999713897705
+            Value: false
+            Vehicle Length: 4.769999980926514
+            Vehicle Width: 1.8300000429153442
+          View Path:
+            Alpha: 0.4000000059604645
+            Color: 233; 180; 255
+            Constant Color: false
+            Value: true
+            Width: 1.2649999856948853
+          View Point:
+            Alpha: 1
+            Color: 0; 60; 255
+            Offset: 0
+            Radius: 0.05000000074505806
+            Value: true
+          View Text Velocity:
+            Scale: 0.10000000149011612
+            Value: true
+          View Velocity:
+            Alpha: 1
+            Color: 0; 0; 0
+            Constant Color: false
+            Scale: 0.30000001192092896
+            Value: true
+        - Class: rviz_plugins/Trajectory
+          Color Border Vel Max: 3
+          Enabled: false
+          Name: Eb_Fiexed_Traj
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/eb_fixed_traj
+          Value: false
+          View Footprint:
+            Alpha: 1
+            Color: 230; 230; 50
+            Offset from BaseLink: 0
+            Rear Overhang: 1.0299999713897705
+            Value: false
+            Vehicle Length: 4.769999980926514
+            Vehicle Width: 1.8300000429153442
+          View Path:
+            Alpha: 0.4000000059604645
+            Color: 233; 180; 255
+            Constant Color: false
+            Value: true
+            Width: 1.2649999856948853
+          View Point:
+            Alpha: 1
+            Color: 0; 60; 255
+            Offset: 0
+            Radius: 0.05000000074505806
+            Value: true
+          View Text Velocity:
+            Scale: 0.10000000149011612
+            Value: true
+          View Velocity:
+            Alpha: 1
+            Color: 0; 0; 0
+            Constant Color: false
+            Scale: 0.30000001192092896
+            Value: true
+        - Class: rviz_plugins/Trajectory
+          Color Border Vel Max: 3
+          Enabled: true
+          Name: MPT_Traj
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/mpt_traj
+          Value: true
+          View Footprint:
+            Alpha: 1
+            Color: 230; 230; 50
+            Offset from BaseLink: 0
+            Rear Overhang: 1.0299999713897705
+            Value: false
+            Vehicle Length: 4.769999980926514
+            Vehicle Width: 1.8300000429153442
+          View Path:
+            Alpha: 0.4000000059604645
+            Color: 233; 180; 255
+            Constant Color: false
+            Value: true
+            Width: 1.2649999856948853
+          View Point:
+            Alpha: 1
+            Color: 0; 60; 255
+            Offset: 0
+            Radius: 0.05000000074505806
+            Value: true
+          View Text Velocity:
+            Scale: 0.10000000149011612
+            Value: true
+          View Velocity:
+            Alpha: 1
+            Color: 0; 0; 0
+            Constant Color: false
+            Scale: 0.30000001192092896
+            Value: true
+        - Class: rviz_plugins/Trajectory
+          Color Border Vel Max: 3
+          Enabled: false
+          Name: MPT_Fiexed_Traj
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/mpt_fixed_traj
+          Value: false
+          View Footprint:
+            Alpha: 1
+            Color: 230; 230; 50
+            Offset from BaseLink: 0
+            Rear Overhang: 1.0299999713897705
+            Value: false
+            Vehicle Length: 4.769999980926514
+            Vehicle Width: 1.8300000429153442
+          View Path:
+            Alpha: 0.4000000059604645
+            Color: 233; 180; 255
+            Constant Color: false
+            Value: true
+            Width: 1.2649999856948853
+          View Point:
+            Alpha: 1
+            Color: 0; 60; 255
+            Offset: 0
+            Radius: 0.05000000074505806
+            Value: true
+          View Text Velocity:
+            Scale: 0.10000000149011612
+            Value: true
+          View Velocity:
+            Alpha: 1
+            Color: 0; 0; 0
+            Constant Color: false
+            Scale: 0.30000001192092896
+            Value: true
+        - Class: rviz_default_plugins/MarkerArray
+          Enabled: false
+          Name: Obs_Avoid_Planner_Debug
+          Namespaces:
+            {}
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/marker
+          Value: false
+      Enabled: true
+      Name: MotionPlanning
   Enabled: true
   Global Options:
     Background Color: 10; 10; 10
@@ -2923,7 +3187,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 3.720001459121704
+      Angle: -2.6350018978118896
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -2933,11 +3197,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: -19.711793899536133
+      Scale: 19.207971572875977
       Target Frame: viewer
       Value: TopDownOrtho (rviz_default_plugins)
-      X: 7.740706920623779
-      Y: 0.34236031770706177
+      X: 57.885528564453125
+      Y: 15.904425621032715
     Saved:
       - Class: rviz_default_plugins/ThirdPersonFollower
         Distance: 18
@@ -2992,7 +3256,7 @@ Window Geometry:
     collapsed: false
   MultiDataMonitor:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000300000000000001bf0000039cfc0200000016fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003e00000185000000ca00fffffffb00000024004100750074006f00770061007200650053007400610074006500500061006e0065006c01000001c90000017a0000017a00fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f00720100000349000000910000009100fffffffc00000334000000a60000000000fffffffaffffffff0100000002fb0000000a0056006900650077007300000000000000033c0000010000fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000000ffffffff0000008a00fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f007200000001d4000000a50000009000fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d0065007200610100000682000000eb0000000000000000fb0000000a0049006d0061006700650100000505000002680000000000000000fb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c00000003bc0000007a0000007a00fffffffb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000000000000000fb00000030005200650063006f0067006e006900740069006f006e0052006500730075006c0074004f006e0049006d006100670065000000033e000000cb0000002800fffffffb0000002a004100750074006f0077006100720065004400610074006500540069006d006500500061006e0065006c0000000325000000420000004200fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f007200000003a0000000910000009000fffffffb0000000a0056006900650077007300000003e0000000bf000000a600fffffffb00000034004100750074006f007700610072006500530063007200650065006e004300610070007400750072006500500061006e0065006c0000000392000000630000006300fffffffb00000034004100750074006f0077006100720065004100750074006f006d00610074006900630047006f0061006c00500061006e0065006c00000003250000015a0000015a00fffffffb0000001e005200540043004d0061006e006100670065007200500061006e0065006c02000004220000005b0000035e000003dd000000010000015f000006fffc0200000002fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000300000e7a0000005afc0100000002fb0000000800540069006d0065010000000000000e7a0000000000000000fb0000000800540069006d00650100000000000004500000000000000000000005750000039c00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000300000000000001d70000039cfc0200000016fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003e00000183000000ca00fffffffb00000024004100750074006f00770061007200650053007400610074006500500061006e0065006c01000001c70000017c0000017a00fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f00720100000349000000910000009100fffffffc00000334000000a60000000000fffffffaffffffff0100000002fb0000000a0056006900650077007300000000000000033c0000010000fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000000ffffffff0000008a00fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f007200000001d4000000a50000009000fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d0065007200610100000682000000eb0000000000000000fb0000000a0049006d0061006700650100000505000002680000000000000000fb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c00000003bc0000007a0000007a00fffffffb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000000000000000fb00000030005200650063006f0067006e006900740069006f006e0052006500730075006c0074004f006e0049006d006100670065000000033e000000cb0000002800fffffffb0000002a004100750074006f0077006100720065004400610074006500540069006d006500500061006e0065006c0000000325000000420000004200fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f007200000003a0000000910000009000fffffffb0000000a0056006900650077007300000003e0000000bf000000a600fffffffb00000034004100750074006f007700610072006500530063007200650065006e004300610070007400750072006500500061006e0065006c0000000392000000630000006300fffffffb00000034004100750074006f0077006100720065004100750074006f006d00610074006900630047006f0061006c00500061006e0065006c00000003250000015a0000015a00fffffffb0000001e005200540043004d0061006e006100670065007200500061006e0065006c02000004220000005b0000035e000003dd000000010000015f000006fffc0200000002fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000300000e7a0000005afc0100000002fb0000000800540069006d0065010000000000000e7a0000000000000000fb0000000800540069006d00650100000000000004500000000000000000000003470000039c00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   RTCManagerPanel:
     collapsed: false
   RecognitionResultOnImage:
@@ -3003,6 +3267,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1850
+  Width: 1316
   X: 70
   Y: 27
