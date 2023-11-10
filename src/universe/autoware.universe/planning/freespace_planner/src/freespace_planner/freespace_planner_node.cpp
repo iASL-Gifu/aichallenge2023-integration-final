@@ -397,11 +397,12 @@ void FreespacePlannerNode::updateTargetIndex()
 
   const auto use_is_stopped = node_param_.use_time_cnt;
 
-  if (!is_near_target && is_stopped){
+  if ((!is_near_target) && is_stopped && found_goal_){
     cnt_+=1;
+    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000, "is_Stopped count:%d",  cnt_);
   }
 
-  if (is_near_target && is_stopped | time_stopped && use_is_stopped) {
+  if ((is_near_target && is_stopped) || (time_stopped && use_is_stopped)) {
     const auto new_target_index =
       getNextTargetIndex(trajectory_.points.size(), reversing_indices_, target_index_);
     cnt_ = 0;
@@ -503,6 +504,7 @@ void FreespacePlannerNode::planTrajectory()
 
   if (result) {
     RCLCPP_INFO(get_logger(), "Found goal!");
+    found_goal_=true;
     trajectory_ =
       createTrajectory(current_pose_, algo_->getWaypoints(), node_param_.waypoints_velocity);
     reversing_indices_ = getReversingIndices(trajectory_);
@@ -512,6 +514,8 @@ void FreespacePlannerNode::planTrajectory()
 
   } else {
     RCLCPP_INFO(get_logger(), "Can't find goal...");
+    found_goal_=false;
+    cnt_=0;
     reset();
   }
 }

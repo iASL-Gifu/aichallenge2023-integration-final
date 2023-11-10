@@ -136,6 +136,7 @@ private:
 
   // add self param
   int cnt_ = 0;
+  bool found_goal_ = false;
 
   LaneletRoute::ConstSharedPtr route_;
   OccupancyGrid::ConstSharedPtr occupancy_grid_;
