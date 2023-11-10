@@ -35,10 +35,12 @@
     # wheel_radius: 0.255
     # wheel_tread: 0.975 # between left wheel center and right wheel center
     # wheel_width: 0.196
+    use_time_count: true
+    replan_time_count: 100000
 
     # -- A* search Configurations --
     astar:
       only_behind_solutions: false    # 解をゴールの後ろに制限するかどうか
       use_back: true                  # バックを使用するかどうか
       distance_heuristic_weight: 1.0  # ノードコストを推定するためのヒューリスティックな重み
-      back_operation_limit: 5
+      back_operation_limit: 2
