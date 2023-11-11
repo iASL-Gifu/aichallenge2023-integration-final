@@ -125,10 +125,10 @@ AstarSearch::AstarSearch(
   y_scale_ = planner_common_param.theta_size;
 }
 
-void AstarSearch::setMap(const nav_msgs::msg::OccupancyGrid & costmap)
+void AstarSearch::setMap(const nav_msgs::msg::OccupancyGrid & costmap, double f, double b, double l, double r)
 {
-  AbstractPlanningAlgorithm::setMap(costmap);
-
+  AbstractPlanningAlgorithm::setMap(costmap, astar_param_.forward_m, astar_param_.back_m, astar_param_.left_m, astar_param_.right_m);
+  std::cout << f+b+l+r;
   clearNodes();
 
   x_scale_ = costmap_.info.height;

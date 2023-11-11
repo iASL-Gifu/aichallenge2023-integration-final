@@ -378,7 +378,7 @@ bool FreespacePlannerNode::isPlanRequired()
   }
 
   if (node_param_.replan_when_obstacle_found) {
-    algo_->setMap(*occupancy_grid_);
+    algo_->setMap(*occupancy_grid_, 0.0,0.0,0.0,0.0);
 
     const size_t nearest_index_partial =
       motion_utils::findNearestIndex(partial_trajectory_.points, current_pose_.pose.position);
@@ -503,7 +503,7 @@ void FreespacePlannerNode::planTrajectory()
   }
 
   // Provide robot shape and map for the planner
-  algo_->setMap(*occupancy_grid_);
+  algo_->setMap(*occupancy_grid_,0.0,0.0,0.0,0.0);
 
   // Calculate poses in costmap frame
   const auto current_pose_in_costmap_frame = transformPose(

@@ -53,6 +53,11 @@ struct AstarParam
   long int back_operation_limit;
   double turning_dist_limit;
   double calc_radius;
+
+  double forward_m;
+  double back_m;
+  double right_m;
+  double left_m;
 };
 
 struct AstarNode
@@ -135,11 +140,15 @@ public:
         node.declare_parameter("astar.distance_heuristic_weight", 1.0),
         node.declare_parameter("astar.back_operation_limit", 5),
         node.declare_parameter("astar.turning_dist_limit", 1.0),
-        node.declare_parameter("astar.calc_radius", 5.0)})
+        node.declare_parameter("astar.calc_radius", 5.0),
+        node.declare_parameter("astar.forward_m", 1.0),
+        node.declare_parameter("astar.back_m", 1.0),
+        node.declare_parameter("astar.right_m", 1.0),
+        node.declare_parameter("astar.left_m",1.0)})
   {
   }
 
-  void setMap(const nav_msgs::msg::OccupancyGrid & costmap) override;
+  void setMap(const nav_msgs::msg::OccupancyGrid & costmap, double f, double b, double l, double r) override;
   bool makePlan(
     const geometry_msgs::msg::Pose & start_pose,
     const geometry_msgs::msg::Pose & goal_pose) override;

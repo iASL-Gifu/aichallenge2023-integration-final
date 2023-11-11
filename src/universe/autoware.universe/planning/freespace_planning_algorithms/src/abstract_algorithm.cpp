@@ -101,7 +101,7 @@ double PlannerWaypoints::compute_length() const
   return total_cost;
 }
 
-void AbstractPlanningAlgorithm::setMap(const nav_msgs::msg::OccupancyGrid & costmap)
+void AbstractPlanningAlgorithm::setMap(const nav_msgs::msg::OccupancyGrid & costmap, double f, double b, double l, double r)
 {
   costmap_ = costmap;
   const auto height = costmap_.info.height;
@@ -125,7 +125,7 @@ void AbstractPlanningAlgorithm::setMap(const nav_msgs::msg::OccupancyGrid & cost
   // construct collision indexes table
   for (int i = 0; i < planner_common_param_.theta_size; i++) {
     std::vector<IndexXY> indexes_2d, vertex_indexes_2d;
-    computeCollisionIndexes(i, indexes_2d, vertex_indexes_2d);
+    computeCollisionIndexes(i, indexes_2d, vertex_indexes_2d, f, b, l, r);
     coll_indexes_table_.push_back(indexes_2d);
     vertex_indexes_table_.push_back(vertex_indexes_2d);
   }
@@ -133,16 +133,17 @@ void AbstractPlanningAlgorithm::setMap(const nav_msgs::msg::OccupancyGrid & cost
 
 void AbstractPlanningAlgorithm::computeCollisionIndexes(
   int theta_index, std::vector<IndexXY> & indexes_2d,
-  std::vector<IndexXY> & vertex_indexes_2d) const
+  std::vector<IndexXY> & vertex_indexes_2d,
+  double f, double b, double l, double r) const
 {
   IndexXYT base_index{0, 0, theta_index};
   const VehicleShape & vehicle_shape = collision_vehicle_shape_;
 
   // Define the robot as rectangle
-  const double back = -1.0 * vehicle_shape.base2back;
-  const double front = vehicle_shape.length - vehicle_shape.base2back;
-  const double right = -1.0 * vehicle_shape.width / 2.0;
-  const double left = vehicle_shape.width / 2.0;
+  const double back = -1.0 * vehicle_shape.base2back - b;
+  const double front = vehicle_shape.length - vehicle_shape.base2back + f;
+  const double right = (-1.0 * vehicle_shape.width / 2.0) - r;
+  const double left = (vehicle_shape.width / 2.0) + l;
 
   const auto base_pose = index2pose(costmap_, base_index, planner_common_param_.theta_size);
   const auto base_theta = tf2::getYaw(base_pose.orientation);

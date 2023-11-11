@@ -215,7 +215,7 @@ std::unique_ptr<fpa::AbstractPlanningAlgorithm> configure_astar(bool use_multi)
   const double turning_dist_limit = 1.0;
   const double calc_radius = 5.0;
   const auto astar_param =
-    fpa::AstarParam{only_behind_solutions, use_back, distance_heuristic_weight, back_operation_limit, turning_dist_limit, calc_radius};
+    fpa::AstarParam{only_behind_solutions, use_back, distance_heuristic_weight, back_operation_limit, turning_dist_limit, calc_radius, 1.0, 1.0, 1.0, 1.0};
 
   auto algo = std::make_unique<fpa::AstarSearch>(planner_common_param, vehicle_shape, astar_param);
   return algo;
@@ -274,7 +274,7 @@ bool test_algorithm(enum AlgorithmType algo_type, bool dump_rosbag = false)
   for (size_t i = 0; i < goal_poses.size(); ++i) {
     const auto goal_pose = goal_poses.at(i);
 
-    algo->setMap(costmap_msg);
+    algo->setMap(costmap_msg, 0.0,0.0,0.0,0.0);
     double msec;
     double cost;
 
