@@ -2,18 +2,28 @@
   ros__parameters:
   #最後のPredictionを担当
   #map_based_predictionは、地図の形状や周囲の環境に応じて、他の車両や歩行者の将来の進路（およびその確率）を予測するモジュールである。
-    enable_delay_compensation: true #オブジェクトの位置に対する時間遅延補正を有効にするフラグ
-    prediction_time_horizon: 10.0 #予測経路の予測時間 [s]
+    enable_delay_compensation: false #Def::trueオブジェクトの位置に対する時間遅延補正を有効にするフラグ
+    prediction_time_horizon: 0.01 #Def 10.0.これ短いと、進路予想が出るからよい！！これだけ先の時間まで予想する 予測経路の予測時間 [s]
     prediction_sampling_delta_time: 0.5 #予測経路上の点のサンプリング時間[s]
     min_velocity_for_map_based_prediction: 10.39 #[m/s] Def::1.39マップベースの予測を、この値よりも速度が速いオブジェクトに適用する。
     min_crosswalk_user_velocity: 1.39 #[m/s]横断歩道利用者の進路予測における最低速度の使用
     dist_threshold_for_searching_lanelet: 3.0 #[m]
-    delta_yaw_threshold_for_searching_lanelet: 0.785 #[rad]
-    sigma_lateral_offset: 0.5 #[m]
-    sigma_yaw_angle_deg: 5.0 #[angle degree]
-    object_buffer_time_length: 2.0 #[s]
-    history_time_length: 1.0 #[s]
+    delta_yaw_threshold_for_searching_lanelet: 0.785 #[rad]オブジェクトが属するレーンを検索する際に使用される角度のしきい値
+    sigma_lateral_offset: 0.0 #[m]物体の横位置の標準偏差
+    sigma_yaw_angle_deg: 0.0 #[angle degree]物体の標準偏差ヨー角
+    object_buffer_time_length: 2.0 #Def::2.0 [s]情報を保存するオブジェクト履歴の時間スパン
+    history_time_length: 1.0 #[s] #Def 1.0予測に使用されるオブジェクト情報の時間スパン
     dist_threshold_for_lane_change_detection: 1.0 #[m]
     time_threshold_for_lane_change_detection: 5.0 #[s]
     cutoff_freq_of_velocity_for_lane_change_detection: 0.1 #[Hz]
     reference_path_resolution: 0.5 #[m]
+  #LIMITATION
+  #物体タイプが乗用車、バス、トラックの場合
+  #予測された物体の進路は道路構造に沿う。
+  #オブジェクトが道路上にない場合、予測経路は単なる直線予測で生成される。
+  #車線上にあるが、道路とは異なる方向に移動する物体については、予測される経路は単なる直線となる。
+  #車両のダイナミクスが適切に考慮されていない可能性がある。
+  #人やバイクの場合
+  #横断歩道周辺」を除く全ての状況において、予測経路は単なる直線で生成される。
+  #すべての障害物の場合
+  #加速度情報がないため、車体運動が等速と仮定されている。
