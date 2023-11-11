@@ -4,7 +4,7 @@
     voxel_leaf_size: 0.3
     min_points_number_per_voxel: 1
     min_cluster_size: 10
-    max_cluster_size: 3000
+    max_cluster_size: 100 #Def 3000 このファイルは使われていないはずだけど、霧対策で一応
     use_height: false
     input_frame: "base_link"
     max_x: 70.0
