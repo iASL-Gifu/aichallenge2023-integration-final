@@ -5,7 +5,7 @@
       resample_interval_for_planning: 0.1               # [m]回避計画パスのパス再サンプル間隔。
       resample_interval_for_output: 0.3                 # [m]
       detection_area_right_expand_dist: 0.3             # 回避のためにレーンを拡大する。Lanelet expand length for right side to find avoidance target vehicles.[m]
-      detection_area_left_expand_dist: 0.3              # Lanelet expand length for left side to find avoidance target vehicles.  [m]
+      detection_area_left_expand_dist: 0.3             # Lanelet expand length for left side to find avoidance target vehicles.  [m]
       drivable_area_right_bound_offset: 0.0             # [m]
       drivable_area_left_bound_offset: 0.0              # [m]
       object_envelope_buffer: 0.2                       # [m] オブジェクトを少し大きく取る。
@@ -16,7 +16,7 @@
       enable_avoidance_over_opposite_direction: true #反対車線まで車線変更して回避するか。
       enable_update_path_when_object_is_gone: false #1回生成した回避パスをObjectが検出されないようになっても使い続けるか。
       enable_force_avoidance_for_stopped_vehicle: true #停車しているvehicleに対して強制的にavoidを行うか。
-      enable_safety_check: false #安全チェック, Jerkしか確認しない。
+      enable_safety_check: false #安全チェック,
       #回避経路が生成でき、周囲の交通状況により回避を実行するべきではないと判断した時にYieldManuvergで、回避を実行するかいなかを決定する。
       enable_yield_maneuver: false #Flag to enable yield maneuver.
       disable_path_update: false
@@ -48,9 +48,13 @@
         object_check_backward_distance: 0.0             # 自車両より後ろのチェック。これより近くのオブジェクトは回避しない。詳細はDocsで確認。このParamよりObjectが後ろにいない。このParamにマイナスが付く？[m]def:2m
         object_check_goal_distance: 20.0                # [m]
         # filtering parking objects　信号待ち車両の除外。センターライン付近で止まっている車両の除外
-        threshold_distance_object_is_on_center: 0.0     # センターラインに付近にいるオブジェクトを回避しないため。センターラインからx mのオブジェクトは回避しない。[m]
-        object_check_shiftable_ratio: 0.0               # [Max 1] Objが駐車しているかどうかの判定。これより高ければ回避を実行する。
-        object_check_min_road_shoulder_width: 0.0       # [m]
+        # センターラインからの長さだけでなく、路肩からの長さも計算し、フィルタリング処理に使用する。
+        #物体の中心から中心線までの実際の長さshift_lengthと、物体がシフトできる最大長さshiftable_lengthの比を計算する。
+        threshold_distance_object_is_on_center: 0.0     # 0.0だとダンボールおじさん認識しない。センターラインに付近にいるオブジェクトを回避しないため。センターラインからx mのオブジェクトは回避しない。[m]
+        #Shiftable_ratio = actial_shift_length / shiftable_length
+        #Shiftable_length(どんだけ路肩に寄れるん) = distance between centerline and most left boundary. - (object width / 2),　
+        object_check_shiftable_ratio: 0.0               # [Max 1] Objが駐車しているかどうかの判定。これより低ければ回避を実行する。0は絶対回避スルマン 1は絶対とまる。
+        object_check_min_road_shoulder_width: 0.0       # [m]道路に路肩がない場合は、object_check_min_road_shoulder_widthを仮想的な路肩幅として使用する。
         # lost object compensation
         object_last_seen_threshold: 2.0 #[s] チャタリングの防止。障害物が消えてもしばらく保持する。大きいと過検出が増える
       

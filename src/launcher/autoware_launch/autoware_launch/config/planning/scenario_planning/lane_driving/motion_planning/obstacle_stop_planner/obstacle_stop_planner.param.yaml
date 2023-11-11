@@ -9,8 +9,8 @@
     voxel_grid_x: 0.05                       # voxel grid x parameter for filtering pointcloud [m]
     voxel_grid_y: 0.05                       # voxel grid y parameter for filtering pointcloud [m]
     voxel_grid_z: 100000.0                   # voxel grid z parameter for filtering pointcloud [m]
-    use_predicted_objects: False            # 衝突と減速の検出に予測オブジェクトを使用するかどうか [-]。whether to use predicted objects [-]
-    publish_obstacle_polygon: False          # whether to publish obstacle polygon [-]
+    use_predicted_objects: False              # FALSEは点群を使う。霧対策。Fog 衝突と減速の検出に予測オブジェクトを使用するかどうか [-]。whether to use predicted objects [-]
+    publish_obstacle_polygon: True          # whether to publish obstacle polygon [-]
 
     stop_planner:
       #このモジュールは、障害物の前に停止点をマージンをもって挿入する。
@@ -19,10 +19,10 @@
       #(本モジュールは、計算コスト削減のため、エゴの位置より後方の入力軌跡をカットし、軌跡点をデシメーションしている)
       # params for stop position
       stop_position:
-        max_longitudinal_margin: 5.0             # stop margin distance from obstacle on the path [m]
-        max_longitudinal_margin_behind_goal: 3.0 # stop margin distance from obstacle behind goal on the path [m]
-        min_longitudinal_margin: 5.0             # stop margin distance when any other stop point is inserted in stop margin [m]
-        hold_stop_margin_distance: 0.0           # the ego keeps stopping if the ego is in this margin [m]
+        max_longitudinal_margin: 5.0             # 障害物とエゴの正面のマージン stop margin distance from obstacle on the path [m]
+        max_longitudinal_margin_behind_goal: 3.0 # ストップポイントがegoの後方にある場合の、障害物とエゴのフロントとの間のマージン。stop margin distance from obstacle behind goal on the path [m]
+        min_longitudinal_margin: 5.0             # Def::5.0 0,0max_longitudinal_marginの範囲内に障害物が存在する場合、このモジュールはmarginをstop marginの値としてmin_longitudinal_margin [m]に設定する。Def::5.0 stop margin distance when any other stop point is inserted in stop margin [m]
+        hold_stop_margin_distance: 0.0           # リスタート防止用パラメータ（上記セクション参照）the ego keeps stopping if the ego is in this margin [m]
 
       # params for detection area
       detection_area:
@@ -30,8 +30,8 @@
         vehicle_lateral_margin: 0.0          # margin of vehicle footprint [m]
         pedestrian_lateral_margin: 0.0       # margin of pedestrian footprint [m]
         unknown_lateral_margin: 0.0          # margin of unknown footprint [m]
-        step_length: 1.0                     # 点群サーチ範囲のステップ長 [m］step length for pointcloud search range [m]
-        enable_stop_behind_goal_for_obstacle: True #障害物検知のため、ゴールレーン以降の軌道を延長可能 enable extend trajectory after goal lane for obstacle detection
+        step_length: 1.0                     # どれだけ先を見るのか。点群サーチ範囲のステップ長 [m］step length for pointcloud search range [m]
+        enable_stop_behind_goal_for_obstacle: True #Def::True 障害物検知のため、ゴールレーン以降の軌道を延長可能 enable extend trajectory after goal lane for obstacle detection
 
 
     slow_down_planner:
