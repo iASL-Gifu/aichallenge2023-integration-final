@@ -165,9 +165,9 @@ bool AstarSearch::setStartNode()
 {
   const auto index = pose2index(costmap_, start_pose_, planner_common_param_.theta_size);
 
-  if (detectCollision(index)) {
-    return false;
-  }
+  // if (detectCollision(index)) {
+  //   return false;
+  // }
 
   // Set start node
   AstarNode * start_node = getNodeRef(index);
@@ -282,7 +282,8 @@ bool AstarSearch::search()
         next_node->pose = next_pose;
         if (!is_turning_point) {
           next_node->back_count = current_node->back_count + 1;
-          next_node->turning_dist = current_node->turning_dist + calcReedsSheppDistance(current_node->pose, next_node->pose, astar_param_.calc_radius);
+          next_node->turning_dist = current_node->turning_dist + std::pow((std::pow(transition.shift_x, 2.0) + std::pow(transition.shift_y, 2.0)), 0.5);
+          // next_node->turning_dist = current_node->turning_dist + calcReedsSheppDistance(current_node->pose, next_node->pose, astar_param_.calc_radius);
           // if(next_node->turning_dist > (std::abs(transition.shift_x) + std::abs(transition.shift_y))){
           //   continue;
           // }

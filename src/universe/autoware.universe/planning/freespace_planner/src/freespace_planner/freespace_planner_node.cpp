@@ -214,6 +214,17 @@ bool isStopped(
   return true;
 }
 
+bool isBack(
+  const std::deque<Odometry::ConstSharedPtr> & odom_buffer)
+{
+  for (const auto & odom : odom_buffer) {
+    if ((odom->twist.twist.linear.x) > 0.0) {
+      return false;
+    }
+  }
+  return true;
+}
+
 }  // namespace
 
 namespace freespace_planner
@@ -354,6 +365,14 @@ void FreespacePlannerNode::onOdometry(const Odometry::ConstSharedPtr msg)
 
 bool FreespacePlannerNode::isPlanRequired()
 {
+  const auto time_stopped = cnt_ > node_param_.replan_cnt;
+  const auto use_is_stopped = node_param_.use_time_cnt;
+
+  if ((time_stopped && use_is_stopped)) {
+    cnt_ = 0;
+    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000, "reset trajectory");
+    return true;
+  }
   if (trajectory_.points.empty()) {
     return true;
   }
@@ -390,25 +409,16 @@ bool FreespacePlannerNode::isPlanRequired()
 
 void FreespacePlannerNode::updateTargetIndex()
 {
-  const auto is_near_target =
-    tier4_autoware_utils::calcDistance2d(trajectory_.points.at(target_index_), current_pose_) <
-    node_param_.th_arrived_distance_m;
+  const auto is_near_target = isBack(odom_buffer_)
+    ? tier4_autoware_utils::calcDistance2d(trajectory_.points.at(target_index_), current_pose_) < (node_param_.th_arrived_distance_m/2)
+    : tier4_autoware_utils::calcDistance2d(trajectory_.points.at(target_index_), current_pose_) < node_param_.th_arrived_distance_m;
 
   const auto is_stopped = isStopped(odom_buffer_, node_param_.th_stopped_velocity_mps);
 
-  const auto time_stopped = cnt_ > node_param_.replan_cnt;
-
-  const auto use_is_stopped = node_param_.use_time_cnt;
 
   if ((!is_near_target) && is_stopped && found_goal_){
     cnt_+=1;
     RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000, "is_Stopped count:%d",  cnt_);
-  }
-  if ((time_stopped && use_is_stopped)) {
-    cnt_ = 0;
-    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000, "reset trajectory");
-    reset();
-    planTrajectory();
   }
 
   if ((is_near_target && is_stopped)) {
