@@ -242,9 +242,9 @@ def launch_setup(context, *args, **kwargs):
         [
             container,
             obstacle_stop_planner_loader,
-            #obstacle_cruise_planner_loader, #無効化
-            #obstacle_cruise_planner_relay_loader,#無効化
-            #surround_obstacle_checker_loader, 無効化
+            obstacle_cruise_planner_loader, #Launchで無効化せい！
+            obstacle_cruise_planner_relay_loader,#Launchで無効化せい！
+            surround_obstacle_checker_loader, #Launchで無効化せい！
         ]
     )
     return [group]
