@@ -1,4 +1,10 @@
 /**:
+# NDTの機能
+# 1.スキャンマッチングによる位置推定
+# 2.モンテカルロ法を用いたROSサービスによる初期位置推定
+# オプション機能として正則化があります。詳細は巻末の正則化の章を参照してください。デフォルトでは無効になっています。
+# sensing/gnss/pose_with_covarianceは、正則化が有効な場合にのみ必要です。
+# 正則化はGNSSを使うため。橋や高速、農道など特徴のないところで有効。
   ros__parameters:
     # Use dynamic map loading
     use_dynamic_map_loading: true
@@ -14,13 +20,13 @@
     # transformations in order to consider convergence
     trans_epsilon: 0.01
 
-    # The newton line search maximum step length
+    # ニュートンライン探索の最大ステップ長.The newton line search maximum step length
     step_size: 0.1
 
-    # The ND voxel grid resolution
+    # 下げても良い。ただ入力のPointcloudも細かくしよう。ボクセル解像度The ND voxel grid resolution [m]
     resolution: 2.0
 
-    # アライメント計算に必要な反復回数
+    # アライメント計算に必要な反復回数。普段は2,3 大きくステアをきると5回ほど
     # The number of iterations required to calculate alignment
     max_iterations: 30
 
@@ -71,7 +77,7 @@
         0.0,   0.0,   0.0,   0.0,      0.0,      0.000625,
       ]
 
-    # Regularization switch
+    #正則化をONにするか Regularization switch
     regularization_enabled: false
 
     # Regularization scale factor
