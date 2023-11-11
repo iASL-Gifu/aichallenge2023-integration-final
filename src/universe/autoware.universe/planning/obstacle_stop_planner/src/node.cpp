@@ -323,11 +323,11 @@ void ObstacleStopPlannerNode::onTrigger(const Trajectory::ConstSharedPtr input_m
   if (stop_param.enable_stop_behind_goal_for_obstacle) {
     base_trajectory = extendTrajectory(base_trajectory, stop_param.max_longitudinal_margin);
   }
-  // decimate trajectory for calculation cost
+  // decimate trajectory for calculation cost 計算コストのために間引いている
   const auto decimate_trajectory = decimateTrajectory(
     base_trajectory, stop_param.step_length, planner_data.decimate_trajectory_index_map);
 
-  if (node_param_.use_predicted_objects) {
+  if (node_param_.use_predicted_objects) {//生経路データを入れた
     searchPredictedObject(decimate_trajectory, planner_data, vehicle_info, stop_param);
   } else {
     // search obstacles within slow-down/collision area
@@ -359,6 +359,12 @@ void ObstacleStopPlannerNode::searchObstacle(
   const StopParam & stop_param, const PointCloud2::SharedPtr obstacle_ros_pointcloud_ptr)
 {
   const auto object_ptr = object_ptr_;
+  RCLCPP_WARN_THROTTLE(
+  get_logger(), *get_clock(), 3000, "<Obs Stop Plan fog >Object sizee: %ld",
+  object_ptr->objects.size());
+  if(object_ptr->objects.size() == 0){//fog 霧対策
+    return;
+  }
   // search candidate obstacle pointcloud
   PointCloud::Ptr slow_down_pointcloud_ptr(new PointCloud);
   PointCloud::Ptr obstacle_candidate_pointcloud_ptr(new PointCloud);

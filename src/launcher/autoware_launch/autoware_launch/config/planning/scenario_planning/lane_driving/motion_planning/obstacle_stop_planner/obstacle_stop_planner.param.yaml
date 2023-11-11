@@ -9,7 +9,7 @@
     voxel_grid_x: 0.05                       # voxel grid x parameter for filtering pointcloud [m]
     voxel_grid_y: 0.05                       # voxel grid y parameter for filtering pointcloud [m]
     voxel_grid_z: 100000.0                   # voxel grid z parameter for filtering pointcloud [m]
-    use_predicted_objects: False              # FALSEは点群を使う。霧対策。Fog 衝突と減速の検出に予測オブジェクトを使用するかどうか [-]。whether to use predicted objects [-]
+    use_predicted_objects: False              # FALSEは点群を使う。霧対策。TrueでDetectしたものを使うけど永遠にみるせいで、段おじ以降進まない。Fog 衝突と減速の検出に予測オブジェクトを使用するかどうか [-]。whether to use predicted objects [-]
     publish_obstacle_polygon: True          # whether to publish obstacle polygon [-]
 
     stop_planner:
@@ -19,10 +19,11 @@
       #(本モジュールは、計算コスト削減のため、エゴの位置より後方の入力軌跡をカットし、軌跡点をデシメーションしている)
       # params for stop position
       stop_position:
-        max_longitudinal_margin: 5.0             # 障害物とエゴの正面のマージン stop margin distance from obstacle on the path [m]
-        max_longitudinal_margin_behind_goal: 3.0 # ストップポイントがegoの後方にある場合の、障害物とエゴのフロントとの間のマージン。stop margin distance from obstacle behind goal on the path [m]
-        min_longitudinal_margin: 5.0             # Def::5.0 0,0max_longitudinal_marginの範囲内に障害物が存在する場合、このモジュールはmarginをstop marginの値としてmin_longitudinal_margin [m]に設定する。Def::5.0 stop margin distance when any other stop point is inserted in stop margin [m]
-        hold_stop_margin_distance: 0.0           # リスタート防止用パラメータ（上記セクション参照）the ego keeps stopping if the ego is in this margin [m]
+        max_longitudinal_margin: 3.0             # Def 5.0 障害物とエゴの正面のマージン stop margin distance from obstacle on the path [m]
+        max_longitudinal_margin_behind_goal: 3.0 # Def 3.0 ストップポイントがegoの後方にある場合の、障害物とエゴのフロントとの間のマージン。stop margin distance from obstacle behind goal on the path [m]
+        min_longitudinal_margin: 0.0             # Def::5.0 max_longitudinal_marginの範囲内に障害物が存在する場合、このモジュールはmarginをstop marginの値としてmin_longitudinal_margin [m]に設定する。Def::5.0 stop margin distance when any other stop point is inserted in stop margin [m]
+        hold_stop_margin_distance: 0.0           # リスタート防止用パラメータ（上記セクション参照）the ego keeps stopping if the ego is in this margin [m]　車両制御性能の低下により、一旦動き出した車両を停止させるのにXメートル(例えば0.5メートル)の距離が必要な場合、
+                                                 # 車両が動き出す際に厳守すべき停止位置をオーバーして、停止位置付近(例えば0.3メートル先)に近づいてしまう。本モジュールでは、このような冗長な再始動を防ぐために、hold_stop_margin_distanceパラメータを用意している。モジュールの停止位置からhold_stop_margin_distanceメートル以内に車両が停止している場合、モジュールはモジュールの停止位置まで車両が既に停止していると判断し、他の要因で車両が停止していても現在位置を停止し続ける予定である。
 
       # params for detection area
       detection_area:
@@ -30,7 +31,7 @@
         vehicle_lateral_margin: 0.0          # margin of vehicle footprint [m]
         pedestrian_lateral_margin: 0.0       # margin of pedestrian footprint [m]
         unknown_lateral_margin: 0.0          # margin of unknown footprint [m]
-        step_length: 1.0                     # どれだけ先を見るのか。点群サーチ範囲のステップ長 [m］step length for pointcloud search range [m]
+        step_length: 1.0                     # 。点群サーチ範囲のそれぞれのステップの長さ [m］step length for pointcloud search range [m]
         enable_stop_behind_goal_for_obstacle: True #Def::True 障害物検知のため、ゴールレーン以降の軌道を延長可能 enable extend trajectory after goal lane for obstacle detection
 
 
