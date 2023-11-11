@@ -1,5 +1,9 @@
 /**:
   ros__parameters:
+  # CenterPointとEuclidクラスタリングの統合
+  # Multi-Object-Tracker検出結果は時系列で処理される。主な目的は、IDを与え、速度を推定することである。
+  # データアソシエーションは、最小コスト最大フロー問題と呼ばれる最大スコアマッチングを行う。本パッケージでは、mussp[1]をソルバーとして使用する。
+  # また、オブザベーションをトレーサに関連付ける際、データ関連付けは、クラスラベルに応じて、BEVからのオブジェクトの面積、マハラノビス距離、最大距離などのゲートを持つ。
     can_assign_matrix:
       #UNKNOWN, CAR, TRUCK, BUS,  TRAILER, MOTORBIKE, BICYCLE,PEDESTRIAN <-Measurement
       [1,       0,   0,     0,    0,       0,         0,      0,         #UNKNOWN <-Tracker

@@ -1,18 +1,22 @@
 /**:
   ros__parameters:
-    chattering_threshold: 10.5                # even if the obstacle disappears, the stop judgment continues for chattering_threshold [s]
+    chattering_threshold: 5.0               #チャタリングの防止 これでダンボールおじさんを乗り越えている。障害物がなくなっても、停止判定はチャタリング_閾値[s]の間継続されるeven if the obstacle disappears, the stop judgment continues for chattering_threshold [s]
     lowpass_gain: 0.9                        # gain parameter for low pass filter [-]
     max_velocity: 20.0                       # max velocity [m/s]
-    enable_slow_down: True                  # whether to use slow down planner [-]
+    enable_slow_down: True                  # スローダウンを有効にするのか？whether to use slow down planner [-]
     enable_z_axis_obstacle_filtering: True   # filter obstacles in z axis (height) [-]
     z_axis_filtering_buffer: 0.0             # additional buffer for z axis filtering [m]
     voxel_grid_x: 0.05                       # voxel grid x parameter for filtering pointcloud [m]
     voxel_grid_y: 0.05                       # voxel grid y parameter for filtering pointcloud [m]
     voxel_grid_z: 100000.0                   # voxel grid z parameter for filtering pointcloud [m]
-    use_predicted_objects: False            # whether to use predicted objects [-]
+    use_predicted_objects: False            # 衝突と減速の検出に予測オブジェクトを使用するかどうか [-]。whether to use predicted objects [-]
     publish_obstacle_polygon: False          # whether to publish obstacle polygon [-]
 
     stop_planner:
+      #このモジュールは、障害物の前に停止点をマージンをもって挿入する。
+      #公称の場合、マージンはbaselink_to_frontとmax_longitudinal_marginの和である。
+      #baselink_to_frontはbaselink(後輪軸中心)から車体前方までの距離を意味する。検出領域は下図のように処理された軌跡に沿って生成される。
+      #(本モジュールは、計算コスト削減のため、エゴの位置より後方の入力軌跡をカットし、軌跡点をデシメーションしている)
       # params for stop position
       stop_position:
         max_longitudinal_margin: 5.0             # stop margin distance from obstacle on the path [m]
@@ -22,12 +26,12 @@
 
       # params for detection area
       detection_area:
-        lateral_margin: 0.0                  # margin [m]
+        lateral_margin: 0.0                  # 衝突障害物検知エリアの車両フットプリントからの横マージン.margin [m]
         vehicle_lateral_margin: 0.0          # margin of vehicle footprint [m]
         pedestrian_lateral_margin: 0.0       # margin of pedestrian footprint [m]
         unknown_lateral_margin: 0.0          # margin of unknown footprint [m]
-        step_length: 1.0                     # step length for pointcloud search range [m]
-        enable_stop_behind_goal_for_obstacle: True # enable extend trajectory after goal lane for obstacle detection
+        step_length: 1.0                     # 点群サーチ範囲のステップ長 [m］step length for pointcloud search range [m]
+        enable_stop_behind_goal_for_obstacle: True #障害物検知のため、ゴールレーン以降の軌道を延長可能 enable extend trajectory after goal lane for obstacle detection
 
 
     slow_down_planner:

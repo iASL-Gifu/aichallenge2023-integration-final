@@ -1,4 +1,5 @@
 /**:
+#カーブ時に減速する等も担当
   ros__parameters:
     min_ttc: 1.0  # [s] minimum time without collision when doing projection at each trajectory point
     distance_buffer: 0.0  # [m] extra distance to add to a projection (in addition to the vehicle overhang)
