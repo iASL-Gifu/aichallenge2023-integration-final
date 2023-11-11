@@ -404,12 +404,17 @@ void FreespacePlannerNode::updateTargetIndex()
     cnt_+=1;
     RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000, "is_Stopped count:%d",  cnt_);
   }
+  if ((time_stopped && use_is_stopped)) {
+    cnt_ = 0;
+    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000, "reset trajectory");
+    reset();
+    planTrajectory();
+  }
 
-  if ((is_near_target && is_stopped) || (time_stopped && use_is_stopped)) {
+  if ((is_near_target && is_stopped)) {
     const auto new_target_index =
       getNextTargetIndex(trajectory_.points.size(), reversing_indices_, target_index_);
     cnt_ = 0;
-
     if (new_target_index == target_index_) {
       // Finished publishing all partial trajectories
       is_completed_ = true;

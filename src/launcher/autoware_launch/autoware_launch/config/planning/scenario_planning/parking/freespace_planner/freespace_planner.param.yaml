@@ -2,9 +2,9 @@
   ros__parameters:
     # -- Node Configurations --
     planning_algorithm: "astar"       # アルゴリズムを選択
-    waypoints_velocity: 1.0           # 速度
+    waypoints_velocity: 0.8           # 速度
     update_rate: 5.0                  # 更新速度
-    th_arrived_distance_m: 0.12       # 到着判定の距離
+    th_arrived_distance_m: 0.06       # 到着判定の距離
     th_stopped_time_sec: 1.0          # 停止状態かどうかを確認するための時間
     th_stopped_velocity_mps: 0.01     # 停止状態かどうかを確認するための速度
     th_course_out_distance_m: 1.0     # コースアウトになる距離
@@ -39,7 +39,7 @@
     replan_time_count: 100            # use_time_countの時間
 
     l_margin: 0.31                    # 前後の車両マージン 
-    w_margin: 0.11                     # 左右の車両マージン
+    w_margin: 0.13                     # 左右の車両マージン
     b2b_margin: 0.20                  # 後ろの車両マージン
 
     # -- A* search Configurations --

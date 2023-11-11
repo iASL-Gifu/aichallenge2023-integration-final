@@ -283,9 +283,9 @@ bool AstarSearch::search()
         if (!is_turning_point) {
           next_node->back_count = current_node->back_count + 1;
           next_node->turning_dist = current_node->turning_dist + calcReedsSheppDistance(current_node->pose, next_node->pose, astar_param_.calc_radius);
-          if(next_node->turning_dist > (std::abs(transition.shift_x) + std::abs(transition.shift_y))){
-            continue;
-          }
+          // if(next_node->turning_dist > (std::abs(transition.shift_x) + std::abs(transition.shift_y))){
+          //   continue;
+          // }
         } else {
           next_node->back_count = 0;
           next_node->turning_dist = 0.0;
