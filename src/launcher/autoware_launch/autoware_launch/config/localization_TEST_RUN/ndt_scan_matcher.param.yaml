@@ -20,10 +20,10 @@
     # transformations in order to consider convergence
     trans_epsilon: 0.01
 
-    # ニュートンライン探索の最大ステップ長 Def 0.1.The newton line search maximum step length
+    # ニュートンライン探索の最大ステップ長.The newton line search maximum step length
     step_size: 0.1
 
-    # 下げても良い。ただ入力のPointcloudも細かくしよう。ボクセル解像度The ND voxel grid resolution [m]。下げても上げても精度が落ちる。
+    # 下げても良い。ただ入力のPointcloudも細かくしよう。ボクセル解像度The ND voxel grid resolution [m]
     resolution: 2.0
 
     # アライメント計算に必要な反復回数。普段は2,3 大きくステアをきると5回ほど
@@ -42,7 +42,7 @@
 
     # 推定結果を信頼するかどうかを決定するためのNVTL閾値 (type::1)
     # If converged_param_type is 1
-    # Threshold for deciding whether to trust the estimation result　これより下がるとだめ。
+    # Threshold for deciding whether to trust the estimation result
     converged_param_nearest_voxel_transformation_likelihood: 2.3
 
     # 初期姿勢を推定するパーティクル数
@@ -94,8 +94,8 @@
 
     # これは、スキャンマッチングスコアを推定するために、非接地LiDARスキャンを使用する機能です。このスコアは、現在のローカライズ性能をより正確に反映することができます。
     # A flag for using scan matching score based on de-grounded LiDAR scan
-    estimate_scores_for_degrounded_scan: true
+    estimate_scores_for_degrounded_scan: false
 
-    # 接地点除去のZ値マージン. この閾値より低い点群は除去される。
+    # 接地点除去のZ値マージン
     # If lidar_point.z - base_link.z <= this threshold , the point will be removed
-    z_margin_for_ground_removal: 0.3 #Def 0.8
+    z_margin_for_ground_removal: 0.8
