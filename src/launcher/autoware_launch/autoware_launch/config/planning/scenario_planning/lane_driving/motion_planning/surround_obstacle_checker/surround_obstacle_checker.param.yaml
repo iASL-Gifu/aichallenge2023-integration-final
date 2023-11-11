@@ -1,4 +1,9 @@
 /**:
+#
+#
+#無効化しました。
+#
+#
   ros__parameters: #自車両が停止しているときに、周囲の障害物を認識し、ある場合は発進させない？
 #このモジュールは、必要なデータ（エゴポーズ、障害物など）をサブスクライブし、停止条件が満たされた場合に停止し続けるためのゼロ速度制限を公開する。
 #自車両と最も近いオブジェクトとの距離を計算します。この関数では、自車両のポリゴンと、点群および動的オブジェクトのポリゴン内のすべての点との間の最小距離を計算します。
@@ -13,8 +18,8 @@
 #State::PASS ：停止計画解除
 #State::STOP ：停止計画中
     # obstacle check
-    use_pointcloud: true # 霧を認識しないため。use pointcloud as obstacle check
-    use_dynamic_object: true # use dynamic object as obstacle check
+    use_pointcloud: false # 霧を認識しないため。use pointcloud as obstacle check
+    use_dynamic_object: false # use dynamic object as obstacle check
     surround_check_distance: 0.5 # この距離にオブジェクトが存在する場合、「障害物あり」ステータスに移行する[m]。if objects exist in this distance, transit to "exist-surrounding-obstacle" status [m]
     surround_check_recover_distance: 0.8 # if no object exists in this distance, transit to "non-surrounding-obstacle" status [m]
     state_clear_time: 2.0 #停止状態をクリアする閾値
