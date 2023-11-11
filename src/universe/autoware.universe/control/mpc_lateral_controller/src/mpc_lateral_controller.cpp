@@ -163,7 +163,8 @@ MpcLateralController::MpcLateralController(rclcpp::Node & node) : node_{&node}
     "~/output/lateral_diagnostic", 1);
   m_pub_steer_offset = node_->create_publisher<tier4_debug_msgs::msg::Float32Stamped>(
     "~/output/estimated_steer_offset", 1);
-
+  m_pub_stop = node_->create_publisher<std_msgs::msg::Bool>(
+    "/freespace_stop", 1);
   // TODO(Frederik.Beaujean) ctor is too long, should factor out parameter declarations
   declareMPCparameters();
 
@@ -235,6 +236,9 @@ trajectory_follower::LateralOutput MpcLateralController::run(
     RCLCPP_WARN_SKIPFIRST_THROTTLE(
       node_->get_logger(), *node_->get_clock(), 5000 /*ms*/,
       "MPC is not solved. publish 0 velocity.");
+    std_msgs::msg::Bool msg;
+    msg.data = true;
+    m_pub_stop->publish(msg);
     ctrl_cmd = getStopControlCommand();
   }
 
