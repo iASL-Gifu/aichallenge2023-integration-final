@@ -7,3 +7,4 @@
     pedestrian_tracker: "pedestrian_and_bicycle_tracker"
     bicycle_tracker: "pedestrian_and_bicycle_tracker"
     motorcycle_tracker: "pedestrian_and_bicycle_tracker"
+    #unknown_tracker: "pass_through_tracker" #unknown trackerもあり。まあ無い気がいい
