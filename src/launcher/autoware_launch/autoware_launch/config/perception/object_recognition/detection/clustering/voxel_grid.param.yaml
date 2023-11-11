@@ -1,5 +1,6 @@
 /**:
   ros__parameters:
+  #Euclidean も読んでいる
     input_frame: base_link
     output_frame: base_link
     voxel_size_x: 0.15
