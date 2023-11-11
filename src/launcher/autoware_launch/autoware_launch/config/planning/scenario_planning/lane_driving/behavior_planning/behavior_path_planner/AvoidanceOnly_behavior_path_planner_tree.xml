@@ -3,19 +3,7 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <Fallback>
-            <ReactiveSequence>
-                <Condition ID="PullOver_Request"/>
-                <Action ID="PullOver_Plan" output="{output}"/>
-            </ReactiveSequence>
-            <ReactiveSequence>
-                <Condition ID="PullOut_Request"/>
-                <Action ID="PullOut_Plan" output="{output}"/>
-            </ReactiveSequence>
-            <ReactiveSequence>
-                <Condition ID="LaneChange_Request"/>
-                <Action ID="LaneChange_Plan" output="{output}"/>
-            </ReactiveSequence>
-            <Action ID="LaneFollowing_Plan" output="{output}"/>
+            <Action ID="Avoidance_Plan" output="{output}"/>
         </Fallback>
     </BehaviorTree>
     <!-- ////////// -->

@@ -1,4 +1,6 @@
 /**:
+# Object_position_filterは、検出されたオブジェクトをx,yの値に基づいてフィルタリングするノードです。
+# x,yの範囲内にあるオブジェクトのみがパブリッシュされます。霧検知に使えそうだが、現状は使っていない。pointcloud_map_filterのlidar_based_perception.launchを変更すれば！
   ros__parameters:
     filter_target_label:
       UNKNOWN : true
@@ -10,7 +12,7 @@
       BICYCLE : false
       PEDESTRIAN : false
 
-    upper_bound_x: 100.0
+    upper_bound_x: 100.0 #フィルタリングの境界。filter_by_xy_positionがtrueの場合のみ使用される。
     lower_bound_x: 0.0
     upper_bound_y: 10.0
     lower_bound_y: -10.0

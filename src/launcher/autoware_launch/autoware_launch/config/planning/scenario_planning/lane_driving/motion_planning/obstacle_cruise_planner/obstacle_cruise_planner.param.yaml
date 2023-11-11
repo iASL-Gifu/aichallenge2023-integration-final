@@ -1,5 +1,14 @@
 /**:
   ros__parameters:
+  #
+  #
+  #無効化しました
+  #
+  #
+  #obstacle_cruise_planner パッケージには以下のモジュールがあります。
+#STOP planning：軌道の近くに静的障害物がある場合に停止する。
+#クルーズプランニング；自我の前方に動的な障害物がある場合に巡航する。
+#減速プランニング：軌道の近くに静的／動的障害物がある場合、減速する。
     common:
       planning_algorithm: "pid_base" # currently supported algorithm is "pid_base"
 

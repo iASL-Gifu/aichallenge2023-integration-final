@@ -1,24 +1,32 @@
 /**:
   ros__parameters:
+   #mpt_fixed Traj:固定軌道 MPTの制約条件
+   #EB→MPT→applyInputVelocity→insertZeroVelocityOutsideDrivableArea→Pub_Debug_Marker_ofOpti→extendTraj→pubDebugData
+   # 以下のいずれかの条件を満たす場合、軌道最適化が実行される。
+   # それ以外の場合は、最新の入力経路から速度を更新しながら、以前に最適化された軌道が使用される。
+   # (1)egoが1サイクルでreplan.max_ego_moving_distより長く移動する。(Def: 3.0 [m]). シミュレーションでエゴのポーズが再び設定されるときのためのものです。
+   # (2)ゴールポーズとみなされる軌道の終点が、1サイクルでreplan.max_goal_moving_distより長く移動する。(デフォルト: 15.0 [ms]).ゴールポーズが再び設定されたら、プランニングをリセットする。
+   # (3)時間の経過。(デフォルト: 1.0 [s]) 最適化が時々重くなるため、最適化をしばらくスキップする。
+   # (4)入力パスが1サイクルで replan.max_path_shape_around_ego_lat_dist より長く横方向に変化する。(デフォルト: 2.0)
     option:
-      enable_smoothing: true                                       # enable path smoothing by elastic band
-      enable_skip_optimization: false                              # skip elastic band and model predictive trajectory
+      enable_smoothing: true                                       # ElasticBandが有効かいなか。PTの軌跡を滑らかにするEBを有効にします。MPTの参照経路が十分に滑らかで、突然形状が変化しない場合はEBは不要です。enable path smoothing by elastic band
+      enable_skip_optimization: false                              # EBとMPTの最適化をスキップします。TIER4のDocsはMPTのみ。skip elastic band and model predictive trajectory
       enable_reset_prev_optimization: false                        # If true, optimization has no fix constraint to the previous result.
-      enable_outside_drivable_area_stop: false                      # stop if the ego's trajectory footprint is outside the drivable area
+      enable_outside_drivable_area_stop: false                    # Trueで生成された軌道点が走行可能領域外に出る直前で停止するようになる。stop if the ego's trajectory footprint is outside the drivable area
       use_footprint_polygon_for_outside_drivable_area_check: true # If false, only the footprint's corner points are considered.
-
+    
       debug:
         # flag to publish
-        enable_pub_debug_marker: true           # publish debug marker
+        enable_pub_debug_marker: true           # falseで計算コストが減る。publish debug marker
 
         # flag to show
-        enable_debug_info: false
-        enable_calculation_time_info: false
+        enable_debug_info: true
+        enable_calculation_time_info: false #関数の各計算時間と合計計算時間をターミナルに表示する。
 
     common:
       # output
       output_delta_arc_length: 0.5     #  delta arc length for output trajectory [m]
-      output_backward_traj_length: 5.0  # backward length for backward trajectory from base_link [m]
+      output_backward_traj_length: 5.0  # どこまで後ろを見るか。MPTも。backward length for backward trajectory from base_link [m]
 
     # replanning & trimming trajectory param outside algorithm
     replan:
@@ -28,15 +36,17 @@
       max_goal_moving_dist: 15.0               # threshold of goal's moving distance for replan [m]
       max_delta_time_sec: 1.0                  # threshold of delta time for replan [second]
 
+    ## ErasticBand 後者の最適化（モデル予測軌道,MPJ,ModelPredictiveTrajectory）は、参照軌道が十分に滑らかであることを前提とする。この関数は、入力経路を弾性バンドによって滑らかにします。
     # eb param
     eb:
       option:
-        enable_warm_start: true
+        enable_warm_start: true #Trueで計算コストが減る。
         enable_optimization_validation: false
 
-      common:
-        num_points: 100        # number of points for optimization [-]
-        delta_arc_length: 1.0  # delta arc length for optimization [m]
+      common: #減らすと緩やかになる。少なくするとしかし、経験的にこれはコーナーで大きく曲がってしまう（例えば、コーナーで右に曲がる少し手前でハンドルを反対側（＝左）に切ってしまう）。
+              #減らすにはまたMPTとEBの前提条件に注意
+        num_points: 100        # 少ないと計算コストが減る。number of points for optimization [-]
+        delta_arc_length: 1.0  # 最適化する長さ。短いと計算コスト削減。delta arc length for optimization [m]
 
       clearance:
         num_joint_points: 3  # number of joint points (joint means connecting fixing and smoothing)
@@ -51,19 +61,53 @@
 
       qp:
         max_iteration: 10000  # max iteration when solving QP
-        eps_abs: 1.0e-7       # eps abs when solving OSQP
-        eps_rel: 1.0e-7       # eps rel when solving OSQP
+        #下2つが小さいとMPTのReferencePath生成が不安定になるか、ステアリングの切りが大きくなる。
+        eps_abs: 1.0e-7       # 小さいと計算コスト減る。eps abs when solving OSQP
+        eps_rel: 1.0e-7       # 小さいと計算コスト減る。eps rel when solving OSQP
 
       validation: # if enable_optimization_validation is true
         max_error: 3.0 # [m]
+
+    # Model Predictive Trajectory
+    # このモジュールは、運動学的に実行可能で衝突のない軌道を作成する。車両のポーズをフレネット座標で定義し、最適化によってトラッキングエラーを最小化します。
+    # この最適化は、車両の運動学と道路境界や障害物との衝突チェックを考慮する。
+    # 計算コストを削減するため、最適化は全軌跡よりも短い軌跡（デフォルト：50[m]）に適用され、最後に残った軌跡と最適化された軌跡を連結する。
+    # ステアリングホイールが安定するように、自我の直前の軌道を大きく変化させてはならない。そのため、エゴの手前では以前に生成した軌道を使用する。
+    # 車両上の最適化中心は、ちょうど軌道上に位置しようとするため、車両の垂直軸に沿って調整することができる。
+    # このパラメータmpt.kinematics.optimization center offsetは、後輪中心から最適化中心までの符号付き長さとして定義されます。
+    # 下図にいくつかの例を示しますが、基準軌道（緑色の軌道）が同じでも、最適化中心によって車両形状の軌道が異なることがわかります。
+
+    # InsertZeroVelocityOutSieDrivableArea
+    # 最適化された軌道は速度計画を行うには短すぎるため、最適化された軌道と走行可能性を考慮した行動経路を連結して軌道を延長する。
+    # 生成した軌道が走行可能領域内か否かをチェックし、走行可能領域外であれば、走行可能領域内の軌道を挙動経路または前回生成した軌道で出力する。  
+    
+    # 前述したように、Behavior Pathは2つのパスに分離される。1つは最適化のためのパスで、もう1つは残るパスである。
+    # 1つ目の経路は最適化された軌道となり、2つ目の経路は軌道に変換されるだけである。そして、走行可能領域内の軌跡は以下のように計算される。
+
+    #   条件１：最適化された軌道が走行可能エリア内にあり、かつ残存軌道が走行可能エリア内外にある場合、
+    # 出力軌跡はその2つの軌跡を連結したものになる。この場合、残り軌跡が走行可能領域の内側にあるか外側にあるかは、一般的には走行可能領域の外側にあるので（特に狭い道路では）気にしないが、
+    # できるだけ長い軌跡を後者のモジュールに渡したい。
+    
+    #   条件２：最適化された軌跡が走行可能領域外にある場合
+    # 条件2かつ、以前に生成された軌道が記憶されている場合、
+    # 出力される軌道は、前回生成された軌道となり、最初に走行可能エリアから外れた地点には速度ゼロが挿入される。
+
+    #条件2かつ、、前回生成した軌道を記憶していない場合、出力される軌道は前回生成した軌道となる、
+    #出力される軌道は、挙動経路を変形しただけの軌道の一部となり、最初に走行可能領域から外れる地点に速度ゼロが挿入される。
+    
+    # 最適化の失敗は、最適化された軌道が走行可能領域外にある場合と同様に対処される。出力された軌道は、次のサイクルのために以前に生成された軌道として記憶される。
+    # 理由 現在の設計では、モデリングエラーがあるため、制約はソフト制約と考えられる。そのため、最適化後に最適化された軌道が走行可能領域内にあるかどうかを確認する必要がある。
+    
+    #結果に対してVelocityを割り当てる。結果軌跡の速度は、挙動経路の速度から割り当てられる。軌跡と経路の形状は異なるため、経路に最も近い各軌跡点を探索し、線形補間する。
+
 
     # mpt param
     mpt:
       option:
         # TODO(murooka) enable the following. Currently enabling the flag makes QP so heavy
-        steer_limit_constraint: false
-        visualize_sampling_num: 1
-        enable_manual_warm_start: false
+        steer_limit_constraint: true #ステアリング角がハードウェアの制限を超えないようになる。
+        visualize_sampling_num: 1 #デバッグのため。
+        enable_manual_warm_start: false #Trueで計算コストが減る。
         enable_warm_start: true
         enable_optimization_validation: false
 
@@ -75,53 +119,58 @@
         # If this parameter is commented out, the parameter is set as below by default.
         # The logic could be `optimization_center_offset = vehicle_info.wheelbase * 0.8`
         # The 0.8 scale is adopted as it performed the best.
-        optimization_center_offset: 2.0 # optimization center offset from base link
+        optimization_center_offset: 2.0 # 狭い道の走行に有効！。 ベースリンクから前方にオフセットされた車両上の点`が基準経路をたどろうとする。 このため、生成された軌道の一部が走行可能エリア外になる可能性があります。 optimization center offset from base link
 
-      clearance:  # clearance(distance) between vehicle and roads/objects when generating trajectory
-        # if collision_free_constraints.option.hard_constraint is true
-        hard_clearance_from_road: 0.0 # clearance from road boundary[m]
-        # if collision_free_constraints.option.soft_constraint is true
-        soft_clearance_from_road: 0.4 # clearance from road boundary[m]
+      clearance:  #経路を生成する際の、道路・オブジェクトとegoのクリアランス(距離) clearance(distance) between vehicle and roads/objects when generating trajectory
+        # Hard-Constraintが有効な場合。if collision_free_constraints.option.hard_constraint is true
+        hard_clearance_from_road: 0.0 # clearance from road bound ary[m]
+        # Soft-Constraintが有効な場合。if collision_free_constraints.option.soft_constraint is true
+        soft_clearance_from_road: 0.4  # 0.5良い。大きいと狭い道が通れるように。clearance from road boundary[m]
 
       # weight parameter for optimization
       weight:
+        #コリジョンフリーの条件はハードな制約ではなく、ソフトな制約であると考えられる。最適化に失敗した場合、または最適化された軌道が無衝突でない場合、出力軌道は以前に生成された軌道となる。
+        #エゴ近傍の軌道は安定でなければならないので、エゴ近傍の軌道点が前回生成した軌道と同じであるという条件が考えられ、これがMPTにおける唯一のハード制約である。
+        #行動モジュールによって回避すべきと判断された障害物が突然現れると、自我の直前の走行可能領域の形状が変化し、急ハンドルを切ることになる。これを防ぐために、自我に近い運転可能領域の形状を、以前の運転可能領域の形状に固定します。
         # collision free
         soft_collision_free_weight: 1000.0        # soft weight for lateral error around the middle point
 
-        # tracking error
+        # 通常時のトラッキングエラーtracking error
         lat_error_weight: 100.0       # weight for lateral error
         yaw_error_weight: 100.0       # weight for yaw error
         yaw_error_rate_weight: 0.0  # weight for yaw error rate
-        steer_input_weight: 150.0     # weight for steering input
-        steer_rate_weight: 10.0      # weight for steering rate
+        steer_input_weight: 150.0     #Def::150MPT後の軌道がロバストでない場合 大きくする。軌跡に沿ったハンドルの安定性である。weight for steering input
+        steer_rate_weight: 10.0      #Def::10 MPT後の軌道がロバストでない場合、大きくする。 weight for steering rate
 
         terminal_lat_error_weight: 100.0  # weight for lateral error at terminal point
         terminal_yaw_error_weight: 100.0  # weight for yaw error at terminal point
         goal_lat_error_weight: 1000.0     # weight for lateral error at path end point
         goal_yaw_error_weight: 1000.0     # weight for yaw error at path end point
-
+      #道路による境界と障害物による境界とを区別することができない。
+      #走行可能領域の幅は、ルールベースで車幅と追加マージンより大きい必要がある。 
       # avoidance
       avoidance:
         max_avoidance_cost: 0.5            # [m]
         avoidance_cost_margin: 0.01         # [m]
-        avoidance_cost_band_length: 5.0    # [m]
-        avoidance_cost_decrease_rate: 0.05 # decreased cost per point interval
-
+        avoidance_cost_band_length: 5.0    # Def 5m[m]長い方が良い気がする。
+        avoidance_cost_decrease_rate: 0.05 # Def 0.06   1かなり良かった。decreased cost per point interval
+        #軌跡最適化問題をより安定的に解くために、軌跡の足跡が入るべき境界制約と最適化の重みを変更する。
+        #AvoidanceのときのWEIGHT
         weight:
-          lat_error_weight: 0.0     # weight for lateral error
-          yaw_error_weight: 0.0    # weight for yaw error
-          steer_input_weight: 20.0 # weight for yaw error
+          lat_error_weight: 0.0     # Def::0.0weight for lateral error
+          yaw_error_weight: 0.0    # Def::0.0weight for yaw error
+          steer_input_weight: 20.0 # 下げるとよく曲がるDef::5.0weight for yaw error
 
       # collision free constraint for optimization
       collision_free_constraints:
         option:
-          l_inf_norm: true
+          l_inf_norm: true #計算コストが減る。スラック変数を考慮したMPTのL-infノルム最適化を使用により設計変数が減る。
           soft_constraint: true
-          hard_constraint: false
+          hard_constraint: false #Ego近傍が安定であるということを保証
 
-        # how to represent footprint as circles
+        # 走行可能領域の計算にこのフットプリントを用いる。how to represent footprint as circles
         vehicle_circles:
-          method: "fitting_uniform_circle"
+          method: "fitting_uniform_circle" #狭い道の走行に有効！
 
           bicycle_model:
             num_for_calculation: 3
@@ -129,8 +178,8 @@
             rear_radius_ratio: 1.0
 
           uniform_circle:
-            num: 3
-            radius_ratio: 1.0
+            num: 3 #Def 3
+            radius_ratio: 0.93 #Def 1  0.93くらいがジャスト
 
           fitting_uniform_circle:
             num: 3
@@ -138,3 +187,30 @@
       validation: # if enable_optimization_validation is true
         max_lat_error: 5.0 # [m]
         max_yaw_error: 1.046 # [rad]
+
+
+# Limitation
+# 計算コストが高くなることがある。
+# 線形化などの近似を行うため、プランナで走れない細い道がある。
+# behavior_path_plannerとobstacle_avoidance_plannerの役割分担が明確でない。どちらも障害物を避けることができる。
+
+# Computation Timeの解決方法
+# MPTとEBの間の軌跡の長さには注意が必要です。
+# ただし、経験的にコーナーで大きく曲がってしまう（例：コーナーで右に曲がる少し手前でハンドルを反対側（＝左）に切ってしまう）。
+# eb.qp.eps_absとeb.qp.eps_relを小さくする。
+#これにより、MPTの基準経路生成が非常に不安定になったり、ハンドルを少し大きく切る
+
+# 2.計算削減フラグを有効にする
+# (5)collision-free constraints(無衝突制約)の数を少なくする。パラメータをどのように変更するかは、無衝突制約のタイプ(colligion-free constraints)に依存します。
+# 自車両の一部が走行可能領域から外れるような軌跡が生成される可能性がある。
+
+# Robustness
+# EB前、EB後、MPT後の軌跡がロバストでないかチェックする
+# EB前の軌道がロバストでない場合  記述なし
+# EB後の軌道がロバストでない場合　記述なし
+
+
+# OTHER OPTIONS.今は存在しない。
+# mpt.option.plan_from_egoは、自我の速度がゼロの時に、自我のポーズからのプランニングを有効にします。
+# mpt.option.max_plan_from_ego_length：エゴから計画する長さのしきい値の最大値。軌跡の長さがこの値より短い場合に有効になる。
+# mpt.option.two_step_soft_constraintは2段階のソフト拘束を有効にします。 mpt.option.soft_clearance_from_roadとmpt.option.soft_second_clearance_from_roadは重み。

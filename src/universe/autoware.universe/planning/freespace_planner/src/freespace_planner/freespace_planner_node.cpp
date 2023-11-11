@@ -214,6 +214,17 @@ bool isStopped(
   return true;
 }
 
+bool isBack(
+  const std::deque<Odometry::ConstSharedPtr> & odom_buffer)
+{
+  for (const auto & odom : odom_buffer) {
+    if ((odom->twist.twist.linear.x) > 0.0) {
+      return false;
+    }
+  }
+  return true;
+}
+
 }  // namespace
 
 namespace freespace_planner
@@ -236,6 +247,11 @@ FreespacePlannerNode::FreespacePlannerNode(const rclcpp::NodeOptions & node_opti
     p.vehicle_shape_margin_m = declare_parameter("vehicle_shape_margin_m", 1.0);
     p.replan_when_obstacle_found = declare_parameter("replan_when_obstacle_found", true);
     p.replan_when_course_out = declare_parameter("replan_when_course_out", true);
+    p.use_time_cnt = declare_parameter("use_time_count", false);
+    p.replan_cnt = declare_parameter("replan_time_count", 100000);
+    p.l_margin = declare_parameter("l_margin", 1.0);
+    p.w_margin = declare_parameter("w_margin", 1.0);
+    p.b2b_margin = declare_parameter("b2b_margin", 1.0);
   }
 
   // set vehicle_info
@@ -349,12 +365,20 @@ void FreespacePlannerNode::onOdometry(const Odometry::ConstSharedPtr msg)
 
 bool FreespacePlannerNode::isPlanRequired()
 {
+  const auto time_stopped = cnt_ > node_param_.replan_cnt;
+  const auto use_is_stopped = node_param_.use_time_cnt;
+
+  if ((time_stopped && use_is_stopped)) {
+    cnt_ = 0;
+    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000, "reset trajectory");
+    return true;
+  }
   if (trajectory_.points.empty()) {
     return true;
   }
 
   if (node_param_.replan_when_obstacle_found) {
-    algo_->setMap(*occupancy_grid_);
+    algo_->setMap(*occupancy_grid_, 0.0,0.0,0.0,0.0);
 
     const size_t nearest_index_partial =
       motion_utils::findNearestIndex(partial_trajectory_.points, current_pose_.pose.position);
@@ -385,16 +409,22 @@ bool FreespacePlannerNode::isPlanRequired()
 
 void FreespacePlannerNode::updateTargetIndex()
 {
-  const auto is_near_target =
-    tier4_autoware_utils::calcDistance2d(trajectory_.points.at(target_index_), current_pose_) <
-    node_param_.th_arrived_distance_m;
+  const auto is_near_target = isBack(odom_buffer_)
+    ? tier4_autoware_utils::calcDistance2d(trajectory_.points.at(target_index_), current_pose_) < (node_param_.th_arrived_distance_m/2)
+    : tier4_autoware_utils::calcDistance2d(trajectory_.points.at(target_index_), current_pose_) < node_param_.th_arrived_distance_m;
 
   const auto is_stopped = isStopped(odom_buffer_, node_param_.th_stopped_velocity_mps);
 
-  if (is_near_target && is_stopped) {
+
+  if ((!is_near_target) && is_stopped && found_goal_){
+    cnt_+=1;
+    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000, "is_Stopped count:%d",  cnt_);
+  }
+
+  if ((is_near_target && is_stopped)) {
     const auto new_target_index =
       getNextTargetIndex(trajectory_.points.size(), reversing_indices_, target_index_);
-
+    cnt_ = 0;
     if (new_target_index == target_index_) {
       // Finished publishing all partial trajectories
       is_completed_ = true;
@@ -404,6 +434,7 @@ void FreespacePlannerNode::updateTargetIndex()
       parking_state_pub_->publish(is_completed_msg);
     } else {
       // Switch to next partial trajectory
+      RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000, "Freespace trajectory change");
       prev_target_index_ = target_index_;
       target_index_ =
         getNextTargetIndex(trajectory_.points.size(), reversing_indices_, target_index_);
@@ -472,7 +503,7 @@ void FreespacePlannerNode::planTrajectory()
   }
 
   // Provide robot shape and map for the planner
-  algo_->setMap(*occupancy_grid_);
+  algo_->setMap(*occupancy_grid_,0.0,0.0,0.0,0.0);
 
   // Calculate poses in costmap frame
   const auto current_pose_in_costmap_frame = transformPose(
@@ -491,6 +522,7 @@ void FreespacePlannerNode::planTrajectory()
 
   if (result) {
     RCLCPP_INFO(get_logger(), "Found goal!");
+    found_goal_=true;
     trajectory_ =
       createTrajectory(current_pose_, algo_->getWaypoints(), node_param_.waypoints_velocity);
     reversing_indices_ = getReversingIndices(trajectory_);
@@ -500,6 +532,8 @@ void FreespacePlannerNode::planTrajectory()
 
   } else {
     RCLCPP_INFO(get_logger(), "Can't find goal...");
+    found_goal_=false;
+    cnt_=0;
     reset();
   }
 }
@@ -531,10 +565,10 @@ void FreespacePlannerNode::initializePlanningAlgorithm()
 {
   // Extend robot shape
   freespace_planning_algorithms::VehicleShape extended_vehicle_shape = vehicle_shape_;
-  const double margin = node_param_.vehicle_shape_margin_m;
-  extended_vehicle_shape.length += margin * 1.5;
-  extended_vehicle_shape.width += margin * 1.0;
-  extended_vehicle_shape.base2back += margin / 2;
+  // const double margin = node_param_.vehicle_shape_margin_m;
+  extended_vehicle_shape.length += node_param_.l_margin;
+  extended_vehicle_shape.width += node_param_.w_margin;
+  extended_vehicle_shape.base2back += node_param_.b2b_margin;
 
   const auto planner_common_param = getPlannerCommonParam();
 

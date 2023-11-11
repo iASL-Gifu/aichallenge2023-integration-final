@@ -292,7 +292,7 @@ bool LaneDepartureChecker::isOutOfLane(
 {
   for (const auto & point : vehicle_footprint) {
     if (!isInAnyLane(candidate_lanelets, point)) {
-      return true;
+      // return true;
     }
   }
 

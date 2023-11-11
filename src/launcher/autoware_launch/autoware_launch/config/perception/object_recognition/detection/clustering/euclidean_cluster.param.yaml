@@ -1,6 +1,7 @@
 /**:
   ros__parameters:
-    max_cluster_size: 1000
+  #Euclidean Clusterこのパラメタを読んでいる。
+    max_cluster_size: 100 #Def::1000　霧対策
     min_cluster_size: 10
-    tolerance: 0.7
-    use_height: false
+    tolerance: 0.7 #[m] 同じクラスタとみなされる点間の距離。0.1だとほぼ認識されない。小さいと実際のオブジェクトが複数のクラスターに見えることがある。L2ユークリッド空間における尺度としての空間クラスター許容度
+    use_height: true #Def::falseUse point.z 入れると認識の継続性が下がる。

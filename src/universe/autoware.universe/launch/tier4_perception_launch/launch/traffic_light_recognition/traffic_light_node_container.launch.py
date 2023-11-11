@@ -237,16 +237,8 @@ def generate_launch_description():
         "component_container_mt",
         condition=IfCondition(LaunchConfiguration("use_multithread")),
     )
-
+#Delete all
     return LaunchDescription(
         [
-            *launch_arguments,
-            set_container_executable,
-            set_container_mt_executable,
-            container,
-            decompressor_loader,
-            fine_detector_loader,
-            estimator_loader,
-            relay_loader,
         ]
     )

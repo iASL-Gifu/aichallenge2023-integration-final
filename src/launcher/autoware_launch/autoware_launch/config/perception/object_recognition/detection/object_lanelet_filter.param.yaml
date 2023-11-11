@@ -1,5 +1,6 @@
 /**:
   ros__parameters:
+  #obstacle_pointcloud_based_validator_node　レーン内の障害物のみを残す。
     filter_target_label:
       UNKNOWN : true
       CAR : false

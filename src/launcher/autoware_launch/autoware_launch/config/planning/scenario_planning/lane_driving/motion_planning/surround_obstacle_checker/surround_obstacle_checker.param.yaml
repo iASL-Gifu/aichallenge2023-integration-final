@@ -1,15 +1,31 @@
 /**:
-  ros__parameters:
-
+#
+#
+#無効化しました。
+#
+#
+  ros__parameters: #自車両が停止しているときに、周囲の障害物を認識し、ある場合は発進させない？
+#このモジュールは、必要なデータ（エゴポーズ、障害物など）をサブスクライブし、停止条件が満たされた場合に停止し続けるためのゼロ速度制限を公開する。
+#自車両と最も近いオブジェクトとの距離を計算します。この関数では、自車両のポリゴンと、点群および動的オブジェクトのポリゴン内のすべての点との間の最小距離を計算します。
+#以下の条件をすべて満たす場合、停止する予定。
+# 1.エゴ車が停止する
+# 2.以下の条件少なくともどちらか満たす
+#    (a)最も近い障害物までの距離が以下の条件を満たす
+#       状態がState::PASSの場合、距離がsurround_check_distance以下である。
+#       状態がState::STOPの場合、距離がsurround_check_recover_distance以下である。
+#    (b) 1の条件を満たさない場合、1の条件を満たした時点からの経過時間がstate_clear_time以下であること?
+#チャタリング防止のため、surround_obstacle_checkerは2つの状態を管理している。停止条件のところで述べたように、状態によって周囲の障害物を見つける閾値を変えることで、チャタリングを防いでいる。
+#State::PASS ：停止計画解除
+#State::STOP ：停止計画中
     # obstacle check
-    use_pointcloud: true # use pointcloud as obstacle check
-    use_dynamic_object: true # use dynamic object as obstacle check
-    surround_check_distance: 0.5 # if objects exist in this distance, transit to "exist-surrounding-obstacle" status [m]
+    use_pointcloud: false # 霧を認識しないため。use pointcloud as obstacle check
+    use_dynamic_object: false # use dynamic object as obstacle check
+    surround_check_distance: 0.5 # この距離にオブジェクトが存在する場合、「障害物あり」ステータスに移行する[m]。if objects exist in this distance, transit to "exist-surrounding-obstacle" status [m]
     surround_check_recover_distance: 0.8 # if no object exists in this distance, transit to "non-surrounding-obstacle" status [m]
-    state_clear_time: 2.0
+    state_clear_time: 2.0 #停止状態をクリアする閾値
 
     # ego stop state
-    stop_state_ego_speed: 0.1 #[m/s]
+    stop_state_ego_speed: 0.1 #自車両の停止を確認する閾値[m/s］[m/s]
 
     # debug
     publish_debug_footprints: true # publish vehicle footprint & footprints with surround_check_distance and surround_check_recover_distance offsets

@@ -125,10 +125,10 @@ AstarSearch::AstarSearch(
   y_scale_ = planner_common_param.theta_size;
 }
 
-void AstarSearch::setMap(const nav_msgs::msg::OccupancyGrid & costmap)
+void AstarSearch::setMap(const nav_msgs::msg::OccupancyGrid & costmap, double f, double b, double l, double r)
 {
-  AbstractPlanningAlgorithm::setMap(costmap);
-
+  AbstractPlanningAlgorithm::setMap(costmap, astar_param_.forward_m, astar_param_.back_m, astar_param_.left_m, astar_param_.right_m);
+  std::cout << f+b+l+r;
   clearNodes();
 
   x_scale_ = costmap_.info.height;
@@ -165,9 +165,9 @@ bool AstarSearch::setStartNode()
 {
   const auto index = pose2index(costmap_, start_pose_, planner_common_param_.theta_size);
 
-  if (detectCollision(index)) {
-    return false;
-  }
+  // if (detectCollision(index)) {
+  //   return false;
+  // }
 
   // Set start node
   AstarNode * start_node = getNodeRef(index);
@@ -180,6 +180,8 @@ bool AstarSearch::setStartNode()
   start_node->back_count = 10;
   start_node->status = NodeStatus::Open;
   start_node->parent = nullptr;
+  start_node->turning_dist = 0;
+  start_node->pose = start_pose_;
 
   // Push start node to openlist
   openlist_.push(start_node);
@@ -255,7 +257,11 @@ bool AstarSearch::search()
       setYaw(&next_pose.orientation, current_node->theta + transition.shift_theta);
       const auto next_index = pose2index(costmap_, next_pose, planner_common_param_.theta_size);
 
-      if (is_turning_point && current_node->back_count < 5) {
+      if (is_turning_point && current_node->turning_dist < astar_param_.turning_dist_limit){
+        continue;
+      }
+
+      if (is_turning_point && current_node->back_count < astar_param_.back_operation_limit) {
         continue;
       } 
 
@@ -273,10 +279,17 @@ bool AstarSearch::search()
         next_node->gc = current_node->gc + move_cost;
         next_node->hc = estimateCost(next_pose);
         next_node->is_back = transition.is_back;
+        next_node->pose = next_pose;
         if (!is_turning_point) {
           next_node->back_count = current_node->back_count + 1;
+          next_node->turning_dist = current_node->turning_dist + std::pow((std::pow(transition.shift_x, 2.0) + std::pow(transition.shift_y, 2.0)), 0.5);
+          // next_node->turning_dist = current_node->turning_dist + calcReedsSheppDistance(current_node->pose, next_node->pose, astar_param_.calc_radius);
+          // if(next_node->turning_dist > (std::abs(transition.shift_x) + std::abs(transition.shift_y))){
+          //   continue;
+          // }
         } else {
           next_node->back_count = 0;
+          next_node->turning_dist = 0.0;
         }
         next_node->parent = current_node;
         openlist_.push(next_node);

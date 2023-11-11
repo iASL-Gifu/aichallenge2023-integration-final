@@ -12,7 +12,7 @@
     <!-- option -->
     <arg name="vehicle_param_file" value="$(find-pkg-share $(var vehicle_model)_description)/config/vehicle_info.param.yaml"/>
     <arg name="vehicle_id" value="$(var vehicle_id)"/>
-    <arg name="enable_obstacle_collision_checker" value="false"/>
+    <arg name="enable_obstacle_collision_checker" value="false"/> <!--obstacle colligion checkerは無効になっている-->
     <arg name="trajectory_follower_node_param_path" value="$(find-pkg-share autoware_launch)/config/control/trajectory_follower/trajectory_follower_node.param.yaml"/>
     <arg
       name="lat_controller_param_path"

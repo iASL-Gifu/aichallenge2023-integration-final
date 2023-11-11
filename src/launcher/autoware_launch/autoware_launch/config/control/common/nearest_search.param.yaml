@@ -1,5 +1,12 @@
 /**:
   ros__parameters:
-    # ego
+    # MPC lateral controller
+    # Note: This function used to take into account the distance to the stop line
+    # for the stop state judgement. However, it has been removed since the steering
+    # control was turned off when approaching/exceeding the stop line on a curve or
+    # emergency stop situation and it caused large tracking error.
+    #注）この機能は、以前は停止線までの距離を考慮して停止状態判定を行っていました。
+    #しかし、カーブや緊急停止時に停止線に近づいたり超えたりするとステアリング制御がオフになり、追従誤差が大きくなるため、この機能は削除されました。
+    #緊急停止時にステアリング制御がOFFになり、追従誤差が大きくなるため削除しました。
     ego_nearest_dist_threshold: 3.0 # [m]
     ego_nearest_yaw_threshold: 1.046 # [rad] = 60 [deg]

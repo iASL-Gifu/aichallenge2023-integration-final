@@ -129,7 +129,7 @@ public:
   {
   }
 
-  virtual void setMap(const nav_msgs::msg::OccupancyGrid & costmap);
+  virtual void setMap(const nav_msgs::msg::OccupancyGrid & costmap, double f, double b, double l, double r);
   virtual bool makePlan(
     const geometry_msgs::msg::Pose & start_pose, const geometry_msgs::msg::Pose & goal_pose) = 0;
   virtual bool hasObstacleOnTrajectory(const geometry_msgs::msg::PoseArray & trajectory) const;
@@ -140,7 +140,7 @@ public:
 protected:
   void computeCollisionIndexes(
     int theta_index, std::vector<IndexXY> & indexes,
-    std::vector<IndexXY> & vertex_indexes_2d) const;
+    std::vector<IndexXY> & vertex_indexes_2d, double f, double b, double l, double r) const;
   bool detectCollision(const IndexXYT & base_index) const;
   inline bool isOutOfRange(const IndexXYT & index) const
   {

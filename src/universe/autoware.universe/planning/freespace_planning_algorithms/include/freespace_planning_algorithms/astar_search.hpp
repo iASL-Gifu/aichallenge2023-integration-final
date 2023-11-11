@@ -32,6 +32,12 @@
 #include <unordered_map>
 #include <vector>
 
+#ifdef ROS_DISTRO_GALACTIC
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#else
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
+#endif
+
 namespace freespace_planning_algorithms
 {
 enum class NodeStatus : uint8_t { None, Open, Closed };
@@ -44,6 +50,14 @@ struct AstarParam
 
   // search configs
   double distance_heuristic_weight;  // obstacle threshold on grid [0,255]
+  long int back_operation_limit;
+  double turning_dist_limit;
+  double calc_radius;
+
+  double forward_m;
+  double back_m;
+  double right_m;
+  double left_m;
 };
 
 struct AstarNode
@@ -57,6 +71,8 @@ struct AstarNode
   bool is_back;                          // true if the current direction of the vehicle is back
   int back_count;                        // recently count
   AstarNode * parent = nullptr;          // parent node
+  double turning_dist;
+  geometry_msgs::msg::Pose pose;
 
   double cost() const { return gc + hc; }
 };
@@ -121,11 +137,18 @@ public:
       AstarParam{
         node.declare_parameter("astar.only_behind_solutions", false),
         node.declare_parameter("astar.use_back", true),
-        node.declare_parameter("astar.distance_heuristic_weight", 1.0)})
+        node.declare_parameter("astar.distance_heuristic_weight", 1.0),
+        node.declare_parameter("astar.back_operation_limit", 5),
+        node.declare_parameter("astar.turning_dist_limit", 1.0),
+        node.declare_parameter("astar.calc_radius", 5.0),
+        node.declare_parameter("astar.forward_m", 1.0),
+        node.declare_parameter("astar.back_m", 1.0),
+        node.declare_parameter("astar.right_m", 1.0),
+        node.declare_parameter("astar.left_m",1.0)})
   {
   }
 
-  void setMap(const nav_msgs::msg::OccupancyGrid & costmap) override;
+  void setMap(const nav_msgs::msg::OccupancyGrid & costmap, double f, double b, double l, double r) override;
   bool makePlan(
     const geometry_msgs::msg::Pose & start_pose,
     const geometry_msgs::msg::Pose & goal_pose) override;

@@ -2,14 +2,14 @@
   ros__parameters:
     # -- Node Configurations --
     planning_algorithm: "astar"       # アルゴリズムを選択
-    waypoints_velocity: 3.0           # 速度
+    waypoints_velocity: 0.8           # 速度
     update_rate: 5.0                  # 更新速度
-    th_arrived_distance_m: 0.1       # 到着判定の距離
+    th_arrived_distance_m: 0.06       # 到着判定の距離
     th_stopped_time_sec: 1.0          # 停止状態かどうかを確認するための時間
     th_stopped_velocity_mps: 0.01     # 停止状態かどうかを確認するための速度
     th_course_out_distance_m: 1.0     # コースアウトになる距離
-    vehicle_shape_margin_m: 0.1      # 車両のマージン
-    replan_when_obstacle_found: true # 軌道上に障害物が存在したときに再計画するかどうか
+    # vehicle_shape_margin_m: 0.13      # 車両のマージン
+    replan_when_obstacle_found: false # 軌道上に障害物が存在したときに再計画するかどうか
     replan_when_course_out: true     # 車両がコースアウトしたときに再計画するかどうか
     # -- Configurations common to the all planners --
     # base configs
@@ -18,8 +18,8 @@
     # robot_length: 3.117               # 車体の長さ
     # robot_width: 1.265                # 車体の幅
     # robot_base2back: 0.510            # 車体の張り出し(後ろ)
-    minimum_turning_radius: 2.0       # 最小回転半径
-    maximum_turning_radius: 10.0       # 最大回転半径
+    minimum_turning_radius: 6.0       # 最小回転半径
+    maximum_turning_radius: 15.0       # 最大回転半径
     turning_radius_size: 30           # 旋回半径の分割数
     # search configs
     theta_size: 180                   # 角度の離散化の数
@@ -31,13 +31,20 @@
     # costmap configs
     obstacle_threshold: 100           # 特定のグリッドを障害物とみなすための閾値
     # vehicle info
-    wheel_base: 2.14 # between front wheel center and rear wheel center
-    wheel_radius: 0.255
-    wheel_tread: 0.975 # between left wheel center and right wheel center
-    wheel_width: 0.196
+    # wheel_base: 2.14 # between front wheel center and rear wheel center
+    # wheel_radius: 0.255
+    # wheel_tread: 0.975 # between left wheel center and right wheel center
+    # wheel_width: 0.196
+    use_time_count: true              # 一定時間経過すると次のtrajectoryに変更される
+    replan_time_count: 100            # use_time_countの時間
+
+    l_margin: 0.31                    # 前後の車両マージン 
+    w_margin: 0.13                     # 左右の車両マージン
+    b2b_margin: 0.20                  # 後ろの車両マージン
 
     # -- A* search Configurations --
     astar:
       only_behind_solutions: false    # 解をゴールの後ろに制限するかどうか
       use_back: true                  # バックを使用するかどうか
       distance_heuristic_weight: 1.0  # ノードコストを推定するためのヒューリスティックな重み
+      back_operation_limit: 2         # 切り返しの制限
