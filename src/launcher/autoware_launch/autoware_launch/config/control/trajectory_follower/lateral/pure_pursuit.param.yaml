@@ -1,16 +1,16 @@
 /**:
   ros__parameters:
-    ld_velocity_ratio: 2.4
-    ld_lateral_error_ratio: 3.6
-    ld_curvature_ratio: 120.0
-    long_ld_lateral_error_threshold: 0.5
-    min_lookahead_distance: 4.35
-    max_lookahead_distance: 15.0
-    converged_steer_rad: 0.1
-    reverse_min_lookahead_distance: 7.0
-    prediction_ds: 0.3
-    prediction_distance_length: 21.0
-    resampling_ds: 0.1
-    curvature_calculation_distance: 4.0
-    enable_path_smoothing: false
-    path_filter_moving_ave_num: 25
+    ld_velocity_ratio: 2.4                # ld(lookahead_distance)での速度比
+    ld_lateral_error_ratio: 3.6           # ldでの横方向の誤差比
+    ld_curvature_ratio: 120.0             # ldでの曲率の誤差比
+    long_ld_lateral_error_threshold: 0.5  # 長距離
+    min_lookahead_distance: 4.35          # 一定距離（lookahead_distance）先の点を目標点にし、その点に到達するような旋回制御を実行する
+    max_lookahead_distance: 15.0          # 
+    converged_steer_rad: 0.1              # 収束ステア半径
+    reverse_min_lookahead_distance: 7.0   # 逆方向最小ld
+    prediction_ds: 0.3                    # 予測時間
+    prediction_distance_length: 21.0      # 予測距離の長さ
+    resampling_ds: 0.1                    # リサンプリング時間
+    curvature_calculation_distance: 4.0   # 曲率計算距離
+    enable_path_smoothing: false          # path smoothingを有効にするかどうか
+    path_filter_moving_ave_num: 25        # path filterの移動平均数
