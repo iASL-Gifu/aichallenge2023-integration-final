@@ -44,7 +44,7 @@ boost::optional<PullOverPath> FreespacePullOver::plan(const Pose & goal_pose)
 {
   const Pose & current_pose = planner_data_->self_odometry->pose.pose;
 
-  planner_->setMap(*planner_data_->costmap);
+  planner_->setMap(*planner_data_->costmap,0.0,0.0,0.0,0.0);
 
   // offset goal pose to make straight path near goal for improving parking precision
   // todo: support straight path when using back
