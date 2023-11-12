@@ -9,9 +9,9 @@
     enable_keep_stopped_until_steer_convergence: false #入れるとDiagAggriで引っかかる。ステアリングが収束するまで止まっているか。
 
     # state transition
-    drive_state_stop_dist: 0.2 #停止線までの距離。Drive移行を決定する。
+    drive_state_stop_dist: 0.3 #停止線までの距離。Drive移行を決定する。
     drive_state_offset_stop_dist: 0.0
-    stopping_state_stop_dist: 0.2 #Stoppingへの移行基準。停止線とegoの距離
+    stopping_state_stop_dist: 0.25 #Stoppingへの移行基準。停止線とegoの距離
     stopped_state_entry_duration_time: 0.1
     stopped_state_entry_vel: 0.0 #Stop状態へ移行する際のVelocity閾値
     stopped_state_entry_acc: 0.0 #Stop状態へ移行する際のACC閾値
@@ -40,13 +40,13 @@
     # smooth stop state(Stopping) まずstrong_accでego速度を下げる。次にweak-accでego-jerkを減少させスムーズに停止する。
     # 仮に、egoが一定時間内に止まらないor停止線を何mかオーバーした際には、すぐに止まるため、weak-stop-accが出力される。
     # もしそれでもegoが動いているなら、今すぐ止まるためのstrong_stop_accを出力する。
-    smooth_stop_max_strong_acc: -3.5
-    smooth_stop_min_strong_acc: -6.4
+    smooth_stop_max_strong_acc: -0.5
+    smooth_stop_min_strong_acc: -1.8
     smooth_stop_weak_acc: -0.12 #弱いACC。StopからEngageへ移行する際のinit-acc
-    smooth_stop_weak_stop_time: 0.0 #weak-accを出す最大時間。この後strong_accが出力される。Def:0.3
+    smooth_stop_weak_stop_time: 0.1 #weak-accを出す最大時間。この後strong_accが出力される。Def:0.3
     smooth_stop_weak_stop_acc: -2.8 #今すぐ止める弱いAcc
-    smooth_stop_weak_stop_dist: 0.3 #これより手前にあるときにweak-accが出力される。[m]
-    smooth_stop_max_fast_vel: 0.1 #egoが速く走っているという閾値。超えるとStrong-accが出る。
+    smooth_stop_weak_stop_dist: -0.21 #これより手前にあるときにweak-accが出力される。[m]
+    smooth_stop_max_fast_vel: 0.3 #egoが速く走っているという閾値。超えるとStrong-accが出る。
     smooth_stop_min_running_vel: 0.01 #egoが走っているかどうかを判断するMin-Vel
     smooth_stop_min_running_acc: 0.01 #egoが走っているか判断するMin-acc
 
