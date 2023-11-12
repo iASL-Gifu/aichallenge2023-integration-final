@@ -4,21 +4,20 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
         - /Map1/Lanelet2VectorMap1/Namespaces1
         - /Sensing1/LiDAR1/ConcatenatePointCloud1/Autocompute Value Bounds1
         - /Sensing1/GNSS1/PoseWithCovariance1
         - /Localization1/NDT1
         - /Localization1/EKF1/PoseHistory1
-        - /Perception1/ObjectRecognition1/Detection1/DetectedObjects(obstacle_pointcloud_based_validator_node)1/CAR1
-        - /Perception1/ObjectRecognition1/Tracking (MultiObj_Tracker)1/TrackedObjects1
-        - /Perception1/ObjectRecognition1/Prediction(Map_based_prediction)1/PredictedObjects1/Status1
-        - /Planning1/ScenarioPlanning1
-        - /Planning1/Diagnostic1
-        - /Planning1/Diagnostic1/PlanningErrorMarker1
+        - /Perception1/Segmentation1
+        - /Perception1/ObjectRecognition1
+        - /Perception1/ObjectRecognition1/Prediction(Map_based_prediction)1/PredictedObjects1/UNKNOWN1
         - /Stop_Reason1/Topic1
-      Splitter Ratio: 0.4377565085887909
-    Tree Height: 155
+        - /Behavior_Path1
+        - /MotionPlanning1
+        - /MotionPlanning1/Obstacle_Avoidance_Planner1
+      Splitter Ratio: 0.4504064917564392
+    Tree Height: 304
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -602,7 +601,7 @@ Visualization Manager:
                 Reliability Policy: Reliable
                 Value: /sensing/lidar/crop_box_filter/crop_box_polygon
               Value: false
-          Enabled: true
+          Enabled: false
           Name: LiDAR
         - Class: rviz_common/Group
           Displays:
@@ -857,13 +856,13 @@ Visualization Manager:
               Color: 200; 200; 200
               Color Transformer: FlatColor
               Decay Time: 0
-              Enabled: true
+              Enabled: false
               Invert Rainbow: false
               Max Color: 255; 255; 255
               Max Intensity: 15
               Min Color: 0; 0; 0
               Min Intensity: -5
-              Name: NoGroundPointCloud
+              Name: NoGroundPointCloud(Input Euclidean)
               Position Transformer: XYZ
               Selectable: false
               Size (Pixels): 3
@@ -878,154 +877,384 @@ Visualization Manager:
                 Value: /perception/obstacle_segmentation/pointcloud
               Use Fixed Frame: true
               Use rainbow: true
-              Value: true
+              Value: false
           Enabled: true
           Name: Segmentation
         - Class: rviz_common/Group
           Displays:
             - Class: rviz_common/Group
               Displays:
-                - BUS:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  CAR:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  CYCLIST:
-                    Alpha: 0.9990000128746033
-                    Color: 119; 11; 32
-                  Class: autoware_auto_perception_rviz_plugin/DetectedObjects
-                  Display Acceleration: true
-                  Display Label: true
-                  Display PoseWithCovariance: true
-                  Display Predicted Path Confidence: true
-                  Display Predicted Paths: true
-                  Display Twist: true
-                  Display UUID: true
-                  Display Velocity: true
+                - Class: rviz_common/Group
+                  Displays:
+                    - Alpha: 0.9990000128746033
+                      Autocompute Intensity Bounds: true
+                      Autocompute Value Bounds:
+                        Max Value: 15
+                        Min Value: -2
+                        Value: false
+                      Axis: Z
+                      Channel Name: z
+                      Class: rviz_default_plugins/PointCloud2
+                      Color: 200; 200; 200
+                      Color Transformer: FlatColor
+                      Decay Time: 0
+                      Enabled: true
+                      Invert Rainbow: false
+                      Max Color: 255; 255; 255
+                      Max Intensity: 15
+                      Min Color: 0; 0; 0
+                      Min Intensity: -5
+                      Name: Cluster_Debug
+                      Position Transformer: XYZ
+                      Selectable: false
+                      Size (Pixels): 3
+                      Size (m): 0.019999999552965164
+                      Style: Points
+                      Topic:
+                        Depth: 5
+                        Durability Policy: Volatile
+                        Filter size: 10
+                        History Policy: Keep Last
+                        Reliability Policy: Best Effort
+                        Value: /perception/object_recognition/detection/clustering/debug/clusters
+                      Use Fixed Frame: true
+                      Use rainbow: true
+                      Value: true
+                    - BUS:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CAR:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CYCLIST:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Class: autoware_auto_perception_rviz_plugin/DetectedObjects
+                      Display Acceleration: true
+                      Display Label: true
+                      Display PoseWithCovariance: true
+                      Display Predicted Path Confidence: true
+                      Display Predicted Paths: true
+                      Display Twist: true
+                      Display UUID: true
+                      Display Velocity: true
+                      Enabled: false
+                      Line Width: 0.029999999329447746
+                      MOTORCYCLE:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Name: Euclidean_Clustering(見れないよ)
+                      Namespaces:
+                        {}
+                      PEDESTRIAN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 192; 203
+                      Polygon Type: 3d
+                      TRAILER:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      TRUCK:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      Topic:
+                        Depth: 5
+                        Durability Policy: Volatile
+                        History Policy: Keep Last
+                        Reliability Policy: Reliable
+                        Value: /perception/object_recognition/detection/clustering/clusters
+                      UNKNOWN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 255; 255
+                      Value: false
+                      Visualization Type: Normal
+                    - BUS:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CAR:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CYCLIST:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Class: autoware_auto_perception_rviz_plugin/DetectedObjects
+                      Display Acceleration: true
+                      Display Label: true
+                      Display PoseWithCovariance: true
+                      Display Predicted Path Confidence: true
+                      Display Predicted Paths: true
+                      Display Twist: true
+                      Display UUID: true
+                      Display Velocity: true
+                      Enabled: false
+                      Line Width: 0.029999999329447746
+                      MOTORCYCLE:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Name: Shape Estimation(見れないよ)
+                      Namespaces:
+                        {}
+                      PEDESTRIAN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 192; 203
+                      Polygon Type: 3d
+                      TRAILER:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      TRUCK:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      Topic:
+                        Depth: 5
+                        Durability Policy: Volatile
+                        History Policy: Keep Last
+                        Reliability Policy: Reliable
+                        Value: /perception/object_recognition/detection/clustering/objects_with_feature
+                      UNKNOWN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 255; 255
+                      Value: false
+                      Visualization Type: Normal
+                    - BUS:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CAR:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CYCLIST:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Class: autoware_auto_perception_rviz_plugin/DetectedObjects
+                      Display Acceleration: true
+                      Display Label: true
+                      Display PoseWithCovariance: true
+                      Display Predicted Path Confidence: true
+                      Display Predicted Paths: true
+                      Display Twist: true
+                      Display UUID: true
+                      Display Velocity: true
+                      Enabled: false
+                      Line Width: 0.029999999329447746
+                      MOTORCYCLE:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Name: (0)Detection_by_tracker_node
+                      Namespaces:
+                        {}
+                      PEDESTRIAN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 192; 203
+                      Polygon Type: 3d
+                      TRAILER:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      TRUCK:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      Topic:
+                        Depth: 5
+                        Durability Policy: Volatile
+                        History Policy: Keep Last
+                        Reliability Policy: Reliable
+                        Value: /perception/object_recognition/detection/detection_by_tracker/objects
+                      UNKNOWN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 255; 255
+                      Value: false
+                      Visualization Type: Normal
+                    - BUS:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CAR:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CYCLIST:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Class: autoware_auto_perception_rviz_plugin/DetectedObjects
+                      Display Acceleration: true
+                      Display Label: true
+                      Display PoseWithCovariance: true
+                      Display Predicted Path Confidence: true
+                      Display Predicted Paths: true
+                      Display Twist: true
+                      Display UUID: true
+                      Display Velocity: true
+                      Enabled: true
+                      Line Width: 0.029999999329447746
+                      MOTORCYCLE:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Name: (0)detected_object_feature_remover (AssociationMergerへ)
+                      Namespaces:
+                        {}
+                      PEDESTRIAN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 192; 203
+                      Polygon Type: 3d
+                      TRAILER:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      TRUCK:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      Topic:
+                        Depth: 5
+                        Durability Policy: Volatile
+                        History Policy: Keep Last
+                        Reliability Policy: Reliable
+                        Value: /perception/object_recognition/detection/clustering/objects
+                      UNKNOWN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 255; 255
+                      Value: true
+                      Visualization Type: Normal
                   Enabled: false
-                  Line Width: 0.029999999329447746
-                  MOTORCYCLE:
-                    Alpha: 0.9990000128746033
-                    Color: 119; 11; 32
-                  Name: CenterPoint
-                  Namespaces:
-                    {}
-                  PEDESTRIAN:
-                    Alpha: 0.9990000128746033
-                    Color: 255; 192; 203
-                  Polygon Type: 3d
-                  TRAILER:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  TRUCK:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  Topic:
-                    Depth: 5
-                    Durability Policy: Volatile
-                    History Policy: Keep Last
-                    Reliability Policy: Reliable
-                    Value: /perception/object_recognition/detection/centerpoint/objects
-                  UNKNOWN:
-                    Alpha: 0.9990000128746033
-                    Color: 255; 255; 255
-                  Value: false
-                  Visualization Type: Normal
-                - BUS:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  CAR:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  CYCLIST:
-                    Alpha: 0.9990000128746033
-                    Color: 119; 11; 32
-                  Class: autoware_auto_perception_rviz_plugin/DetectedObjects
-                  Display Acceleration: true
-                  Display Label: false
-                  Display PoseWithCovariance: true
-                  Display Predicted Path Confidence: true
-                  Display Predicted Paths: true
-                  Display Twist: true
-                  Display UUID: true
-                  Display Velocity: true
+                  Name: Euclid_Clustering
+                - Class: rviz_common/Group
+                  Displays:
+                    - BUS:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CAR:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CYCLIST:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Class: autoware_auto_perception_rviz_plugin/DetectedObjects
+                      Display Acceleration: true
+                      Display Label: true
+                      Display PoseWithCovariance: true
+                      Display Predicted Path Confidence: true
+                      Display Predicted Paths: true
+                      Display Twist: true
+                      Display UUID: true
+                      Display Velocity: true
+                      Enabled: true
+                      Line Width: 0.029999999329447746
+                      MOTORCYCLE:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Name: CenterPoint
+                      Namespaces:
+                        {}
+                      PEDESTRIAN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 192; 203
+                      Polygon Type: 3d
+                      TRAILER:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      TRUCK:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      Topic:
+                        Depth: 5
+                        Durability Policy: Volatile
+                        History Policy: Keep Last
+                        Reliability Policy: Reliable
+                        Value: /perception/object_recognition/detection/centerpoint/objects
+                      UNKNOWN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 255; 255
+                      Value: true
+                      Visualization Type: Normal
+                    - BUS:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CAR:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CYCLIST:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Class: autoware_auto_perception_rviz_plugin/DetectedObjects
+                      Display Acceleration: true
+                      Display Label: false
+                      Display PoseWithCovariance: true
+                      Display Predicted Path Confidence: true
+                      Display Predicted Paths: true
+                      Display Twist: true
+                      Display UUID: true
+                      Display Velocity: true
+                      Enabled: false
+                      Line Width: 0.029999999329447746
+                      MOTORCYCLE:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Name: DetectedObjects(obstacle_pointcloud_based_validator_node)
+                      Namespaces:
+                        {}
+                      PEDESTRIAN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 192; 203
+                      Polygon Type: 3d
+                      TRAILER:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      TRUCK:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      Topic:
+                        Depth: 5
+                        Durability Policy: Volatile
+                        History Policy: Keep Last
+                        Reliability Policy: Best Effort
+                        Value: /perception/object_recognition/detection/objects
+                      UNKNOWN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 255; 255
+                      Value: false
+                      Visualization Type: Normal
+                    - BUS:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CAR:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      CYCLIST:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Class: autoware_auto_perception_rviz_plugin/DetectedObjects
+                      Display Acceleration: true
+                      Display Label: false
+                      Display PoseWithCovariance: true
+                      Display Predicted Path Confidence: true
+                      Display Predicted Paths: true
+                      Display Twist: true
+                      Display UUID: true
+                      Display Velocity: true
+                      Enabled: false
+                      Line Width: 0.029999999329447746
+                      MOTORCYCLE:
+                        Alpha: 0.9990000128746033
+                        Color: 119; 11; 32
+                      Name: Obstacle_pointcloud_based_Validator
+                      Namespaces:
+                        {}
+                      PEDESTRIAN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 192; 203
+                      Polygon Type: 3d
+                      TRAILER:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      TRUCK:
+                        Alpha: 0.9990000128746033
+                        Color: 30; 144; 255
+                      Topic:
+                        Depth: 5
+                        Durability Policy: Volatile
+                        History Policy: Keep Last
+                        Reliability Policy: Best Effort
+                        Value: /perception/object_recognition/detection/centerpoint/validation/objects
+                      UNKNOWN:
+                        Alpha: 0.9990000128746033
+                        Color: 255; 255; 255
+                      Value: false
+                      Visualization Type: Normal
                   Enabled: false
-                  Line Width: 0.029999999329447746
-                  MOTORCYCLE:
-                    Alpha: 0.9990000128746033
-                    Color: 119; 11; 32
-                  Name: Obstacle_pointcloud_based_Validator
-                  Namespaces:
-                    {}
-                  PEDESTRIAN:
-                    Alpha: 0.9990000128746033
-                    Color: 255; 192; 203
-                  Polygon Type: 3d
-                  TRAILER:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  TRUCK:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  Topic:
-                    Depth: 5
-                    Durability Policy: Volatile
-                    History Policy: Keep Last
-                    Reliability Policy: Best Effort
-                    Value: /perception/object_recognition/detection/centerpoint/validation/objects
-                  UNKNOWN:
-                    Alpha: 0.9990000128746033
-                    Color: 255; 255; 255
-                  Value: false
-                  Visualization Type: Normal
-                - BUS:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  CAR:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  CYCLIST:
-                    Alpha: 0.9990000128746033
-                    Color: 119; 11; 32
-                  Class: autoware_auto_perception_rviz_plugin/DetectedObjects
-                  Display Acceleration: true
-                  Display Label: false
-                  Display PoseWithCovariance: true
-                  Display Predicted Path Confidence: true
-                  Display Predicted Paths: true
-                  Display Twist: true
-                  Display UUID: true
-                  Display Velocity: true
-                  Enabled: false
-                  Line Width: 0.029999999329447746
-                  MOTORCYCLE:
-                    Alpha: 0.9990000128746033
-                    Color: 119; 11; 32
-                  Name: DetectedObjects(obstacle_pointcloud_based_validator_node)
-                  Namespaces:
-                    {}
-                  PEDESTRIAN:
-                    Alpha: 0.9990000128746033
-                    Color: 255; 192; 203
-                  Polygon Type: 3d
-                  TRAILER:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  TRUCK:
-                    Alpha: 0.9990000128746033
-                    Color: 30; 144; 255
-                  Topic:
-                    Depth: 5
-                    Durability Policy: Volatile
-                    History Policy: Keep Last
-                    Reliability Policy: Best Effort
-                    Value: /perception/object_recognition/detection/objects
-                  UNKNOWN:
-                    Alpha: 0.9990000128746033
-                    Color: 255; 255; 255
-                  Value: false
-                  Visualization Type: Normal
+                  Name: CenterPoint(無効化)
                 - BUS:
                     Alpha: 0.9990000128746033
                     Color: 30; 144; 255
@@ -1096,7 +1325,54 @@ Visualization Manager:
                   MOTORCYCLE:
                     Alpha: 0.9990000128746033
                     Color: 119; 11; 32
-                  Name: Merged_Obj(Center & Cluster), LiDAR
+                  Name: Obj_Association_Merger, TMP_Merged_Obj(Center & Cluster)
+                  Namespaces:
+                    {}
+                  PEDESTRIAN:
+                    Alpha: 0.9990000128746033
+                    Color: 255; 192; 203
+                  Polygon Type: 3d
+                  TRAILER:
+                    Alpha: 0.9990000128746033
+                    Color: 30; 144; 255
+                  TRUCK:
+                    Alpha: 0.9990000128746033
+                    Color: 30; 144; 255
+                  Topic:
+                    Depth: 5
+                    Durability Policy: Volatile
+                    History Policy: Keep Last
+                    Reliability Policy: Best Effort
+                    Value: /perception/object_recognition/detection/temporary_merged_objects
+                  UNKNOWN:
+                    Alpha: 0.9990000128746033
+                    Color: 255; 255; 255
+                  Value: false
+                  Visualization Type: Normal
+                - BUS:
+                    Alpha: 0.9990000128746033
+                    Color: 30; 144; 255
+                  CAR:
+                    Alpha: 0.9990000128746033
+                    Color: 30; 144; 255
+                  CYCLIST:
+                    Alpha: 0.9990000128746033
+                    Color: 119; 11; 32
+                  Class: autoware_auto_perception_rviz_plugin/DetectedObjects
+                  Display Acceleration: true
+                  Display Label: false
+                  Display PoseWithCovariance: true
+                  Display Predicted Path Confidence: true
+                  Display Predicted Paths: true
+                  Display Twist: true
+                  Display UUID: true
+                  Display Velocity: true
+                  Enabled: false
+                  Line Width: 0.029999999329447746
+                  MOTORCYCLE:
+                    Alpha: 0.9990000128746033
+                    Color: 119; 11; 32
+                  Name: Obj_Asso_Merger, Merged_Obj(Center & Cluster), LiDAR
                   Namespaces:
                     {}
                   PEDESTRIAN:
@@ -1138,7 +1414,7 @@ Visualization Manager:
                   Display Twist: true
                   Display UUID: true
                   Display Velocity: true
-                  Enabled: true
+                  Enabled: false
                   Line Width: 0.029999999329447746
                   MOTORCYCLE:
                     Alpha: 0.9990000128746033
@@ -1165,9 +1441,9 @@ Visualization Manager:
                   UNKNOWN:
                     Alpha: 0.9990000128746033
                     Color: 255; 255; 255
-                  Value: true
+                  Value: false
                   Visualization Type: Normal
-              Enabled: false
+              Enabled: true
               Name: Detection
             - Class: rviz_common/Group
               Displays:
@@ -1233,12 +1509,12 @@ Visualization Manager:
                     Color: 119; 11; 32
                   Class: autoware_auto_perception_rviz_plugin/PredictedObjects
                   Display Acceleration: true
-                  Display Label: true
-                  Display PoseWithCovariance: false
-                  Display Predicted Path Confidence: true
+                  Display Label: false
+                  Display PoseWithCovariance: true
+                  Display Predicted Path Confidence: false
                   Display Predicted Paths: true
-                  Display Twist: true
-                  Display UUID: true
+                  Display Twist: false
+                  Display UUID: false
                   Display Velocity: true
                   Enabled: true
                   Line Width: 0.029999999329447746
@@ -1247,14 +1523,7 @@ Visualization Manager:
                     Color: 119; 11; 32
                   Name: PredictedObjects
                   Namespaces:
-                    acceleration: true
-                    label: true
-                    path: true
-                    path confidence: true
-                    shape: true
-                    twist: true
-                    uuid: true
-                    velocity: true
+                    {}
                   PEDESTRIAN:
                     Alpha: 0.9990000128746033
                     Color: 255; 192; 203
@@ -1309,7 +1578,7 @@ Visualization Manager:
                 Value: /perception/traffic_light_recognition/debug/rois
               Value: false
             - Class: rviz_default_plugins/MarkerArray
-              Enabled: true
+              Enabled: false
               Name: MapBasedDetectionResult
               Namespaces:
                 {}
@@ -1319,8 +1588,8 @@ Visualization Manager:
                 History Policy: Keep Last
                 Reliability Policy: Best Effort
                 Value: /perception/traffic_light_recognition/traffic_light_map_based_detector/debug/markers
-              Value: true
-          Enabled: true
+              Value: false
+          Enabled: false
           Name: TrafficLight
         - Class: rviz_common/Group
           Displays:
@@ -1349,1120 +1618,6 @@ Visualization Manager:
           Name: OccupancyGrid
       Enabled: true
       Name: Perception
-    - Class: rviz_common/Group
-      Displays:
-        - Class: rviz_common/Group
-          Displays:
-            - Class: rviz_default_plugins/MarkerArray
-              Enabled: true
-              Name: RouteArea
-              Namespaces:
-                {}
-              Topic:
-                Depth: 5
-                Durability Policy: Transient Local
-                History Policy: Keep Last
-                Reliability Policy: Reliable
-                Value: /planning/mission_planning/route_marker
-              Value: true
-            - Alpha: 0.9990000128746033
-              Axes Length: 1
-              Axes Radius: 0.30000001192092896
-              Class: rviz_default_plugins/Pose
-              Color: 255; 25; 0
-              Enabled: true
-              Head Length: 0.30000001192092896
-              Head Radius: 0.5
-              Name: GoalPose
-              Shaft Length: 3
-              Shaft Radius: 0.20000000298023224
-              Shape: Axes
-              Topic:
-                Depth: 5
-                Durability Policy: Volatile
-                Filter size: 10
-                History Policy: Keep Last
-                Reliability Policy: Reliable
-                Value: /planning/mission_planning/echo_back_goal_pose
-              Value: true
-          Enabled: true
-          Name: MissionPlanning
-        - Class: rviz_common/Group
-          Displays:
-            - Class: rviz_plugins/Trajectory
-              Color Border Vel Max: 3
-              Enabled: true
-              Name: ScenarioTrajectory
-              Topic:
-                Depth: 5
-                Durability Policy: Volatile
-                Filter size: 10
-                History Policy: Keep Last
-                Reliability Policy: Reliable
-                Value: /planning/scenario_planning/trajectory
-              Value: true
-              View Footprint:
-                Alpha: 1
-                Color: 230; 230; 50
-                Offset from BaseLink: 0
-                Rear Overhang: 1.0299999713897705
-                Value: false
-                Vehicle Length: 4.769999980926514
-                Vehicle Width: 1.8300000429153442
-              View Path:
-                Alpha: 0.9990000128746033
-                Color: 0; 0; 0
-                Constant Color: false
-                Value: true
-                Width: 2
-              View Point:
-                Alpha: 1
-                Color: 0; 60; 255
-                Offset: 0
-                Radius: 0.10000000149011612
-                Value: false
-              View Text Velocity:
-                Scale: 0.30000001192092896
-                Value: false
-              View Velocity:
-                Alpha: 0.9990000128746033
-                Color: 0; 0; 0
-                Constant Color: false
-                Scale: 0.30000001192092896
-                Value: true
-            - Class: rviz_common/Group
-              Displays:
-                - Class: rviz_common/Group
-                  Displays:
-                    - Class: rviz_plugins/Path
-                      Color Border Vel Max: 3
-                      Enabled: true
-                      Name: Path
-                      Topic:
-                        Depth: 5
-                        Durability Policy: Volatile
-                        Filter size: 10
-                        History Policy: Keep Last
-                        Reliability Policy: Reliable
-                        Value: /planning/scenario_planning/lane_driving/behavior_planning/path
-                      Value: true
-                      View Drivable Area:
-                        Alpha: 0.9990000128746033
-                        Color: 0; 148; 205
-                        Value: true
-                        Width: 0.30000001192092896
-                      View Footprint:
-                        Alpha: 1
-                        Color: 230; 230; 50
-                        Offset from BaseLink: 0
-                        Rear Overhang: 1.0299999713897705
-                        Value: false
-                        Vehicle Length: 4.769999980926514
-                        Vehicle Width: 1.8300000429153442
-                      View Path:
-                        Alpha: 0.4000000059604645
-                        Color: 0; 0; 0
-                        Constant Color: false
-                        Value: true
-                        Width: 2
-                      View Point:
-                        Alpha: 1
-                        Color: 0; 60; 255
-                        Offset: 0
-                        Radius: 0.10000000149011612
-                        Value: false
-                      View Text Velocity:
-                        Scale: 0.30000001192092896
-                        Value: false
-                      View Velocity:
-                        Alpha: 0.4000000059604645
-                        Color: 0; 0; 0
-                        Constant Color: false
-                        Scale: 0.30000001192092896
-                        Value: true
-                    - Class: rviz_plugins/Path
-                      Color Border Vel Max: 3
-                      Enabled: true
-                      Name: PathChangeCandidate_LaneChange
-                      Topic:
-                        Depth: 5
-                        Durability Policy: Volatile
-                        Filter size: 10
-                        History Policy: Keep Last
-                        Reliability Policy: Reliable
-                        Value: /planning/path_candidate/lane_change
-                      Value: true
-                      View Drivable Area:
-                        Alpha: 0.9990000128746033
-                        Color: 0; 148; 205
-                        Value: true
-                        Width: 0.30000001192092896
-                      View Footprint:
-                        Alpha: 1
-                        Color: 230; 230; 50
-                        Offset from BaseLink: 0
-                        Rear Overhang: 1.0299999713897705
-                        Value: false
-                        Vehicle Length: 4.769999980926514
-                        Vehicle Width: 1.8300000429153442
-                      View Path:
-                        Alpha: 0.30000001192092896
-                        Color: 115; 210; 22
-                        Constant Color: false
-                        Value: true
-                        Width: 2
-                      View Point:
-                        Alpha: 1
-                        Color: 0; 60; 255
-                        Offset: 0
-                        Radius: 0.10000000149011612
-                        Value: false
-                      View Text Velocity:
-                        Scale: 0.30000001192092896
-                        Value: false
-                      View Velocity:
-                        Alpha: 0.30000001192092896
-                        Color: 0; 0; 0
-                        Constant Color: false
-                        Scale: 0.30000001192092896
-                        Value: false
-                    - Class: rviz_plugins/Path
-                      Color Border Vel Max: 3
-                      Enabled: true
-                      Name: PathChangeCandidate_ExternalRequestLaneChangeRight
-                      Topic:
-                        Depth: 5
-                        Durability Policy: Volatile
-                        Filter size: 10
-                        History Policy: Keep Last
-                        Reliability Policy: Reliable
-                        Value: /planning/path_candidate/ext_request_lane_change_right
-                      Value: true
-                      View Drivable Area:
-                        Alpha: 0.9990000128746033
-                        Color: 0; 148; 205
-                        Value: true
-                        Width: 0.30000001192092896
-                      View Footprint:
-                        Alpha: 1
-                        Color: 230; 230; 50
-                        Offset from BaseLink: 0
-                        Rear Overhang: 1.0299999713897705
-                        Value: false
-                        Vehicle Length: 4.769999980926514
-                        Vehicle Width: 1.8300000429153442
-                      View Path:
-                        Alpha: 0.30000001192092896
-                        Color: 115; 210; 22
-                        Constant Color: false
-                        Value: true
-                        Width: 2
-                      View Point:
-                        Alpha: 1
-                        Color: 0; 60; 255
-                        Offset: 0
-                        Radius: 0.10000000149011612
-                        Value: false
-                      View Text Velocity:
-                        Scale: 0.30000001192092896
-                        Value: false
-                      View Velocity:
-                        Alpha: 0.30000001192092896
-                        Color: 0; 0; 0
-                        Constant Color: false
-                        Scale: 0.30000001192092896
-                        Value: false
-                    - Class: rviz_plugins/Path
-                      Color Border Vel Max: 3
-                      Enabled: true
-                      Name: PathChangeCandidate_ExternalRequestLaneChangeLeft
-                      Topic:
-                        Depth: 5
-                        Durability Policy: Volatile
-                        Filter size: 10
-                        History Policy: Keep Last
-                        Reliability Policy: Reliable
-                        Value: /planning/path_candidate/ext_request_lane_change_left
-                      Value: true
-                      View Drivable Area:
-                        Alpha: 0.9990000128746033
-                        Color: 0; 148; 205
-                        Value: true
-                        Width: 0.30000001192092896
-                      View Footprint:
-                        Alpha: 1
-                        Color: 230; 230; 50
-                        Offset from BaseLink: 0
-                        Rear Overhang: 1.0299999713897705
-                        Value: false
-                        Vehicle Length: 4.769999980926514
-                        Vehicle Width: 1.8300000429153442
-                      View Path:
-                        Alpha: 0.30000001192092896
-                        Color: 115; 210; 22
-                        Constant Color: false
-                        Value: true
-                        Width: 2
-                      View Point:
-                        Alpha: 1
-                        Color: 0; 60; 255
-                        Offset: 0
-                        Radius: 0.10000000149011612
-                        Value: false
-                      View Text Velocity:
-                        Scale: 0.30000001192092896
-                        Value: false
-                      View Velocity:
-                        Alpha: 0.30000001192092896
-                        Color: 0; 0; 0
-                        Constant Color: false
-                        Scale: 0.30000001192092896
-                        Value: false
-                    - Class: rviz_plugins/Path
-                      Color Border Vel Max: 3
-                      Enabled: true
-                      Name: PathChangeCandidate_Avoidance
-                      Topic:
-                        Depth: 5
-                        Durability Policy: Volatile
-                        Filter size: 10
-                        History Policy: Keep Last
-                        Reliability Policy: Reliable
-                        Value: /planning/path_candidate/avoidance
-                      Value: true
-                      View Drivable Area:
-                        Alpha: 0.9990000128746033
-                        Color: 0; 148; 205
-                        Value: true
-                        Width: 0.30000001192092896
-                      View Footprint:
-                        Alpha: 1
-                        Color: 230; 230; 50
-                        Offset from BaseLink: 0
-                        Rear Overhang: 1.0299999713897705
-                        Value: false
-                        Vehicle Length: 4.769999980926514
-                        Vehicle Width: 1.8300000429153442
-                      View Path:
-                        Alpha: 0.30000001192092896
-                        Color: 115; 210; 22
-                        Constant Color: false
-                        Value: true
-                        Width: 2
-                      View Point:
-                        Alpha: 1
-                        Color: 0; 60; 255
-                        Offset: 0
-                        Radius: 0.10000000149011612
-                        Value: false
-                      View Text Velocity:
-                        Scale: 0.30000001192092896
-                        Value: false
-                      View Velocity:
-                        Alpha: 0.30000001192092896
-                        Color: 0; 0; 0
-                        Constant Color: false
-                        Scale: 0.30000001192092896
-                        Value: false
-                    - Class: rviz_plugins/Path
-                      Color Border Vel Max: 3
-                      Enabled: true
-                      Name: PathChangeCandidate_PullOut
-                      Topic:
-                        Depth: 5
-                        Durability Policy: Volatile
-                        Filter size: 10
-                        History Policy: Keep Last
-                        Reliability Policy: Reliable
-                        Value: /planning/path_candidate/pull_out
-                      Value: true
-                      View Drivable Area:
-                        Alpha: 0.9990000128746033
-                        Color: 0; 148; 205
-                        Value: true
-                        Width: 0.30000001192092896
-                      View Footprint:
-                        Alpha: 1
-                        Color: 230; 230; 50
-                        Offset from BaseLink: 0
-                        Rear Overhang: 1.0299999713897705
-                        Value: false
-                        Vehicle Length: 4.769999980926514
-                        Vehicle Width: 1.8300000429153442
-                      View Path:
-                        Alpha: 0.30000001192092896
-                        Color: 115; 210; 22
-                        Constant Color: false
-                        Value: true
-                        Width: 2
-                      View Point:
-                        Alpha: 1
-                        Color: 0; 60; 255
-                        Offset: 0
-                        Radius: 0.10000000149011612
-                        Value: false
-                      View Text Velocity:
-                        Scale: 0.30000001192092896
-                        Value: false
-                      View Velocity:
-                        Alpha: 0.30000001192092896
-                        Color: 0; 0; 0
-                        Constant Color: false
-                        Scale: 0.30000001192092896
-                        Value: false
-                    - Class: rviz_plugins/Path
-                      Color Border Vel Max: 3
-                      Enabled: true
-                      Name: PathChangeCandidate_PullOver
-                      Topic:
-                        Depth: 5
-                        Durability Policy: Volatile
-                        Filter size: 10
-                        History Policy: Keep Last
-                        Reliability Policy: Reliable
-                        Value: /planning/path_candidate/pull_over
-                      Value: true
-                      View Drivable Area:
-                        Alpha: 0.9990000128746033
-                        Color: 0; 148; 205
-                        Value: true
-                        Width: 0.30000001192092896
-                      View Footprint:
-                        Alpha: 1
-                        Color: 230; 230; 50
-                        Offset from BaseLink: 0
-                        Rear Overhang: 1.0299999713897705
-                        Value: false
-                        Vehicle Length: 4.769999980926514
-                        Vehicle Width: 1.8300000429153442
-                      View Path:
-                        Alpha: 0.30000001192092896
-                        Color: 115; 210; 22
-                        Constant Color: false
-                        Value: true
-                        Width: 2
-                      View Point:
-                        Alpha: 1
-                        Color: 0; 60; 255
-                        Offset: 0
-                        Radius: 0.10000000149011612
-                        Value: false
-                      View Text Velocity:
-                        Scale: 0.30000001192092896
-                        Value: false
-                      View Velocity:
-                        Alpha: 0.30000001192092896
-                        Color: 0; 0; 0
-                        Constant Color: false
-                        Scale: 0.30000001192092896
-                        Value: false
-                    - Class: rviz_default_plugins/MarkerArray
-                      Enabled: true
-                      Name: Bound
-                      Namespaces:
-                        {}
-                      Topic:
-                        Depth: 5
-                        Durability Policy: Volatile
-                        History Policy: Keep Last
-                        Reliability Policy: Reliable
-                        Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/bound
-                      Value: true
-                    - Class: rviz_common/Group
-                      Displays:
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (BlindSpot)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/blind_spot
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (Crosswalk)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/crosswalk
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (Walkway)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/walkway
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (DetectionArea)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/detection_area
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (Intersection)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/intersection
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (MergeFromPrivateArea)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/merge_from_private
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (NoStoppingArea)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/no_stopping_area
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (OcclusionSpot)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/occlusion_spot
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (StopLine)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/stop_line
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (TrafficLight)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/traffic_light
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (VirtualTrafficLight)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/virtual_traffic_light
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (RunOut)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/run_out
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (SpeedBump)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/virtual_wall/speed_bump
-                          Value: true
-                      Enabled: true
-                      Name: VirtualWall
-                    - Class: rviz_common/Group
-                      Displays:
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: Arrow
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/path
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: Crosswalk
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/crosswalk
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: Intersection
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/intersection
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: Blind Spot
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/blind_spot
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: TrafficLight
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/traffic_light
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: VirtualTrafficLight
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/virtual_traffic_light
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: StopLine
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/stop_line
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: DetectionArea
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/detection_area
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: OcclusionSpot
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/occlusion_spot
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: NoStoppingArea
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/no_stopping_area
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: RunOut
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/run_out
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: Avoidance
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/avoidance
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: LaneChange
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/lanechange
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: LaneFollowing
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/lanefollowing
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: PullOver
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/pullover
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: PullOut
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/pullout
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: SideShift
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/sideshift
-                          Value: false
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: SpeedBump
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_velocity_planner/debug/speed_bump
-                          Value: false
-                      Enabled: false
-                      Name: DebugMarker
-                  Enabled: true
-                  Name: BehaviorPlanning
-                - Class: rviz_common/Group
-                  Displays:
-                    - Class: rviz_plugins/Trajectory
-                      Color Border Vel Max: 3
-                      Enabled: false
-                      Name: Trajectory
-                      Topic:
-                        Depth: 5
-                        Durability Policy: Volatile
-                        Filter size: 10
-                        History Policy: Keep Last
-                        Reliability Policy: Reliable
-                        Value: /planning/scenario_planning/lane_driving/trajectory
-                      Value: false
-                      View Footprint:
-                        Alpha: 1
-                        Color: 230; 230; 50
-                        Offset from BaseLink: 0
-                        Rear Overhang: 1.0299999713897705
-                        Value: false
-                        Vehicle Length: 4.769999980926514
-                        Vehicle Width: 1.8300000429153442
-                      View Path:
-                        Alpha: 0.9990000128746033
-                        Color: 0; 0; 0
-                        Constant Color: false
-                        Value: true
-                        Width: 2
-                      View Point:
-                        Alpha: 1
-                        Color: 0; 60; 255
-                        Offset: 0
-                        Radius: 0.10000000149011612
-                        Value: false
-                      View Text Velocity:
-                        Scale: 0.30000001192092896
-                        Value: false
-                      View Velocity:
-                        Alpha: 0.9990000128746033
-                        Color: 0; 0; 0
-                        Constant Color: false
-                        Scale: 0.30000001192092896
-                        Value: true
-                    - Class: rviz_common/Group
-                      Displays:
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (ObstacleStop)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/virtual_wall
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (SurroundObstacle)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/motion_planning/surround_obstacle_checker/virtual_wall
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (ObstacleAvoidance)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/virtual_wall
-                          Value: true
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: true
-                          Name: VirtualWall (ObstacleCruise)
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_cruise_planner/virtual_wall
-                          Value: true
-                      Enabled: true
-                      Name: VirtualWall
-                    - Class: rviz_common/Group
-                      Displays:
-                        - Class: rviz_common/Group
-                          Displays:
-                            - Class: rviz_default_plugins/MarkerArray
-                              Enabled: true
-                              Name: SurroundObstacleCheck
-                              Namespaces:
-                                {}
-                              Topic:
-                                Depth: 5
-                                Durability Policy: Volatile
-                                History Policy: Keep Last
-                                Reliability Policy: Reliable
-                                Value: /planning/scenario_planning/lane_driving/motion_planning/surround_obstacle_checker/debug/marker
-                              Value: true
-                            - Alpha: 1
-                              Class: rviz_default_plugins/Polygon
-                              Color: 25; 255; 0
-                              Enabled: false
-                              Name: Footprint
-                              Topic:
-                                Depth: 5
-                                Durability Policy: Volatile
-                                Filter size: 10
-                                History Policy: Keep Last
-                                Reliability Policy: Reliable
-                                Value: /planning/scenario_planning/lane_driving/motion_planning/surround_obstacle_checker/debug/footprint
-                              Value: false
-                            - Alpha: 1
-                              Class: rviz_default_plugins/Polygon
-                              Color: 239; 41; 41
-                              Enabled: false
-                              Name: FootprintOffset
-                              Topic:
-                                Depth: 5
-                                Durability Policy: Volatile
-                                Filter size: 10
-                                History Policy: Keep Last
-                                Reliability Policy: Reliable
-                                Value: /planning/scenario_planning/lane_driving/motion_planning/surround_obstacle_checker/debug/footprint_offset
-                              Value: false
-                            - Alpha: 1
-                              Class: rviz_default_plugins/Polygon
-                              Color: 10; 21; 255
-                              Enabled: false
-                              Name: FootprintRecoverOffset
-                              Topic:
-                                Depth: 5
-                                Durability Policy: Volatile
-                                Filter size: 10
-                                History Policy: Keep Last
-                                Reliability Policy: Reliable
-                                Value: /planning/scenario_planning/lane_driving/motion_planning/surround_obstacle_checker/debug/footprint_recover_offset
-                              Value: false
-                          Enabled: false
-                          Name: SurroundObstacleChecker
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: ObstacleStop
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/debug/marker
-                          Value: false
-                        - Class: rviz_common/Group
-                          Displays:
-                            - Class: rviz_default_plugins/MarkerArray
-                              Enabled: true
-                              Name: CruiseVirtualWall
-                              Namespaces:
-                                {}
-                              Topic:
-                                Depth: 5
-                                Durability Policy: Volatile
-                                History Policy: Keep Last
-                                Reliability Policy: Reliable
-                                Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_cruise_planner/debug/cruise/virtual_wall
-                              Value: true
-                            - Class: rviz_default_plugins/MarkerArray
-                              Enabled: true
-                              Name: DebugMarker
-                              Namespaces:
-                                {}
-                              Topic:
-                                Depth: 5
-                                Durability Policy: Volatile
-                                History Policy: Keep Last
-                                Reliability Policy: Reliable
-                                Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_cruise_planner/debug/marker
-                              Value: true
-                          Enabled: false
-                          Name: ObstacleCruise
-                        - Class: rviz_default_plugins/MarkerArray
-                          Enabled: false
-                          Name: ObstacleAvoidance
-                          Namespaces:
-                            {}
-                          Topic:
-                            Depth: 5
-                            Durability Policy: Volatile
-                            History Policy: Keep Last
-                            Reliability Policy: Reliable
-                            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/marker
-                          Value: false
-                      Enabled: false
-                      Name: DebugMarker
-                  Enabled: true
-                  Name: MotionPlanning
-              Enabled: true
-              Name: LaneDriving
-            - Class: rviz_common/Group
-              Displays:
-                - Alpha: 0.699999988079071
-                  Class: rviz_default_plugins/Map
-                  Color Scheme: map
-                  Draw Behind: false
-                  Enabled: false
-                  Name: Costmap
-                  Topic:
-                    Depth: 5
-                    Durability Policy: Volatile
-                    Filter size: 10
-                    History Policy: Keep Last
-                    Reliability Policy: Reliable
-                    Value: /planning/scenario_planning/parking/costmap_generator/occupancy_grid
-                  Update Topic:
-                    Depth: 5
-                    Durability Policy: Volatile
-                    History Policy: Keep Last
-                    Reliability Policy: Reliable
-                    Value: /planning/scenario_planning/parking/costmap_generator/occupancy_grid_updates
-                  Use Timestamp: false
-                  Value: false
-                - Alpha: 0.9990000128746033
-                  Arrow Length: 0.30000001192092896
-                  Axes Length: 0.30000001192092896
-                  Axes Radius: 0.009999999776482582
-                  Class: rviz_default_plugins/PoseArray
-                  Color: 255; 25; 0
-                  Enabled: true
-                  Head Length: 0.10000000149011612
-                  Head Radius: 0.20000000298023224
-                  Name: PartialPoseArray
-                  Shaft Length: 0.20000000298023224
-                  Shaft Radius: 0.05000000074505806
-                  Shape: Arrow (3D)
-                  Topic:
-                    Depth: 5
-                    Durability Policy: Volatile
-                    Filter size: 10
-                    History Policy: Keep Last
-                    Reliability Policy: Reliable
-                    Value: /planning/scenario_planning/parking/freespace_planner/debug/partial_pose_array
-                  Value: true
-                - Alpha: 0.9990000128746033
-                  Arrow Length: 0.5
-                  Axes Length: 0.30000001192092896
-                  Axes Radius: 0.009999999776482582
-                  Class: rviz_default_plugins/PoseArray
-                  Color: 0; 0; 255
-                  Enabled: true
-                  Head Length: 0.10000000149011612
-                  Head Radius: 0.20000000298023224
-                  Name: PoseArray
-                  Shaft Length: 0.20000000298023224
-                  Shaft Radius: 0.05000000074505806
-                  Shape: Arrow (Flat)
-                  Topic:
-                    Depth: 5
-                    Durability Policy: Volatile
-                    Filter size: 10
-                    History Policy: Keep Last
-                    Reliability Policy: Reliable
-                    Value: /planning/scenario_planning/parking/freespace_planner/debug/pose_array
-                  Value: true
-              Enabled: true
-              Name: Parking
-            - Class: rviz_plugins/PoseWithUuidStamped
-              Enabled: true
-              Length: 1.5
-              Name: ModifiedGoal
-              Radius: 0.5
-              Topic:
-                Depth: 5
-                Durability Policy: Volatile
-                Filter size: 10
-                History Policy: Keep Last
-                Reliability Policy: Reliable
-                Value: /planning/scenario_planning/modified_goal
-              UUID:
-                Scale: 0.30000001192092896
-                Value: false
-              Value: true
-          Enabled: true
-          Name: ScenarioPlanning
-        - Class: rviz_common/Group
-          Displays:
-            - Class: rviz_default_plugins/MarkerArray
-              Enabled: true
-              Name: PlanningErrorMarker
-              Namespaces:
-                {}
-              Topic:
-                Depth: 5
-                Durability Policy: Volatile
-                History Policy: Keep Last
-                Reliability Policy: Best Effort
-                Value: /planning/planning_diagnostics/planning_error_monitor/debug/marker
-              Value: true
-          Enabled: true
-          Name: Diagnostic
-      Enabled: false
-      Name: Planning
     - Class: rviz_common/Group
       Displays:
         - Class: rviz_plugins/Trajectory
@@ -2520,94 +1675,399 @@ Visualization Manager:
           Value: true
       Enabled: true
       Name: Control
-    - BUS:
-        Alpha: 0.9990000128746033
-        Color: 30; 144; 255
-      CAR:
-        Alpha: 0.9990000128746033
-        Color: 30; 144; 255
-      CYCLIST:
-        Alpha: 0.9990000128746033
-        Color: 119; 11; 32
-      Class: autoware_auto_perception_rviz_plugin/DetectedObjects
-      Display Acceleration: true
-      Display Label: true
-      Display PoseWithCovariance: true
-      Display Predicted Path Confidence: true
-      Display Predicted Paths: true
-      Display Twist: true
-      Display UUID: true
-      Display Velocity: true
-      Enabled: false
-      Line Width: 0.029999999329447746
-      MOTORCYCLE:
-        Alpha: 0.9990000128746033
-        Color: 119; 11; 32
-      Name: Euclidean_orig
-      Namespaces:
-        {}
-      PEDESTRIAN:
-        Alpha: 0.9990000128746033
-        Color: 255; 192; 203
-      Polygon Type: 3d
-      TRAILER:
-        Alpha: 0.9990000128746033
-        Color: 30; 144; 255
-      TRUCK:
-        Alpha: 0.9990000128746033
-        Color: 30; 144; 255
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /perception/object_recognition/detection/clustering/objects
-      UNKNOWN:
-        Alpha: 0.9990000128746033
-        Color: 255; 255; 255
-      Value: false
-      Visualization Type: Normal
-    - Class: rviz_plugins/Trajectory
-      Color Border Vel Max: 3
-      Enabled: false
-      Name: VelSmooth_Consi_Stopline
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /planning/scenario_planning/motion_velocity_smoother/debug/trajectory_external_velocity_limited
-      Value: false
-      View Footprint:
-        Alpha: 1
-        Color: 230; 230; 50
-        Offset from BaseLink: 0
-        Rear Overhang: 1.0299999713897705
-        Value: false
-        Vehicle Length: 4.769999980926514
-        Vehicle Width: 1.8300000429153442
-      View Path:
-        Alpha: 0.4000000059604645
-        Color: 0; 0; 0
-        Constant Color: false
-        Value: true
-        Width: 1.2649999856948853
-      View Point:
-        Alpha: 1
-        Color: 0; 60; 255
-        Offset: 0
-        Radius: 0.05000000074505806
-        Value: true
-      View Text Velocity:
-        Scale: 0.05000000074505806
-        Value: true
-      View Velocity:
-        Alpha: 1
-        Color: 0; 0; 0
-        Constant Color: false
-        Scale: 0.30000001192092896
-        Value: true
+    - Class: rviz_common/Group
+      Displays:
+        - Class: rviz_common/Group
+          Displays:
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: PID_Stopline
+              Topic: /control/trajectory_follower/longitudinal/diagnostic
+              Value: true
+              auto color change: true
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 28
+              foreground alpha: 0.699999988079071
+              foreground alpha 2: 0.4000000059604645
+              foreground color: 25; 255; 240
+              left: 0
+              max color: 0; 255; 255
+              max color change threshold: 0
+              max value: 1
+              med color: 255; 0; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 100
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: State
+              Topic: /control/trajectory_follower/longitudinal/diagnostic
+              Value: true
+              auto color change: true
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 13
+              foreground alpha: 0.699999988079071
+              foreground alpha 2: 0.4000000059604645
+              foreground color: 25; 255; 240
+              left: 110
+              max color: 255; 0; 0
+              max color change threshold: 0
+              max value: 1
+              med color: 255; 0; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 11
+              top: 100
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: Pub_ACC
+              Topic: /control/trajectory_follower/longitudinal/diagnostic
+              Value: true
+              auto color change: true
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 18
+              foreground alpha: 0.699999988079071
+              foreground alpha 2: 0.4000000059604645
+              foreground color: 25; 255; 240
+              left: 210
+              max color: 255; 255; 255
+              max color change threshold: 0
+              max value: 1
+              med color: 255; 255; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 100
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: Target_ACC
+              Topic: /control/trajectory_follower/longitudinal/diagnostic
+              Value: true
+              auto color change: true
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 3
+              foreground alpha: 0.699999988079071
+              foreground alpha 2: 0.4000000059604645
+              foreground color: 255; 255; 255
+              left: 310
+              max color: 255; 255; 255
+              max color change threshold: 0
+              max value: 1
+              med color: 255; 255; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 100
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: Target_Vel
+              Topic: /control/trajectory_follower/longitudinal/diagnostic
+              Value: true
+              auto color change: true
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 2
+              foreground alpha: 0.699999988079071
+              foreground alpha 2: 0.4000000059604645
+              foreground color: 255; 255; 255
+              left: 410
+              max color: 255; 255; 255
+              max color change threshold: 0
+              max value: 1
+              med color: 255; 255; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 100
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: Nearest_Vel
+              Topic: /control/trajectory_follower/longitudinal/diagnostic
+              Value: true
+              auto color change: true
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 4
+              foreground alpha: 0.699999988079071
+              foreground alpha 2: 0.4000000059604645
+              foreground color: 255; 255; 255
+              left: 510
+              max color: 255; 255; 255
+              max color change threshold: 0
+              max value: 1
+              med color: 255; 255; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 100
+          Enabled: true
+          Name: PID_rViZ
+        - Class: rviz_common/Group
+          Displays:
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: MPC_FinalSteer
+              Topic: /control/trajectory_follower/lateral/diagnostic
+              Value: true
+              auto color change: true
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 0
+              foreground alpha: 0.699999988079071
+              foreground alpha 2: 0.4000000059604645
+              foreground color: 170; 255; 127
+              left: 0
+              max color: 255; 0; 0
+              max color change threshold: 0
+              max value: 1
+              med color: 255; 0; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 220
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: LatError
+              Topic: /control/trajectory_follower/lateral/diagnostic
+              Value: true
+              auto color change: true
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 5
+              foreground alpha: 0.699999988079071
+              foreground alpha 2: 0.4000000059604645
+              foreground color: 170; 255; 127
+              left: 110
+              max color: 255; 0; 0
+              max color change threshold: 0.10000000149011612
+              max value: 1
+              med color: 255; 0; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 11
+              top: 220
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: YawError
+              Topic: /control/trajectory_follower/lateral/diagnostic
+              Value: true
+              auto color change: true
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 8
+              foreground alpha: 0.699999988079071
+              foreground alpha 2: 0.4000000059604645
+              foreground color: 170; 255; 127
+              left: 210
+              max color: 255; 0; 0
+              max color change threshold: 0.10000000149011612
+              max value: 1
+              med color: 170; 255; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 220
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: Reference_Vel
+              Topic: /control/trajectory_follower/lateral/diagnostic
+              Value: true
+              auto color change: false
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 9
+              foreground alpha: 1
+              foreground alpha 2: 1
+              foreground color: 170; 255; 127
+              left: 320
+              max color: 255; 255; 255
+              max color change threshold: 0
+              max value: 1
+              med color: 255; 255; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 220
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: CurrentPoseYaw
+              Topic: /control/trajectory_follower/lateral/diagnostic
+              Value: true
+              auto color change: false
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 6
+              foreground alpha: 1
+              foreground alpha 2: 1
+              foreground color: 170; 255; 127
+              left: 420
+              max color: 255; 255; 255
+              max color change threshold: 0
+              max value: 1
+              med color: 255; 255; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 220
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: NearestPoseYaw
+              Topic: /control/trajectory_follower/lateral/diagnostic
+              Value: true
+              auto color change: false
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 7
+              foreground alpha: 1
+              foreground alpha 2: 1
+              foreground color: 170; 255; 127
+              left: 525
+              max color: 255; 255; 255
+              max color change threshold: 0
+              max value: 1
+              med color: 255; 255; 0
+              med color change threshold: 0
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 220
+          Enabled: true
+          Name: MPC_rViZ
+        - Class: rviz_common/Group
+          Displays:
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: Obj_Dist
+              Topic: /planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/obstacle_stop/debug_values
+              Value: true
+              auto color change: true
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 4
+              foreground alpha: 0.699999988079071
+              foreground alpha 2: 0.4000000059604645
+              foreground color: 255; 255; 255
+              left: 110
+              max color: 255; 255; 255
+              max color change threshold: 0
+              max value: 1
+              med color: 255; 255; 0
+              med color change threshold: 1
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 690
+            - Class: rviz_plugins/Float32MultiArrayStampedPieChart
+              Enabled: true
+              Name: Colligion_Obj
+              Topic: /planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/obstacle_stop/debug_values
+              Value: true
+              auto color change: true
+              background alpha: 0
+              background color: 0; 0; 0
+              clockwise rotate direction: false
+              data index: 5
+              foreground alpha: 0.699999988079071
+              foreground alpha 2: 0.4000000059604645
+              foreground color: 255; 255; 255
+              left: 0
+              max color: 255; 85; 0
+              max color change threshold: 1
+              max value: 1
+              med color: 255; 255; 0
+              med color change threshold: 1
+              min value: 0
+              show caption: true
+              size: 100
+              text size: 10
+              top: 690
+          Enabled: true
+          Name: Motion_Planner_RViz
+        - Class: rviz_plugins/Trajectory
+          Color Border Vel Max: 3
+          Enabled: false
+          Name: VelSmooth_Consi_Stopline
+          Topic:
+            Depth: 5
+            Durability Policy: Volatile
+            Filter size: 10
+            History Policy: Keep Last
+            Reliability Policy: Reliable
+            Value: /planning/scenario_planning/motion_velocity_smoother/debug/trajectory_external_velocity_limited
+          Value: false
+          View Footprint:
+            Alpha: 1
+            Color: 230; 230; 50
+            Offset from BaseLink: 0
+            Rear Overhang: 1.0299999713897705
+            Value: false
+            Vehicle Length: 4.769999980926514
+            Vehicle Width: 1.8300000429153442
+          View Path:
+            Alpha: 0.4000000059604645
+            Color: 0; 0; 0
+            Constant Color: false
+            Value: true
+            Width: 1.2649999856948853
+          View Point:
+            Alpha: 1
+            Color: 0; 60; 255
+            Offset: 0
+            Radius: 0.05000000074505806
+            Value: true
+          View Text Velocity:
+            Scale: 0.05000000074505806
+            Value: true
+          View Velocity:
+            Alpha: 1
+            Color: 0; 0; 0
+            Constant Color: false
+            Scale: 0.30000001192092896
+            Value: true
+      Enabled: true
+      Name: RViz
     - Alpha: 0.699999988079071
       Class: rviz_default_plugins/Map
       Color Scheme: costmap
@@ -2765,6 +2225,18 @@ Visualization Manager:
       Name: FreeSpace
     - Class: rviz_default_plugins/MarkerArray
       Enabled: false
+      Name: PlanningErrorMarker
+      Namespaces:
+        {}
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /planning/planning_diagnostics/planning_error_monitor/debug/marker
+      Value: false
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: false
       Name: Stop_Reason
       Namespaces:
         {}
@@ -2775,419 +2247,6 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /stop_reason_visualizer/debug/markers
       Value: false
-    - Class: rviz_plugins/Trajectory
-      Color Border Vel Max: 3
-      Enabled: false
-      Name: Motion_Velo_Smoother_Traj
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        Filter size: 10
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /planning/scenario_planning/motion_velocity_smoother/trajectory
-      Value: false
-      View Footprint:
-        Alpha: 1
-        Color: 230; 230; 50
-        Offset from BaseLink: 0
-        Rear Overhang: 1.0299999713897705
-        Value: false
-        Vehicle Length: 4.769999980926514
-        Vehicle Width: 1.8300000429153442
-      View Path:
-        Alpha: 0.4000000059604645
-        Color: 0; 0; 0
-        Constant Color: false
-        Value: true
-        Width: 1.2649999856948853
-      View Point:
-        Alpha: 1
-        Color: 0; 60; 255
-        Offset: 0
-        Radius: 0.05000000074505806
-        Value: true
-      View Text Velocity:
-        Scale: 0.05000000074505806
-        Value: true
-      View Velocity:
-        Alpha: 1
-        Color: 0; 0; 0
-        Constant Color: false
-        Scale: 0.30000001192092896
-        Value: true
-    - Class: rviz_common/Group
-      Displays:
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: PID_Stopline
-          Topic: /control/trajectory_follower/longitudinal/diagnostic
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 28
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 25; 255; 240
-          left: 0
-          max color: 255; 0; 0
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 0; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 100
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: State
-          Topic: /control/trajectory_follower/longitudinal/diagnostic
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 13
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 25; 255; 240
-          left: 110
-          max color: 255; 0; 0
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 0; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 11
-          top: 100
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: Pub_ACC
-          Topic: /control/trajectory_follower/longitudinal/diagnostic
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 18
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 25; 255; 240
-          left: 210
-          max color: 255; 255; 255
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 255; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 100
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: Target_ACC
-          Topic: /control/trajectory_follower/longitudinal/diagnostic
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 3
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 255; 255; 255
-          left: 310
-          max color: 255; 255; 255
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 255; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 100
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: Target_Vel
-          Topic: /control/trajectory_follower/longitudinal/diagnostic
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 2
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 255; 255; 255
-          left: 410
-          max color: 255; 255; 255
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 255; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 100
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: Nearest_Vel
-          Topic: /control/trajectory_follower/longitudinal/diagnostic
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 4
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 255; 255; 255
-          left: 510
-          max color: 255; 255; 255
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 255; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 100
-      Enabled: true
-      Name: PID_rViZ
-    - Class: rviz_common/Group
-      Displays:
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: MPC_FinalSteer
-          Topic: /control/trajectory_follower/lateral/diagnostic
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 0
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 170; 255; 127
-          left: 0
-          max color: 255; 0; 0
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 0; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 220
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: LatError
-          Topic: /control/trajectory_follower/lateral/diagnostic
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 5
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 170; 255; 127
-          left: 110
-          max color: 255; 0; 0
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 0; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 11
-          top: 220
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: YawError
-          Topic: /control/trajectory_follower/lateral/diagnostic
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 8
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 170; 255; 127
-          left: 210
-          max color: 255; 255; 255
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 255; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 220
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: Reference_Vel
-          Topic: /control/trajectory_follower/lateral/diagnostic
-          Value: true
-          auto color change: false
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 9
-          foreground alpha: 1
-          foreground alpha 2: 1
-          foreground color: 170; 255; 127
-          left: 320
-          max color: 255; 255; 255
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 255; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 220
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: CurrentPoseYaw
-          Topic: /control/trajectory_follower/lateral/diagnostic
-          Value: true
-          auto color change: false
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 6
-          foreground alpha: 1
-          foreground alpha 2: 1
-          foreground color: 170; 255; 127
-          left: 420
-          max color: 255; 255; 255
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 255; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 220
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: NearestPoseYaw
-          Topic: /control/trajectory_follower/lateral/diagnostic
-          Value: true
-          auto color change: false
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 7
-          foreground alpha: 1
-          foreground alpha 2: 1
-          foreground color: 170; 255; 127
-          left: 525
-          max color: 255; 255; 255
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 255; 0
-          med color change threshold: 0
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 220
-      Enabled: true
-      Name: MPC_rViZ
-    - Class: rviz_common/Group
-      Displays:
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: AdaptiveCruise
-          Topic: /planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/obstacle_stop/debug_values
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 7
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 255; 255; 255
-          left: 0
-          max color: 255; 255; 255
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 255; 0
-          med color change threshold: 1
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 790
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: Colligion_Obj_Dist
-          Topic: /planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/obstacle_stop/debug_values
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 4
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 255; 255; 255
-          left: 110
-          max color: 255; 255; 255
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 255; 0
-          med color change threshold: 1
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 690
-        - Class: rviz_plugins/Float32MultiArrayStampedPieChart
-          Enabled: true
-          Name: Colligion_Obj
-          Topic: /planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/obstacle_stop/debug_values
-          Value: true
-          auto color change: true
-          background alpha: 0
-          background color: 0; 0; 0
-          clockwise rotate direction: false
-          data index: 5
-          foreground alpha: 0.699999988079071
-          foreground alpha 2: 0.4000000059604645
-          foreground color: 255; 255; 255
-          left: 0
-          max color: 255; 255; 255
-          max color change threshold: 0
-          max value: 1
-          med color: 255; 255; 0
-          med color change threshold: 1
-          min value: 0
-          show caption: true
-          size: 100
-          text size: 10
-          top: 690
-      Enabled: false
-      Name: Motion_Planner_RViz
     - Class: rviz_common/Group
       Displays:
         - Class: rviz_plugins/Path
@@ -3248,185 +2307,242 @@ Visualization Manager:
             Reliability Policy: Reliable
             Value: /planning/scenario_planning/lane_driving/behavior_planning/behavior_path_planner/debug/avoidance
           Value: false
-      Enabled: false
+      Enabled: true
       Name: Behavior_Path
     - Class: rviz_common/Group
       Displays:
-        - Class: rviz_plugins/Trajectory
-          Color Border Vel Max: 3
-          Enabled: false
-          Name: Obstacle_Avoidance_Planner
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Reliable
-            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/trajectory
-          Value: false
-          View Footprint:
-            Alpha: 1
-            Color: 230; 230; 50
-            Offset from BaseLink: 0
-            Rear Overhang: 1.0299999713897705
-            Value: false
-            Vehicle Length: 4.769999980926514
-            Vehicle Width: 1.8300000429153442
-          View Path:
-            Alpha: 0.4000000059604645
-            Color: 233; 180; 255
-            Constant Color: false
-            Value: true
-            Width: 1.2649999856948853
-          View Point:
-            Alpha: 1
-            Color: 0; 60; 255
-            Offset: 0
-            Radius: 0.05000000074505806
-            Value: true
-          View Text Velocity:
-            Scale: 0.10000000149011612
-            Value: true
-          View Velocity:
-            Alpha: 1
-            Color: 0; 0; 0
-            Constant Color: false
-            Scale: 0.30000001192092896
-            Value: true
-        - Class: rviz_plugins/Trajectory
-          Color Border Vel Max: 3
-          Enabled: false
-          Name: Eb_Traj
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Reliable
-            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/eb_traj
-          Value: false
-          View Footprint:
-            Alpha: 1
-            Color: 230; 230; 50
-            Offset from BaseLink: 0
-            Rear Overhang: 1.0299999713897705
-            Value: false
-            Vehicle Length: 4.769999980926514
-            Vehicle Width: 1.8300000429153442
-          View Path:
-            Alpha: 0.4000000059604645
-            Color: 233; 180; 255
-            Constant Color: false
-            Value: true
-            Width: 1.2649999856948853
-          View Point:
-            Alpha: 1
-            Color: 0; 60; 255
-            Offset: 0
-            Radius: 0.05000000074505806
-            Value: true
-          View Text Velocity:
-            Scale: 0.10000000149011612
-            Value: true
-          View Velocity:
-            Alpha: 1
-            Color: 0; 0; 0
-            Constant Color: false
-            Scale: 0.30000001192092896
-            Value: true
-        - Class: rviz_plugins/Trajectory
-          Color Border Vel Max: 3
-          Enabled: false
-          Name: Eb_Fiexed_Traj
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Reliable
-            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/eb_fixed_traj
-          Value: false
-          View Footprint:
-            Alpha: 1
-            Color: 230; 230; 50
-            Offset from BaseLink: 0
-            Rear Overhang: 1.0299999713897705
-            Value: false
-            Vehicle Length: 4.769999980926514
-            Vehicle Width: 1.8300000429153442
-          View Path:
-            Alpha: 0.4000000059604645
-            Color: 233; 180; 255
-            Constant Color: false
-            Value: true
-            Width: 1.2649999856948853
-          View Point:
-            Alpha: 1
-            Color: 0; 60; 255
-            Offset: 0
-            Radius: 0.05000000074505806
-            Value: true
-          View Text Velocity:
-            Scale: 0.10000000149011612
-            Value: true
-          View Velocity:
-            Alpha: 1
-            Color: 0; 0; 0
-            Constant Color: false
-            Scale: 0.30000001192092896
-            Value: true
-        - Class: rviz_plugins/Trajectory
-          Color Border Vel Max: 3
+        - Class: rviz_common/Group
+          Displays:
+            - Class: rviz_default_plugins/MarkerArray
+              Enabled: false
+              Name: Obs_Avoid_Planner_Debug
+              Namespaces:
+                {}
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/marker
+              Value: false
+            - Class: rviz_plugins/Trajectory
+              Color Border Vel Max: 3
+              Enabled: false
+              Name: Eb_Fiexed_Traj
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                Filter size: 10
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/eb_fixed_traj
+              Value: false
+              View Footprint:
+                Alpha: 1
+                Color: 230; 230; 50
+                Offset from BaseLink: 0
+                Rear Overhang: 1.0299999713897705
+                Value: false
+                Vehicle Length: 4.769999980926514
+                Vehicle Width: 1.8300000429153442
+              View Path:
+                Alpha: 0.4000000059604645
+                Color: 233; 180; 255
+                Constant Color: false
+                Value: true
+                Width: 1.2649999856948853
+              View Point:
+                Alpha: 1
+                Color: 0; 60; 255
+                Offset: 0
+                Radius: 0.05000000074505806
+                Value: true
+              View Text Velocity:
+                Scale: 0.10000000149011612
+                Value: true
+              View Velocity:
+                Alpha: 1
+                Color: 0; 0; 0
+                Constant Color: false
+                Scale: 0.30000001192092896
+                Value: true
+            - Class: rviz_plugins/Trajectory
+              Color Border Vel Max: 3
+              Enabled: true
+              Name: Eb_Traj
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                Filter size: 10
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/eb_traj
+              Value: true
+              View Footprint:
+                Alpha: 1
+                Color: 230; 230; 50
+                Offset from BaseLink: 0
+                Rear Overhang: 1.0299999713897705
+                Value: false
+                Vehicle Length: 4.769999980926514
+                Vehicle Width: 1.8300000429153442
+              View Path:
+                Alpha: 0.4000000059604645
+                Color: 233; 180; 255
+                Constant Color: false
+                Value: true
+                Width: 1.2649999856948853
+              View Point:
+                Alpha: 1
+                Color: 0; 60; 255
+                Offset: 0
+                Radius: 0.05000000074505806
+                Value: true
+              View Text Velocity:
+                Scale: 0.10000000149011612
+                Value: true
+              View Velocity:
+                Alpha: 1
+                Color: 0; 0; 0
+                Constant Color: false
+                Scale: 0.30000001192092896
+                Value: true
+            - Class: rviz_plugins/Trajectory
+              Color Border Vel Max: 3
+              Enabled: false
+              Name: MPT_Traj
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                Filter size: 10
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/mpt_traj
+              Value: false
+              View Footprint:
+                Alpha: 1
+                Color: 230; 230; 50
+                Offset from BaseLink: 0
+                Rear Overhang: 1.0299999713897705
+                Value: false
+                Vehicle Length: 4.769999980926514
+                Vehicle Width: 1.8300000429153442
+              View Path:
+                Alpha: 0.4000000059604645
+                Color: 233; 180; 255
+                Constant Color: false
+                Value: true
+                Width: 1.2649999856948853
+              View Point:
+                Alpha: 1
+                Color: 0; 60; 255
+                Offset: 0
+                Radius: 0.05000000074505806
+                Value: true
+              View Text Velocity:
+                Scale: 0.10000000149011612
+                Value: true
+              View Velocity:
+                Alpha: 1
+                Color: 0; 0; 0
+                Constant Color: false
+                Scale: 0.30000001192092896
+                Value: true
+            - Class: rviz_plugins/Trajectory
+              Color Border Vel Max: 3
+              Enabled: false
+              Name: MPT_Fiexed_Traj
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                Filter size: 10
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/mpt_fixed_traj
+              Value: false
+              View Footprint:
+                Alpha: 1
+                Color: 230; 230; 50
+                Offset from BaseLink: 0
+                Rear Overhang: 1.0299999713897705
+                Value: false
+                Vehicle Length: 4.769999980926514
+                Vehicle Width: 1.8300000429153442
+              View Path:
+                Alpha: 0.4000000059604645
+                Color: 233; 180; 255
+                Constant Color: false
+                Value: true
+                Width: 1.2649999856948853
+              View Point:
+                Alpha: 1
+                Color: 0; 60; 255
+                Offset: 0
+                Radius: 0.05000000074505806
+                Value: true
+              View Text Velocity:
+                Scale: 0.10000000149011612
+                Value: true
+              View Velocity:
+                Alpha: 1
+                Color: 0; 0; 0
+                Constant Color: false
+                Scale: 0.30000001192092896
+                Value: true
+            - Class: rviz_plugins/Trajectory
+              Color Border Vel Max: 3
+              Enabled: true
+              Name: Obstacle_Avoidance_Planner
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                Filter size: 10
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/trajectory
+              Value: true
+              View Footprint:
+                Alpha: 1
+                Color: 230; 230; 50
+                Offset from BaseLink: 0
+                Rear Overhang: 1.0299999713897705
+                Value: false
+                Vehicle Length: 4.769999980926514
+                Vehicle Width: 1.8300000429153442
+              View Path:
+                Alpha: 0.4000000059604645
+                Color: 233; 180; 255
+                Constant Color: false
+                Value: true
+                Width: 1.2649999856948853
+              View Point:
+                Alpha: 1
+                Color: 0; 60; 255
+                Offset: 0
+                Radius: 0.05000000074505806
+                Value: true
+              View Text Velocity:
+                Scale: 0.10000000149011612
+                Value: true
+              View Velocity:
+                Alpha: 1
+                Color: 0; 0; 0
+                Constant Color: false
+                Scale: 0.30000001192092896
+                Value: true
           Enabled: true
-          Name: MPT_Traj
-          Topic:
-            Depth: 5
-            Durability Policy: Volatile
-            Filter size: 10
-            History Policy: Keep Last
-            Reliability Policy: Reliable
-            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/mpt_traj
-          Value: true
-          View Footprint:
-            Alpha: 1
-            Color: 230; 230; 50
-            Offset from BaseLink: 0
-            Rear Overhang: 1.0299999713897705
-            Value: false
-            Vehicle Length: 4.769999980926514
-            Vehicle Width: 1.8300000429153442
-          View Path:
-            Alpha: 0.4000000059604645
-            Color: 233; 180; 255
-            Constant Color: false
-            Value: true
-            Width: 1.2649999856948853
-          View Point:
-            Alpha: 1
-            Color: 0; 60; 255
-            Offset: 0
-            Radius: 0.05000000074505806
-            Value: true
-          View Text Velocity:
-            Scale: 0.10000000149011612
-            Value: true
-          View Velocity:
-            Alpha: 1
-            Color: 0; 0; 0
-            Constant Color: false
-            Scale: 0.30000001192092896
-            Value: true
+          Name: Obstacle_Avoidance_Planner
         - Class: rviz_plugins/Trajectory
           Color Border Vel Max: 3
           Enabled: false
-          Name: MPT_Fiexed_Traj
+          Name: Obstacle_Velocity_Limiter
           Topic:
             Depth: 5
             Durability Policy: Volatile
             Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/mpt_fixed_traj
+            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_velocity_limiter/trajectory
           Value: false
           View Footprint:
             Alpha: 1
@@ -3457,19 +2573,241 @@ Visualization Manager:
             Constant Color: false
             Scale: 0.30000001192092896
             Value: true
-        - Class: rviz_default_plugins/MarkerArray
+        - Class: rviz_common/Group
+          Displays:
+            - Class: rviz_default_plugins/MarkerArray
+              Enabled: true
+              Name: Obs_Stop_Debug
+              Namespaces:
+                {}
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/debug/marker
+              Value: true
+            - Class: rviz_default_plugins/MarkerArray
+              Enabled: true
+              Name: Obs_Stop_Planner_virtual_wall
+              Namespaces:
+                {}
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/virtual_wall
+              Value: true
+            - Alpha: 1
+              Autocompute Intensity Bounds: true
+              Autocompute Value Bounds:
+                Max Value: 10
+                Min Value: -10
+                Value: true
+              Axis: Z
+              Channel Name: intensity
+              Class: rviz_default_plugins/PointCloud2
+              Color: 255; 255; 255
+              Color Transformer: Intensity
+              Decay Time: 0
+              Enabled: true
+              Invert Rainbow: false
+              Max Color: 255; 255; 255
+              Max Intensity: 4096
+              Min Color: 0; 0; 0
+              Min Intensity: 0
+              Name: Colligion(出ないようにした。)
+              Position Transformer: XYZ
+              Selectable: true
+              Size (Pixels): 3
+              Size (m): 1
+              Style: Flat Squares
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                Filter size: 10
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_stop_planner/debug/collision_pointcloud
+              Use Fixed Frame: true
+              Use rainbow: true
+              Value: true
+            - Class: rviz_plugins/Trajectory
+              Color Border Vel Max: 3
+              Enabled: true
+              Name: Obstacle_Stop_Planner(/lane_driving/traj)
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                Filter size: 10
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/lane_driving/trajectory
+              Value: true
+              View Footprint:
+                Alpha: 1
+                Color: 230; 230; 50
+                Offset from BaseLink: 0
+                Rear Overhang: 1.0299999713897705
+                Value: false
+                Vehicle Length: 4.769999980926514
+                Vehicle Width: 1.8300000429153442
+              View Path:
+                Alpha: 0.4000000059604645
+                Color: 233; 180; 255
+                Constant Color: false
+                Value: true
+                Width: 1.2649999856948853
+              View Point:
+                Alpha: 1
+                Color: 0; 60; 255
+                Offset: 0
+                Radius: 0.05000000074505806
+                Value: true
+              View Text Velocity:
+                Scale: 0.10000000149011612
+                Value: true
+              View Velocity:
+                Alpha: 1
+                Color: 0; 0; 0
+                Constant Color: false
+                Scale: 0.30000001192092896
+                Value: true
           Enabled: false
-          Name: Obs_Avoid_Planner_Debug
-          Namespaces:
-            {}
+          Name: Obstacle_StopPlaner
+        - Class: rviz_common/Group
+          Displays:
+            - Class: rviz_plugins/Trajectory
+              Color Border Vel Max: 3
+              Enabled: true
+              Name: scenario_selector_traj
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                Filter size: 10
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/scenario_selector/trajectory
+              Value: true
+              View Footprint:
+                Alpha: 1
+                Color: 230; 230; 50
+                Offset from BaseLink: 0
+                Rear Overhang: 1.0299999713897705
+                Value: false
+                Vehicle Length: 4.769999980926514
+                Vehicle Width: 1.8300000429153442
+              View Path:
+                Alpha: 0.4000000059604645
+                Color: 233; 180; 255
+                Constant Color: false
+                Value: true
+                Width: 1.2649999856948853
+              View Point:
+                Alpha: 1
+                Color: 0; 60; 255
+                Offset: 0
+                Radius: 0.05000000074505806
+                Value: true
+              View Text Velocity:
+                Scale: 0.10000000149011612
+                Value: true
+              View Velocity:
+                Alpha: 1
+                Color: 0; 0; 0
+                Constant Color: false
+                Scale: 0.30000001192092896
+                Value: true
+          Enabled: false
+          Name: Self_Scenario_selector(Parkとlane)
+        - Class: rviz_common/Group
+          Displays:
+            - Class: rviz_plugins/Trajectory
+              Color Border Vel Max: 3
+              Enabled: true
+              Name: Motion_Velo_Traj
+              Topic:
+                Depth: 5
+                Durability Policy: Volatile
+                Filter size: 10
+                History Policy: Keep Last
+                Reliability Policy: Reliable
+                Value: /planning/scenario_planning/motion_velocity_smoother/trajectory
+              Value: true
+              View Footprint:
+                Alpha: 1
+                Color: 230; 230; 50
+                Offset from BaseLink: 0
+                Rear Overhang: 1.0299999713897705
+                Value: false
+                Vehicle Length: 4.769999980926514
+                Vehicle Width: 1.8300000429153442
+              View Path:
+                Alpha: 0.4000000059604645
+                Color: 233; 180; 255
+                Constant Color: false
+                Value: true
+                Width: 1.2649999856948853
+              View Point:
+                Alpha: 1
+                Color: 0; 60; 255
+                Offset: 0
+                Radius: 0.05000000074505806
+                Value: true
+              View Text Velocity:
+                Scale: 0.10000000149011612
+                Value: true
+              View Velocity:
+                Alpha: 1
+                Color: 0; 0; 0
+                Constant Color: false
+                Scale: 0.30000001192092896
+                Value: true
+          Enabled: false
+          Name: Motion_Velocity_Smoother
+        - Class: rviz_plugins/Trajectory
+          Color Border Vel Max: 3
+          Enabled: false
+          Name: Planning_Validator(/planning/scenario_planning/trajectory)
           Topic:
             Depth: 5
             Durability Policy: Volatile
+            Filter size: 10
             History Policy: Keep Last
             Reliability Policy: Reliable
-            Value: /planning/scenario_planning/lane_driving/motion_planning/obstacle_avoidance_planner/debug/marker
+            Value: /planning/scenario_planning/trajectory
           Value: false
-      Enabled: false
+          View Footprint:
+            Alpha: 1
+            Color: 230; 230; 50
+            Offset from BaseLink: 0
+            Rear Overhang: 1.0299999713897705
+            Value: false
+            Vehicle Length: 4.769999980926514
+            Vehicle Width: 1.8300000429153442
+          View Path:
+            Alpha: 0.4000000059604645
+            Color: 233; 180; 255
+            Constant Color: false
+            Value: true
+            Width: 1.2649999856948853
+          View Point:
+            Alpha: 1
+            Color: 0; 60; 255
+            Offset: 0
+            Radius: 0.05000000074505806
+            Value: true
+          View Text Velocity:
+            Scale: 0.10000000149011612
+            Value: true
+          View Velocity:
+            Alpha: 1
+            Color: 0; 0; 0
+            Constant Color: false
+            Scale: 0.30000001192092896
+            Value: true
+      Enabled: true
       Name: MotionPlanning
   Enabled: true
   Global Options:
@@ -3561,7 +2899,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 0.47500014305114746
+      Angle: 0.4599999189376831
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -3571,11 +2909,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 15.735194206237793
+      Scale: 9.994674682617188
       Target Frame: viewer
       Value: TopDownOrtho (rviz_default_plugins)
-      X: 36.49152374267578
-      Y: 17.422639846801758
+      X: -7.544222831726074
+      Y: -1.731654405593872
     Saved:
       - Class: rviz_default_plugins/ThirdPersonFollower
         Distance: 18
@@ -3630,7 +2968,7 @@ Window Geometry:
     collapsed: false
   MultiDataMonitor:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000300000000000002dd0000039cfc0200000016fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003e000000d9000000ca00fffffffb00000024004100750074006f00770061007200650053007400610074006500500061006e0065006c010000011d0000017a0000017a00fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f0072010000029d000000910000009100fffffffc00000334000000a6000000a600fffffffa000000000100000002fb0000000a0056006900650077007301000000000000033c0000010000fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000000ffffffff0000008a00fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f007200000001d4000000a50000009000fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d0065007200610100000682000000eb0000000000000000fb0000000a0049006d0061006700650100000505000002680000000000000000fb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c00000003bc0000007a0000007a00fffffffb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000000000000000fb00000030005200650063006f0067006e006900740069006f006e0052006500730075006c0074004f006e0049006d006100670065000000033e000000cb0000002800fffffffb0000002a004100750074006f0077006100720065004400610074006500540069006d006500500061006e0065006c0000000325000000420000004200fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f007200000003a0000000910000009000fffffffb0000000a0056006900650077007300000003e0000000bf000000a600fffffffb00000034004100750074006f007700610072006500530063007200650065006e004300610070007400750072006500500061006e0065006c0000000392000000630000006300fffffffb00000034004100750074006f0077006100720065004100750074006f006d00610074006900630047006f0061006c00500061006e0065006c00000003250000015a0000015a00fffffffb0000001e005200540043004d0061006e006100670065007200500061006e0065006c02000004220000005b0000035e000003dd000000010000015f000006fffc0200000002fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000300000e7a0000005afc0100000002fb0000000800540069006d0065010000000000000e7a0000000000000000fb0000000800540069006d00650100000000000004500000000000000000000004570000039c00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000300000000000002690000039cfc0200000016fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003e0000016e000000ca00fffffffb00000024004100750074006f00770061007200650053007400610074006500500061006e0065006c01000001b20000017c0000017a00fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f00720000000327000000b30000009000fffffffc00000334000000a6000000a600fffffffa000000000100000002fb0000000a0056006900650077007301000000000000033c0000010000fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000000ffffffff0000008a00fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f007200000001d4000000a50000009000fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000c00430061006d0065007200610100000682000000eb0000000000000000fb0000000a0049006d0061006700650100000505000002680000000000000000fb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c00000003600000007a0000007a00fffffffb0000002c0049006e0069007400690061006c0050006f007300650042007500740074006f006e00500061006e0065006c000000068f000000de0000000000000000fb00000030005200650063006f0067006e006900740069006f006e0052006500730075006c0074004f006e0049006d006100670065000000033e000000cb0000002800fffffffb0000002a004100750074006f0077006100720065004400610074006500540069006d006500500061006e0065006c0000000325000000420000004200fffffffb00000020004d0075006c007400690044006100740061004d006f006e00690074006f007200000003a0000000910000009000fffffffb0000000a0056006900650077007300000003e0000000bf000000a600fffffffb00000034004100750074006f007700610072006500530063007200650065006e004300610070007400750072006500500061006e0065006c0000000392000000630000006300fffffffb00000034004100750074006f0077006100720065004100750074006f006d00610074006900630047006f0061006c00500061006e0065006c00000003250000015a0000015a00fffffffb0000001e005200540043004d0061006e006100670065007200500061006e0065006c02000004220000005b0000035e000003dd000000010000015f000006fffc0200000002fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000300000e7a0000005afc0100000002fb0000000800540069006d0065010000000000000e7a0000000000000000fb0000000800540069006d00650100000000000004500000000000000000000004cb0000039c00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   RTCManagerPanel:
     collapsed: false
   RecognitionResultOnImage:
