@@ -276,6 +276,8 @@ FreespacePlannerNode::FreespacePlannerNode(const rclcpp::NodeOptions & node_opti
       "~/input/scenario", 1, std::bind(&FreespacePlannerNode::onScenario, this, _1));
     odom_sub_ = create_subscription<Odometry>(
       "~/input/odometry", 100, std::bind(&FreespacePlannerNode::onOdometry, this, _1));
+    stop_sub_ = create_subscription<std_msgs::msg::Bool>(
+      "/freespace_stop", 1, std::bind(&FreespacePlannerNode::onStop, this, _1));
   }
 
   // Publishers
@@ -360,6 +362,11 @@ void FreespacePlannerNode::onOdometry(const Odometry::ConstSharedPtr msg)
     }
 
     odom_buffer_.pop_front();
+  }
+}
+void FreespacePlannerNode::onStop(const std_msgs::msg::Bool::ConstSharedPtr msg){
+  if(msg->data){
+    is_stop_ = true;
   }
 }
 
@@ -466,8 +473,9 @@ void FreespacePlannerNode::onTimer()
     return;
   }
 
-  if (isPlanRequired()) {
+  if (isPlanRequired() || is_stop_) {
     // Stop before planning new trajectory
+    is_stop_ = false;
     const auto stop_trajectory = partial_trajectory_.points.empty()
                                    ? createStopTrajectory(current_pose_)
                                    : createStopTrajectory(partial_trajectory_);
@@ -498,6 +506,7 @@ void FreespacePlannerNode::onTimer()
 
 void FreespacePlannerNode::planTrajectory()
 {
+  is_stop_ = false;
   if (occupancy_grid_ == nullptr) {
     return;
   }

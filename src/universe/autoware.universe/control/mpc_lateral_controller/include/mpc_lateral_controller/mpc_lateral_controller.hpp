@@ -33,6 +33,7 @@
 #include "tf2_ros/transform_listener.h"
 #include "trajectory_follower_base/lateral_controller_base.hpp"
 #include "vehicle_info_util/vehicle_info_util.hpp"
+#include <std_msgs/msg/bool.hpp>
 
 #include "autoware_auto_control_msgs/msg/ackermann_lateral_command.hpp"
 #include "autoware_auto_planning_msgs/msg/trajectory.hpp"
@@ -75,6 +76,7 @@ private:
   //!< @brief topic publisher for control debug values
   rclcpp::Publisher<tier4_debug_msgs::msg::Float32MultiArrayStamped>::SharedPtr m_pub_debug_values;
   rclcpp::Publisher<tier4_debug_msgs::msg::Float32Stamped>::SharedPtr m_pub_steer_offset;
+  rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr m_pub_stop;
   //!< @brief subscription for transform messages
   rclcpp::Subscription<tf2_msgs::msg::TFMessage>::SharedPtr m_tf_sub;
   rclcpp::Subscription<tf2_msgs::msg::TFMessage>::SharedPtr m_tf_static_sub;

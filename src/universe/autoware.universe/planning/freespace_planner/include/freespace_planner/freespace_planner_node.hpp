@@ -115,6 +115,7 @@ private:
   rclcpp::Subscription<OccupancyGrid>::SharedPtr occupancy_grid_sub_;
   rclcpp::Subscription<Scenario>::SharedPtr scenario_sub_;
   rclcpp::Subscription<Odometry>::SharedPtr odom_sub_;
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr stop_sub_;
 
   rclcpp::TimerBase::SharedPtr timer_;
 
@@ -136,6 +137,7 @@ private:
   size_t prev_target_index_;
   size_t target_index_;
   bool is_completed_ = false;
+  bool is_stop_ = false;
 
   // add self param
   int cnt_ = 0;
@@ -157,6 +159,7 @@ private:
   void onOccupancyGrid(const OccupancyGrid::ConstSharedPtr msg);
   void onScenario(const Scenario::ConstSharedPtr msg);
   void onOdometry(const Odometry::ConstSharedPtr msg);
+  void onStop(const std_msgs::msg::Bool::ConstSharedPtr msg);
 
   void onTimer();
 
