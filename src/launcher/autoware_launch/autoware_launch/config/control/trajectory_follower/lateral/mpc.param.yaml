@@ -1,45 +1,34 @@
 /**:
   ros__parameters:
     # -- system --
-    traj_resample_dist: 0.5      # サンプリングにおけるWayPointの距離。path resampling interval [m]リ Def::0.1
-    use_steer_prediction: false     # 現在ステアリング情報を取得する際に予測値を用いるか。Falseで良いかと。flag for using steer prediction (do not use steer measurement) 
-    admissible_position_error: 5.0  # この値より自己位置誤差が大きければ車両を停止させる。(m)stop mpc calculation when error is larger than the following value
-    admissible_yaw_error_rad: 1.57  # 上記のヨーアングルVer(rad)。stop mpc calculation when error is larger than the following value
+    traj_resample_dist: 0.2665         # path resampling interval [m]リサンプリングにおけるWayPointの距離 Def::0.1
+    use_steer_prediction: false     # flag for using steer prediction (do not use steer measurement) 現在ステアリング情報を取得する際に予測値を用いるか。Falseで良いかと。
+    admissible_position_error: 5.0  # stop mpc calculation when error is larger than the following value
+    admissible_yaw_error_rad: 1.57  # stop mpc calculation when error is larger than the following value
 
     # -- path smoothing --　基本的に無効でいい気がする。
-    # ターゲット曲率がギザギザに見える場合は、curvature_smoothingを調整することが正確な曲率計算のために決定的に重要になります。
-    # 値を大きくすると、スムーズな曲率計算が行われ、ノイズが減りますが、フィードフォワード計算に遅延が生じ、パフォーマンスが低下する可能性があります。
     enable_path_smoothing: true   # flag for path smoothing
-    path_filter_moving_ave_num: 3 # param of moving average filter for path smoothing
-    curvature_smoothing_num_traj: 3        # point-to-point index distance used in curvature calculation (for trajectory): curvature is calculated from three points p(i-num), p(i), p(i+num)
-    curvature_smoothing_num_ref_steer: 3   # point-to-point index distance used in curvature calculation (for steer command reference): curvature is calculated from three points p(i-num), p(i), p(i+num)
+    path_filter_moving_ave_num: 10 # param of moving average filter for path smoothing
+    curvature_smoothing_num_traj: 10        # point-to-point index distance used in curvature calculation (for trajectory): curvature is calculated from three points p(i-num), p(i), p(i+num)
+    curvature_smoothing_num_ref_steer: 10   # point-to-point index distance used in curvature calculation (for steer command reference): curvature is calculated from three points p(i-num), p(i), p(i+num)
 
     # -- trajectory extending -- MPCはPathの終点における姿勢角を考慮していない。経路終点を姿勢方向に延長することで、姿勢角を考慮できるようになり制御性能が向上する。軌道が終点の姿勢角を考慮して適切に定義されているならfalse
     extend_trajectory_for_end_yaw_control: true # flag of trajectory extending for terminal yaw control.ヨーエンド制御のためにTrajを延長するかいなか。最後ぐにゃって曲がる。
 
     # -- mpc optimization -- inputは下げる。Weightは上げると、そのParamがより考慮される。
     qp_solver_type: "unconstraint_fast"          # optimization solver option (unconstraint_fast or osqp)パラメタの調整不足でosqpだとsolveできないときがある。解けないとMPC結果が出力されない。→止まる。
-    # より大きなmpc_prediction_horizonとより小さなmpc_prediction_dtは、トラッキング性能にとって効率的である。しかし、これらの代償として計算コストが高くなります。
-    mpc_prediction_horizon: 70                   # トータルのMPC予想ステップ：多い方が良い。prediction horizon step 
-    mpc_prediction_dt: 0.2                       # 少ない方が良い。 prediction horizon period [s]
-    # MPCの重みを調整する。チューニングの簡単な方法のひとつは、横偏差の重み（weight_lat_error）を一定に保ち、
-    # ステアリングの振動と制御精度のトレードオフを観察しながら、入力の重み（weight_steering_input）を変化させることである。
+    mpc_prediction_horizon: 70                   # prediction horizon step トータルのMPC予想ステップ：多い方が良い。
+    mpc_prediction_dt: 0.2                       # prediction horizon period [s]　少ない方が良い。
+    mpc_weight_lat_error: 5.3                    # lateral error weight in matrix Q
+    mpc_weight_heading_error: 4.1                # heading error weight in matrix Q かなり変わる。直進性。
+    mpc_weight_heading_error_squared_vel: 0.3    # heading error * velocity weight in matrix Q
+    mpc_weight_steering_input: 0.97               # steering error weight in matrix R
+    mpc_weight_steering_input_squared_vel: 0.25  # steering error * velocity weight in matrix R
+    mpc_weight_lat_jerk: 0.0                     # lateral jerk weight in matrix R
+    mpc_weight_steer_rate: 0.0                   # steering rate weight in matrix R 
+    mpc_weight_steer_acc: 0.000001               # steering angular acceleration weight in matrix R
 
-    # weight_lat_errorが大きいと、精度向上のためにステアリングが大きく動くため、振動が発生しやすくなる。一方、weight_steering_inputが大きい場合、ステアリングはトラッキングエラーにあまり反応せず、
-    # 安定したドライビングを提供しますが、トラッキング精度が低下する可能性があります。
-    # 理論的には、ターミナルの重みweight_terminal_lat_errorとweight_terminal_heading_errorを増やすことで、トラッキングの安定性を高めることができる。この方法は時に有効である。
-    mpc_weight_lat_error: 5.3                    # 大：よく曲がる。経路追従の横方向の誤差を抑制するように働く。横方向のトラッキングエラーを減らす。これはPIDにおけるPゲインのような働きをする。lateral error weight in matrix Q
-    mpc_weight_heading_error: 4.1                # 真っ直ぐ走行するようになる。これはPIDのDゲインのような働きをする。安定性のため。heading error weight in matrix Q かなり変わる。直進性。
-    mpc_weight_heading_error_squared_vel: 0.3    # 高速域でDriveの直進性を上げる。heading error * velocity weight in matrix Q
-    # ドライブ中に車両が振動する場合、weight_steering_inputを大きくする。
-    # トラッキング精度が低い場合は、weight_steering_inputを小さく設定する。
-    mpc_weight_steering_input: 0.97              # 小：ステアが細かく動く。ステアリング角を経路の曲率によって決まる標準値に調整するように働く。トラッキングの振動を抑える。 steering error weight in matrix R
-    mpc_weight_steering_input_squared_vel: 0.25  # steering_inputの高速域のみバージョン。高速域でのトラッキングの振動を抑える。steering error * velocity weight in matrix R
-    mpc_weight_lat_jerk: 0.0                     # 横方向のジャークを減らす。lateral jerk weight in matrix R
-    mpc_weight_steer_rate: 0.0                   # ステアリングレートの重み。[rad/s] steering rate weight in matrix R 
-    mpc_weight_steer_acc: 0.000001               # ステアリングレートの微分の重み。[rad/ss]steering angular acceleration weight in matrix Rf
     #Not Used
-    # 軌道の曲率に応じてウェイトを変更したい場合（例えば、急カーブを走っていてウェイトを大きくしたい場合）、mpc_low_curvature_thresh_curvatureを使用し、mpc_low_curvature_weight_**ウェイトを調整する。
     mpc_low_curvature_weight_lat_error: 1.0                    # lateral error weight in matrix Q in low curvature point
     mpc_low_curvature_weight_heading_error: 1.0                # heading error weight in matrix Q in low curvature point
     mpc_low_curvature_weight_heading_error_squared_vel: 0.3    # heading error * velocity weight in matrix Q in low curvature point
@@ -50,44 +39,36 @@
     mpc_low_curvature_weight_steer_acc: 0.000001               # steering angular acceleration weight in matrix R in low curvature point
     mpc_low_curvature_thresh_curvature: 0.0                    # threshold of curvature to use "low_curvature" parameter (recommend: 0.01~0.03)
 
-    mpc_weight_terminal_lat_error: 6.0           # MPCの安定性を確保する。weight_lat_errorよりも高い値を設定することが望ましい。terminal lateral error weight in matrix Q to improve mpc stability 昔はもっと小さい
-    mpc_weight_terminal_heading_error: 1.1       # MPCの安定性を確保する。weight_heading_errorよりも高い値を設定することが望ましい。terminal heading error weight in matrix Q to improve mpc stability　　昔はもっと小さい
-    mpc_zero_ff_steer_deg: 0.5                   # フィードフォワード角がゼロになる閾値。threshold that feed-forward angle becomes zero
-    mpc_acceleration_limit: 2.0                  # 車両の加速制限。limit on the vehicle's acceleration
-    mpc_velocity_time_constant: 0.61             # 速度の平滑化に使用される時定数。time constant used for velocity smoothing
-    mpc_min_prediction_length: 5.0               # 最小の予想長さ。minimum prediction length
+    mpc_weight_terminal_lat_error: 6.0             # terminal lateral error weight in matrix Q to improve mpc stability 昔はもっと小さい
+    mpc_weight_terminal_heading_error: 1.1       # terminal heading error weight in matrix Q to improve mpc stability　　昔はもっと小さい
+    mpc_zero_ff_steer_deg: 0.5                   # threshold that feed-forward angle becomes zero
+    mpc_acceleration_limit: 2.0                  # limit on the vehicle's acceleration
+    mpc_velocity_time_constant: 0.61              # time constant used for velocity smoothing
+    mpc_min_prediction_length: 5.0               # minimum prediction length
 
     # -- vehicle model --
-    # カーブでのステアリング開始が遅い場合、ステアリングモデルの遅延時間と時定数が正しくないことが原因であることが多い。
-    # input_delay と vehicle_model_steer_tau の値を再チェックしてください。
-    # さらに、MPC はデバッグ情報の一部として、MPC モデルが想定している現在の操舵角を出力しますので、その操舵角が実際の操舵角と合っているかどうか確認してください。
     vehicle_model_type: "kinematics" # vehicle model type for mpc prediction. option is kinematics, kinematics_no_delay, and dynamics
-    input_delay: 0.14                # 遅延補償用のステアリング入力遅延時間。steering input delay time for delay compensation
+    input_delay: 0.14                # steering input delay time for delay compensation
     vehicle_model_steer_tau: 0.1     # steering dynamics time constant (1d approximation) [s]
     steer_rate_lim_dps: 400.0         # steering angle rate limit [deg/s]
     acceleration_limit: 100.0          # acceleration limit for trajectory velocity modification [m/ss]
     velocity_time_constant: 0.61      # velocity dynamics time constant  for trajectory velocity modification [s]
 
     # -- lowpass filter for noise reduction --
-    # steering_lpf_cutoff_hzの値を調整することも、計算ノイズを強制的に減らすのに効果的である。これは最終層に設置される2次バターワースフィルターのカットオフ周波数を指す。
-    # カットオフ周波数が小さいほどノイズの低減効果が強くなるが、演算遅延を誘発する。
-    steering_lpf_cutoff_hz: 3.0 # ステアのlow-passカットオフ周波数。cutoff frequency of lowpass filter for steering command [Hz]
+    steering_lpf_cutoff_hz: 3.0 # cutoff frequency of lowpass filter for steering command [Hz]
     error_deriv_lpf_cutoff_hz: 5.0
 
-    # 停止状態でステアの据え切りをしないために利用。 stop state: steering command is kept in the previous value in the stop state.
-    stop_state_entry_ego_speed: -3.0 #停止状態に移行するためのego-Vel
-    stop_state_entry_target_speed: -3.0 #停止状態に移行するためのTarget_speed
-    converged_steer_rad: 0.1 #ステアリング収束の閾値(rad)
+    # stop state: steering command is kept in the previous value in the stop state.
+    stop_state_entry_ego_speed: -3.0
+    stop_state_entry_target_speed: -3.0
+    converged_steer_rad: 0.1
     keep_steer_control_until_converged: false #ステアリング計算値が収束するまで、以前のステア値を用いるか
-    new_traj_duration_time: 0.5 #新しいTrajとみなすための閾値時間　Trajの形の変更をチェックする　setTrajに影響
-    new_traj_end_dist: 0.1 #新しい軌跡とみなされる軌跡終端との間の閾値　Trajの形の変更をチェックする
+    new_traj_duration_time: 1.0
+    new_traj_end_dist: 0.3
 
-    # steer offset Trueでいい気がするけど。切り遅れが改善した気がする。
-    # 車両が一貫して軌道から横方向に逸脱している場合、ステアリングセンサーのオフセットや自己位置推定が原因であることがほとんどです。
-    # MPCに入力する前にこれらのバイアスを除去することが望ましいですが、MPC内でこのバイアスを除去することも可能です。
-    # これを利用するには、enable_auto_steering_offset_removal を true に設定し、ステアリングオフセットリムーバーを有効にします。ステアリングオフセット推定ロジックは、ステアリングをセンターに近づけて高速走行するときに働き、オフセット除去を適用します。
+    # steer offset
     steering_offset:
-      enable_auto_steering_offset_removal: false
+      enable_auto_steering_offset_removal: true
       update_vel_threshold: 0.56
       update_steer_threshold: 0.035
       average_num: 1000
