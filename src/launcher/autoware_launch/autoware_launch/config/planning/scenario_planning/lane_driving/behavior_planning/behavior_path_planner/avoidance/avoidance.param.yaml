@@ -63,8 +63,8 @@
       #エゴの未来位置と物体の予測経路から衝突の危険性を判断します。時間地平(safety_check_time_horizon)におけるエゴの将来位置を計算し、
       #物体の予測経路を物体の将来位置として使用します。
       safety_check:
-        safety_check_backward_distance: 0.1            # [m] #後方チェックする距離 Def::0.5
-        safety_check_time_horizon: 5.0                  # [s] この時間で衝突する可能性を判断する。
+        safety_check_backward_distance: 0.5            # [m] #後方チェックする距離 Def::0.5
+        safety_check_time_horizon: 10.0                  # [s] この時間で衝突する可能性を判断する。
         safety_check_idling_time: 1.5                    # [s] 横マージン計算のため。Def 1.5
         safety_check_accel_for_rss: 2.5                  # [m/ss]　RSSに基づく縦方向のマージン計算に使用されるアクセル定数。横マージン計算のため。　Def 2.5
         safety_check_hysteresis_factor: 2.0              # [-]チャタリング防止に使用されるヒステリシス係数。
