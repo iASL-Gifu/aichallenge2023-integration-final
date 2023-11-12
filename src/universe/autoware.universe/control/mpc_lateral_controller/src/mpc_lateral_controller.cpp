@@ -164,7 +164,7 @@ MpcLateralController::MpcLateralController(rclcpp::Node & node) : node_{&node}
   m_pub_steer_offset = node_->create_publisher<tier4_debug_msgs::msg::Float32Stamped>(
     "~/output/estimated_steer_offset", 1);
   m_pub_stop = node_->create_publisher<std_msgs::msg::Bool>(
-    "/freespace_stop", 1);
+    "/out/freespace_stop", 1);
   // TODO(Frederik.Beaujean) ctor is too long, should factor out parameter declarations
   declareMPCparameters();
 
@@ -239,7 +239,8 @@ trajectory_follower::LateralOutput MpcLateralController::run(
     std_msgs::msg::Bool msg;
     msg.data = true;
     m_pub_stop->publish(msg);
-    ctrl_cmd = getStopControlCommand();
+    // ctrl_cmd = 
+    getStopControlCommand();
   }
 
   m_ctrl_cmd_prev = ctrl_cmd;
