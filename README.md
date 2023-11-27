@@ -13,4 +13,4 @@ Path-PlanningにおいてはBT-Tree・Paramの変更により起動するモジ�
 
 RViZにおいては各モジュールの可視化に注力しています。
 
-途中からCenterPointからEuclidean Clusteringにしています。
+段ボール検知は途中でCenterPointからEuclidean Clusteringに変更しています。
