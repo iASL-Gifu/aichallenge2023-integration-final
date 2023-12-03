@@ -19,12 +19,15 @@ RViZにおいては各モジュールの可視化に注力しています。<br>
 
 ### Control
 #### PID
+Target速度・加速度と現在の速度・加速度との差が小さくなるようにチューニングしました。<br>
 最後のS字で切り返しを行う予定であったので、指定されたWaypointに正確に発着できるようにチューニングしました。
 StoppingとStoppedの移行判定のソースコードをより柔軟になるよう改変しています。
 #### MPC
+Waypointと自車両の差(LatError,YawError)を減らすようにチューニングしました。<br>
 それぞれの重みを上げすぎるとQP-Solverが解けなくなってしまうので、重み付けは慎重に行いました。
 QP-SolverはOSQPと比較してUnconstraint-fastの方が安定して解を算出してくれました。
 ### Planning
+後段モジュールのControlにて緻密に制御(着発進)するためにWayPointを増やしました。
 ### Behavior Path Planning
 各モジュールを管理するBT-Treeを改変し、AvoidanceとLaneFollowingのみ機能するように変更しました。
 ![image](https://github.com/iASL-Gifu/aichallenge2023-integration-final/assets/99851410/27cde24a-6ee4-4950-96bb-9a06fba993d0)
@@ -32,7 +35,15 @@ QP-SolverはOSQPと比較してUnconstraint-fastの方が安定して解を算�
 WIP
 ### Perception
 予選ではCenterPointを用いていましたが本番環境ではCenterPointを用いるためのGPUリソースが十分でなかったため,Euclidean Clusteringに変更しました。
+### Localizer
+試走会では自己位置の推定に問題がなかったため、ほぼデフォルト値でした。<br>
+(これが本番に良くなかった？のですが、、)
+地面から数十センチのPointCloudはNDP-Matchingに入力しないという設定にデフォルトから変更していました。<br>
+また並列処理のThread数を増やしました。
 ### RViZ
 制御・Planningのチューニングをより簡便にするために
 Float32MultiArrayStampedPieChartでデータの可視化を行いました。
 ![img_3669](https://github.com/iASL-Gifu/aichallenge2023-integration-final/assets/99851410/0fd29206-451c-481b-9f9e-1a7948038491)
+### Others
+Autowareの各所にあるValidatorのモジュールを外しました。<br>
+(これも本番に良くなかったのですが、)
