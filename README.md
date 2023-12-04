@@ -1,7 +1,6 @@
 # WIP:aichallenge2023-integration-final
 2023年に開催された自動運転AIチャレンジ(Integration)のチームiASLのソースコードです。
 
-予選は本レポジトリの最初の数コミットのどれかになります。
 決勝はprodブランチです。
 <br>
 ## 決勝を終えて
@@ -30,9 +29,11 @@ QP-SolverはOSQPと比較してUnconstraint-fastの方が安定して解を算�
 後段モジュールのControlにて緻密に制御(着発進)するためにWayPointを増やしました。
 ### Behavior Path Planning
 各モジュールを管理するBT-Treeを改変し、AvoidanceとLaneFollowingのみ機能するように変更しました。
-![image](https://github.com/iASL-Gifu/aichallenge2023-integration-final/assets/99851410/27cde24a-6ee4-4950-96bb-9a06fba993d0)
+![image](./assets/images/BT-tree.png)
 ### FreeSpacePlanner
-WIP
+今大会の道幅の狭いクランクを突破するためにAutoware標準のFreeSpaceプランナーを使用することで解決しようと試みました。
+きれいな経路を生成こそしたのですが、シュミレーター上でも後ろタイヤの一部分やボディがはみ出る等コースアウトになってしまいました。
+![Freespace trajectry](./assets/images/freespace.png)
 ### Perception
 予選ではCenterPointを用いていましたが本番環境ではCenterPointを用いるためのGPUリソースが十分でなかったため,Euclidean Clusteringに変更しました。
 ### Localizer
@@ -43,7 +44,7 @@ WIP
 ### RViZ
 制御・Planningのチューニングをより簡便にするために
 Float32MultiArrayStampedPieChartでデータの可視化を行いました。
-![img_3669](https://github.com/iASL-Gifu/aichallenge2023-integration-final/assets/99851410/0fd29206-451c-481b-9f9e-1a7948038491)
+![img_3669](./assets/images/rviz.jpg)
 ### Others
 Autowareの各所にあるValidatorのモジュールを外しました。<br>
 (これも本番に良くなかったのですが、)
