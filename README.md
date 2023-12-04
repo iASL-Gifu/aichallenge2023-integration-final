@@ -33,6 +33,7 @@ QP-SolverはOSQPと比較してUnconstraint-fastの方が安定して解を算�
 ### FreeSpacePlanner
 今大会の道幅の狭いクランクを突破するためにAutoware標準のFreeSpaceプランナーを使用することで解決しようと試みました。
 きれいな経路を生成こそしたのですが、シュミレーター上でも後ろタイヤの一部分やボディがはみ出る等コースアウトになってしまいました。
+また、ソースコードを直に改変しました。詳しい概要は[こちら](./assets/docs/freespace.md)
 ![Freespace trajectry](./assets/images/freespace.png)
 ### Perception
 予選ではCenterPointを用いていましたが本番環境ではCenterPointを用いるためのGPUリソースが十分でなかったため,Euclidean Clusteringに変更しました。
