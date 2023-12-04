@@ -26,7 +26,8 @@ Waypointと自車両の差(LatError,YawError)を減らすようにチューニ�
 それぞれの重みを上げすぎるとQP-Solverが解けなくなってしまうので、重み付けは慎重に行いました。
 QP-SolverはOSQPと比較してUnconstraint-fastの方が安定して解を算出してくれました。
 ### Planning
-後段モジュールのControlにて緻密に制御(着発進)するためにWayPointを増やしました。
+後段モジュールのControlにて緻密に制御(着発進)するためにWayPointを増やしました。<br>
+ダンボール回避は主にBehavior Path Planningで回避し、MotionPlanningで最後の最適化を行いました。<br>
 ### Behavior Path Planning
 各モジュールを管理するBT-Treeを改変し、AvoidanceとLaneFollowingのみ機能するように変更しました。
 ![image](./assets/images/BT-tree.png)
