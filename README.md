@@ -47,7 +47,8 @@ QP-SolverはOSQPと比較してUnconstraint-fastの方が安定して解を算�
 ### RViZ
 制御・Planningのチューニングをより簡便にするために
 Float32MultiArrayStampedPieChartでデータの可視化を行いました。
-![image](https://github.com/iASL-Gifu/aichallenge2023-integration-final/assets/106212734/d15f6620-6744-450e-a1f9-c3bbcceee1d3)
+![image](https://github.com/iASL-Gifu/aichallenge2023-integration-final/assets/99851410/18b1fc81-020a-4626-8408-c7c42b8bf844)
+
 
 ### Others
 Autowareの各所にあるValidatorのモジュールを外しました。<br>
