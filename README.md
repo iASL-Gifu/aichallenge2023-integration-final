@@ -30,7 +30,8 @@ QP-SolverはOSQPと比較してUnconstraint-fastの方が安定して解を算�
 後段モジュールのControlにて緻密に制御(着発進)するためにWayPointを増やしました。<br>
 ダンボール回避は主にBehavior Path Planningで回避し、MotionPlanningで最後の最適化を行いました。<br>
 ### Behavior Path Planning
-各モジュールを管理するBT-Treeを改変し、AvoidanceとLaneFollowingのみ機能するように変更しました。
+各モジュールを管理するBT-Treeを改変し、AvoidanceとLaneFollowingのみ機能するように変更しました。<br>
+BT-Treeの改変・状態確認にはGrootを用いています。(Not Groot2)
 ![image](./assets/images/BT-tree.png)
 ### FreeSpacePlanner
 今大会の道幅の狭いクランクを突破するためにAutoware標準のFreeSpaceプランナーを使用することで解決しようと試みました。
