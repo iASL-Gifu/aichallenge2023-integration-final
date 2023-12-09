@@ -1,5 +1,6 @@
 # WIP:aichallenge2023-integration-final
-2023年に開催された自動運転AIチャレンジ(Integration)のチームiASLのソースコードです。
+2023年に開催された自動運転AIチャレンジ(Integration)のチームiASLのソースコードです。<br>
+コンフィグファイルのパラメータには説明を付与してあります。参考になれば幸いです。
 
 決勝はprodブランチです。
 <br>
